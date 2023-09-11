@@ -10,21 +10,21 @@ for (int i = 0; i < 8; i++)
 
 bool EsSeguroColocarReina(Estados[,] tablero, int fila, int columna)
 {
-    
+
     for (int i = 0; i < 8; i++)
     {
         if (tablero[fila, i] == Estados.Ocupada)
             return false;
     }
 
-    
+
     for (int i = 0; i < 8; i++)
     {
         if (tablero[i, columna] == Estados.Ocupada)
             return false;
     }
 
-    
+
     for (int i = fila, j = columna; i >= 0 && j >= 0; i--, j--)
     {
         if (tablero[i, j] == Estados.Ocupada)

@@ -97,5 +97,4 @@ enum Estados
 {
     Libre = 0,
     Ocupada = 1,
-    Marcada = 2
 }

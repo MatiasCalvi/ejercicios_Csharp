@@ -1,4 +1,4 @@
-﻿Estados[,] tablero = new Estados[8, 8];
+Estados[,] tablero = new Estados[8, 8];
 
 for (int i = 0; i < 8; i++)
 {
@@ -12,41 +12,27 @@ bool EsSeguroColocarReina(Estados[,] tablero, int fila, int columna)
 {
     for (int i = 0; i < 8; i++)
     {
-        if (tablero[fila, i] == Estados.Ocupada)
+        if (tablero[fila, i] == Estados.Ocupada || tablero[i, columna] == Estados.Ocupada) // --> Horizontal y Vertical
             return false;
     }
 
     for (int i = 0; i < 8; i++)
     {
-        if (tablero[i, columna] == Estados.Ocupada)
+        if (fila - i >= 0 && columna - i >= 0 && tablero[fila - i, columna - i] == Estados.Ocupada) // --> Diagonal hacia arriba-izquierda
             return false;
-    }
 
-    for (int i = fila, j = columna; i >= 0 && j >= 0; i--, j--)
-    {
-        if (tablero[i, j] == Estados.Ocupada)
+        if (fila - i >= 0 && columna + i < 8 && tablero[fila - i, columna + i] == Estados.Ocupada) // --> Diagonal hacia arriba-derecha
             return false;
-    }
 
-    for (int i = fila, j = columna; i >= 0 && j < 8; i--, j++)
-    {
-        if (tablero[i, j] == Estados.Ocupada)
+        if (fila + i < 8 && columna - i >= 0 && tablero[fila + i, columna - i] == Estados.Ocupada) // --> Diagonal hacia abajo-izquierda
             return false;
-    }
 
-    for (int i = fila, j = columna; i < 8 && j >= 0; i++, j--)
-    {
-        if (tablero[i, j] == Estados.Ocupada)
-            return false;
-    }
-
-    for (int i = fila, j = columna; i < 8 && j < 8; i++, j++)
-    {
-        if (tablero[i, j] == Estados.Ocupada)
+        if (fila + i < 8 && columna + i < 8 && tablero[fila + i, columna + i] == Estados.Ocupada) // --> Diagonal hacia abajo-derecha
             return false;
     }
 
     return true;
+
 }
 
 
@@ -54,17 +40,6 @@ bool ColocarReinas(Estados[,] tablero, int columna)
 {
     if (columna >= 8)
     {
-        Console.WriteLine("Solución encontrada:");
-        for (int i = 0; i < 8; i++)
-        {
-            for (int j = 0; j < 8; j++)
-            {
-                if (tablero[i, j] == Estados.Ocupada)
-                {
-                    Console.WriteLine($"Reina en fila {i}, columna {j}");
-                }
-            }
-        }
         return true;
     }
 
@@ -86,7 +61,20 @@ bool ColocarReinas(Estados[,] tablero, int columna)
 
 if (ColocarReinas(tablero, 0))
 {
+    Console.WriteLine("Solución encontrada:");
+
     Console.WriteLine("Número de reinas colocadas: 8");
+
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            if (tablero[i, j] == Estados.Ocupada)
+            {
+                Console.WriteLine($"Reina en fila {i}, columna {j}");
+            }
+        }
+    }
 }
 else
 {
@@ -97,5 +85,4 @@ enum Estados
 {
     Libre = 0,
     Ocupada = 1,
-    Marcada = 2
 }

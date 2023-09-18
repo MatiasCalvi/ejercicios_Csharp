@@ -7,14 +7,27 @@
   "targets": {
     ".NETCoreApp,Version=v6.0": {
       "elProblemaDeLasNReinas/1.0.0": {
+        "dependencies": {
+          "Piezas": "1.0.0"
+        },
         "runtime": {
           "elProblemaDeLasNReinas.dll": {}
+        }
+      },
+      "Piezas/1.0.0": {
+        "runtime": {
+          "Piezas.dll": {}
         }
       }
     }
   },
   "libraries": {
     "elProblemaDeLasNReinas/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Piezas/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net6.0": {}
+    "net6.0": {
+      "Piezas/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/Piezas.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Piezas.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Piezas/1.0.0": {
+      "type": "project",
+      "path": "../Piezas/Piezas.csproj",
+      "msbuildProject": "../Piezas/Piezas.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net6.0": []
+    "net6.0": [
+      "Piezas >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\Matias\\.nuget\\packages\\": {}
@@ -33,7 +52,11 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\problemaDeLasNReinas\\elProblemaDeLasNReinas\\Piezas\\Piezas.csproj": {
+              "projectPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\problemaDeLasNReinas\\elProblemaDeLasNReinas\\Piezas\\Piezas.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

@@ -6,7 +6,7 @@ namespace TuEspacioDeNombres
     class Program
     {   
   
-        static void FuncionMostrar9(Caballo pieza, NuevaPieza nuevaPieza)
+        static void FuncionMostrar9(Reina pieza, NuevaPieza nuevaPieza)
         {
             if (pieza.Backtracking(0))
             {
@@ -34,7 +34,7 @@ namespace TuEspacioDeNombres
 
         static void Main(string[] args)
         {
-            Caballo pieza = new Caballo(); // *---> Puede ser cualquier pieza dependiendo del constructor "Peon","Rey","Caballo","Torre","Reina","Alfil".
+            Reina pieza = new Reina(); // *---> Puede ser cualquier pieza dependiendo del constructor "Peon","Rey","Caballo","Torre","Reina","Alfil".
             NuevaPieza nuevaPieza = new NuevaPieza(); //*---> Nueva Pieza, se mueve en cualquier dialgonal pero no horizontal-vertical y solo una casilla a la vez
 
 

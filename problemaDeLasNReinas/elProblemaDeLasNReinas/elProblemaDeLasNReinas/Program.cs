@@ -1,5 +1,5 @@
-using Piezas.Piezas;
 
+using Piezas.Piezas;
 
 namespace TuEspacioDeNombres
 {   
@@ -42,25 +42,3 @@ namespace TuEspacioDeNombres
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

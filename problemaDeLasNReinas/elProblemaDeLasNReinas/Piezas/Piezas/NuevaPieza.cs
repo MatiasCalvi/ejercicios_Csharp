@@ -11,7 +11,16 @@ namespace Piezas.Piezas
     {
         public bool EsMovimientoSeguro(Casilla[,] tablero, int fila, int columna)
         {
-            
+            if (fila < 0 || columna < 0 || fila >= 8 || columna >= 8)
+            {
+                return false; 
+            }
+
+            if (tablero[fila, columna] == Casilla.Ocupada)
+            {
+                return false; 
+            }
+
 
             for (int i = 0; i < 8; i++)
             {
@@ -37,25 +46,8 @@ namespace Piezas.Piezas
                     }
                 }
             }
-
-         
-            
-
-
-
-
-            if (fila < 0 || columna < 0 || fila >= 8 || columna >= 8)
-            {
-                return false; 
-            }
-
-            if (tablero[fila, columna] == Casilla.Ocupada)
-            {
-                return false; 
-            }
-
            
-            int[] movimientosX = { -2, -1, 1, 2, -2, -1, 1, 2 };
+            int[] movimientosX = { -2, -1, 1, 2, -2, -1, 1, 2 };  // Para la verificacion de la Clase Caballo en especifico
             int[] movimientosY = { -1, -2, -2, -1, 1, 2, 2, -1 };
 
             for (int i = 0; i < movimientosX.Length; i++)

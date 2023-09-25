@@ -1,7 +1,7 @@
 
 using Piezas.Piezas;
 
-namespace TuEspacioDeNombres
+namespace Pieza
 {   
     class Program
     {   

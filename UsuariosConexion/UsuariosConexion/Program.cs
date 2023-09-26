@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
+﻿using System.Data;
 using Dapper;
 using MySql.Data.MySqlClient;
 using UsuariosConexion;
@@ -18,12 +15,12 @@ public class RepositorioUsuarios
         }
     }
 
-    public List<Usuario> ListarTodosLosUsuarios()
+    public Usuario[] ListarTodosLosUsuarios()
     {
         using (IDbConnection dbConnection = Connection)
         {
             dbConnection.Open();
-            return dbConnection.Query<Usuario>("SELECT * FROM usuarios").ToList();
+            return dbConnection.Query<Usuario>("SELECT * FROM usuarios").ToArray();
         }
     }
 
@@ -35,6 +32,7 @@ public class RepositorioUsuarios
             return dbConnection.Query<Usuario>("SELECT * FROM usuarios WHERE Usuario_Id = @Id", new { Id = id }).FirstOrDefault();
         }
     }
+
 }
 
 class Program

@@ -12,3 +12,7 @@ C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\problem
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\problemaDeLasNReinas\elProblemaDeLasNReinas\elProblemaDeLasNReinas\obj\Debug\net6.0\elProblemaDeLasNReinas.pdb
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\problemaDeLasNReinas\elProblemaDeLasNReinas\elProblemaDeLasNReinas\obj\Debug\net6.0\elProblemaDeLasNReinas.genruntimeconfig.cache
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\problemaDeLasNReinas\elProblemaDeLasNReinas\elProblemaDeLasNReinas\obj\Debug\net6.0\ref\elProblemaDeLasNReinas.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\problemaDeLasNReinas\elProblemaDeLasNReinas\elProblemaDeLasNReinas\bin\Debug\net6.0\Piezas.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\problemaDeLasNReinas\elProblemaDeLasNReinas\elProblemaDeLasNReinas\bin\Debug\net6.0\Piezas.pdb
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\problemaDeLasNReinas\elProblemaDeLasNReinas\elProblemaDeLasNReinas\obj\Debug\net6.0\elProblemaDeLasNReinas.csproj.AssemblyReference.cache
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\problemaDeLasNReinas\elProblemaDeLasNReinas\elProblemaDeLasNReinas\obj\Debug\net6.0\elProblemaDeLasNReinas.csproj.CopyComplete

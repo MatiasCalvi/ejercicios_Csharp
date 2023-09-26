@@ -1,88 +1,44 @@
-Estados[,] tablero = new Estados[8, 8];
 
-for (int i = 0; i < 8; i++)
-{
-    for (int j = 0; j < 8; j++)
-    {
-        tablero[i, j] = Estados.Libre;
-    }
-}
+using Piezas.Piezas;
 
-bool EsSeguroColocarReina(Estados[,] tablero, int fila, int columna)
-{
-    for (int i = 0; i < 8; i++)
-    {
-        if (tablero[fila, i] == Estados.Ocupada || tablero[i, columna] == Estados.Ocupada) // --> Horizontal y Vertical
-            return false;
-    }
-
-    for (int i = 0; i < 8; i++)
-    {
-        if (fila - i >= 0 && columna - i >= 0 && tablero[fila - i, columna - i] == Estados.Ocupada) // --> Diagonal hacia arriba-izquierda
-            return false;
-
-        if (fila - i >= 0 && columna + i < 8 && tablero[fila - i, columna + i] == Estados.Ocupada) // --> Diagonal hacia arriba-derecha
-            return false;
-
-        if (fila + i < 8 && columna - i >= 0 && tablero[fila + i, columna - i] == Estados.Ocupada) // --> Diagonal hacia abajo-izquierda
-            return false;
-
-        if (fila + i < 8 && columna + i < 8 && tablero[fila + i, columna + i] == Estados.Ocupada) // --> Diagonal hacia abajo-derecha
-            return false;
-    }
-
-    return true;
-
-}
-
-
-bool ColocarReinas(Estados[,] tablero, int columna)
-{
-    if (columna >= 8)
-    {
-        return true;
-    }
-
-    for (int fila = 0; fila < 8; fila++)
-    {
-        if (EsSeguroColocarReina(tablero, fila, columna))
+namespace Pieza
+{   
+    class Program
+    {   
+  
+        static void FuncionMostrar9(Reina pieza, NuevaPieza nuevaPieza)
         {
-            tablero[fila, columna] = Estados.Ocupada;
-
-            if (ColocarReinas(tablero, columna + 1))
-                return true;
-
-            tablero[fila, columna] = Estados.Libre;
-        }
-    }
-
-    return false;
-}
-
-if (ColocarReinas(tablero, 0))
-{
-    Console.WriteLine("Solución encontrada:");
-
-    Console.WriteLine("Número de reinas colocadas: 8");
-
-    for (int i = 0; i < 8; i++)
-    {
-        for (int j = 0; j < 8; j++)
-        {
-            if (tablero[i, j] == Estados.Ocupada)
+            if (pieza.Backtracking(0))
             {
-                Console.WriteLine($"Reina en fila {i}, columna {j}");
+                pieza.MostrarPosicion();
+
+                for (int fila = 0; fila < 8; fila++)
+                {
+                    for (int columna = 0; columna < 8; columna++)
+                    {
+                        if (nuevaPieza.EsMovimientoSeguro(pieza.tablero, fila, columna))
+                        {
+                            Console.WriteLine("La NuevaPieza puede ser colocada en la fila {0}, columna {1}", fila, columna);
+                            return;
+                        }
+                    }
+                }
+
+                Console.WriteLine("No se encontró una posición para la NuevaPieza.");
+            }
+            else
+            {
+                Console.WriteLine("No se encontró una solución.");
             }
         }
-    }
-}
-else
-{
-    Console.WriteLine("No se encontró una solución.");
-}
 
-enum Estados
-{
-    Libre = 0,
-    Ocupada = 1,
+        static void Main(string[] args)
+        {
+            Reina pieza = new Reina(); // *---> Puede ser cualquier pieza dependiendo del constructor "Peon","Rey","Caballo","Torre","Reina","Alfil".
+            NuevaPieza nuevaPieza = new NuevaPieza(); //*---> Nueva Pieza, se mueve en cualquier dialgonal pero no horizontal-vertical y solo una casilla a la vez
+
+
+            FuncionMostrar9(pieza, nuevaPieza);
+        }
+    }
 }

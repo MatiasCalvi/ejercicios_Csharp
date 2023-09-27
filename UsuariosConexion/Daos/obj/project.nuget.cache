@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "RwUX7iqToJnaWi2p9mJxxlfToPAxAbuG7UH+K/SYPes+xP35rY011xtbWfeIyuD4mW2lSoNxjS8N+2b3xVydDw==",
+  "dgSpecHash": "XBwi41srwY9TTT06fo25uwsDHE6pJ6Wqu2LqfIo/mytUvYKs+FTja3mYJpy8FHsPLUOyFgv45tjRdkxLol8jSQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\UsuariosConexion\\Daos\\Daos.csproj",
+  "projectFilePath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\UsuariosConexion\\Daos\\Dao.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Matias\\.nuget\\packages\\dapper\\2.0.151\\dapper.2.0.151.nupkg.sha512",
     "C:\\Users\\Matias\\.nuget\\packages\\google.protobuf\\3.21.9\\google.protobuf.3.21.9.nupkg.sha512",

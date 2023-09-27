@@ -2109,9 +2109,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\UsuariosConexion\\Daos\\Daos.csproj",
-      "projectName": "Daos",
-      "projectPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\UsuariosConexion\\Daos\\Daos.csproj",
+      "projectUniqueName": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\UsuariosConexion\\Daos\\Dao.csproj",
+      "projectName": "Dao",
+      "projectPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\UsuariosConexion\\Daos\\Dao.csproj",
       "packagesPath": "C:\\Users\\Matias\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\UsuariosConexion\\Daos\\obj\\",
       "projectStyle": "PackageReference",

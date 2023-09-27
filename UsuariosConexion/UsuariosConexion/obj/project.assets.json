@@ -649,6 +649,11 @@
       "Daos/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "Dapper": "2.0.151",
+          "MySql.Data": "8.1.0",
+          "System.Data.SqlClient": "4.8.5"
+        },
         "compile": {
           "bin/placeholder/Daos.dll": {}
         },

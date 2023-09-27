@@ -6,15 +6,14 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "UsuariosConexion/1.0.0": {
+      "Daos/1.0.0": {
         "dependencies": {
-          "Daos": "1.0.0",
           "Dapper": "2.0.151",
           "MySql.Data": "8.1.0",
           "System.Data.SqlClient": "4.8.5"
         },
         "runtime": {
-          "UsuariosConexion.dll": {}
+          "Daos.dll": {}
         }
       },
       "Dapper/2.0.151": {
@@ -416,21 +415,11 @@
             "fileVersion": "0.7.1.0"
           }
         }
-      },
-      "Daos/1.0.0": {
-        "dependencies": {
-          "Dapper": "2.0.151",
-          "MySql.Data": "8.1.0",
-          "System.Data.SqlClient": "4.8.5"
-        },
-        "runtime": {
-          "Daos.dll": {}
-        }
       }
     }
   },
   "libraries": {
-    "UsuariosConexion/1.0.0": {
+    "Daos/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -707,11 +696,6 @@
       "sha512": "sha512-Idgg+mJEyAujqDPzA3APy9dNoyw0YQcNA65GgYjktDRtJ+nvx/hv+J+m6Eax3JJMGEYGy04oc5YNP6ZvQ3Y1vQ==",
       "path": "zstdsharp.port/0.7.1",
       "hashPath": "zstdsharp.port.0.7.1.nupkg.sha512"
-    },
-    "Daos/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
     }
   }
 }

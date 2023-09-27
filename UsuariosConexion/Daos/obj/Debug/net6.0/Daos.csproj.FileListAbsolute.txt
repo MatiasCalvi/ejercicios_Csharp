@@ -1,0 +1,12 @@
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\UsuariosConexion\Daos\bin\Debug\net6.0\Daos.deps.json
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\UsuariosConexion\Daos\bin\Debug\net6.0\Daos.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\UsuariosConexion\Daos\bin\Debug\net6.0\Daos.pdb
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\UsuariosConexion\Daos\obj\Debug\net6.0\Daos.csproj.AssemblyReference.cache
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\UsuariosConexion\Daos\obj\Debug\net6.0\Daos.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\UsuariosConexion\Daos\obj\Debug\net6.0\Daos.AssemblyInfoInputs.cache
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\UsuariosConexion\Daos\obj\Debug\net6.0\Daos.AssemblyInfo.cs
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\UsuariosConexion\Daos\obj\Debug\net6.0\Daos.csproj.CoreCompileInputs.cache
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\UsuariosConexion\Daos\obj\Debug\net6.0\Daos.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\UsuariosConexion\Daos\obj\Debug\net6.0\refint\Daos.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\UsuariosConexion\Daos\obj\Debug\net6.0\Daos.pdb
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\UsuariosConexion\Daos\obj\Debug\net6.0\ref\Daos.dll

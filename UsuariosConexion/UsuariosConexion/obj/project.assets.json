@@ -645,6 +645,16 @@
         "runtime": {
           "lib/net6.0/ZstdSharp.dll": {}
         }
+      },
+      "Daos/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/Daos.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Daos.dll": {}
+        }
       }
     }
   },
@@ -2094,10 +2104,16 @@
         "zstdsharp.port.0.7.1.nupkg.sha512",
         "zstdsharp.port.nuspec"
       ]
+    },
+    "Daos/1.0.0": {
+      "type": "project",
+      "path": "../Daos/Daos.csproj",
+      "msbuildProject": "../Daos/Daos.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "Daos >= 1.0.0",
       "Dapper >= 2.0.151",
       "MySql.Data >= 8.1.0",
       "System.Data.SqlClient >= 4.8.5"
@@ -2129,7 +2145,11 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\UsuariosConexion\\Daos\\Daos.csproj": {
+              "projectPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\UsuariosConexion\\Daos\\Daos.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

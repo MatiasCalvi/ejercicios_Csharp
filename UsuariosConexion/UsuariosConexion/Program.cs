@@ -15,12 +15,12 @@ public class RepositorioUsuarios
         }
     }
 
-    public Usuario[] ListarTodosLosUsuarios()
+    public List<Usuario> ListarTodosLosUsuarios()
     {
         using (IDbConnection dbConnection = Connection)
         {
             dbConnection.Open();
-            return dbConnection.Query<Usuario>("SELECT * FROM usuarios").ToArray();
+            return dbConnection.Query<Usuario>("SELECT * FROM usuarios").ToList();
         }
     }
 
@@ -48,8 +48,7 @@ class Program
             Console.WriteLine($"ID: {usuario.Usuario_Id}, Nombre: {usuario.Usuario_Nombre}, Edad: {usuario.Usuario_Edad}");
         }
 
-        
-        var usuarioInfo = repositorio.ObtenerInformacionDeUnUsuario(1); //--------> Listar usuario por Id
+        var usuarioInfo = repositorio.ObtenerInformacionDeUnUsuario(3); //--------> Listar usuario por Id
         Console.WriteLine($"ID: {usuarioInfo.Usuario_Id}, Nombre: {usuarioInfo.Usuario_Nombre}, Edad: {usuarioInfo.Usuario_Edad}");
     }
 }

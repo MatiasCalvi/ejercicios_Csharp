@@ -646,7 +646,7 @@
           "lib/net6.0/ZstdSharp.dll": {}
         }
       },
-      "Dao/1.0.0": {
+      "Daos/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
         "dependencies": {
@@ -655,10 +655,10 @@
           "System.Data.SqlClient": "4.8.5"
         },
         "compile": {
-          "bin/placeholder/Dao.dll": {}
+          "bin/placeholder/Daos.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Dao.dll": {}
+          "bin/placeholder/Daos.dll": {}
         }
       }
     }
@@ -2110,15 +2110,15 @@
         "zstdsharp.port.nuspec"
       ]
     },
-    "Dao/1.0.0": {
+    "Daos/1.0.0": {
       "type": "project",
-      "path": "../Daos/Dao.csproj",
-      "msbuildProject": "../Daos/Dao.csproj"
+      "path": "../Daos/Daos.csproj",
+      "msbuildProject": "../Daos/Daos.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "Dao >= 1.0.0",
+      "Daos >= 1.0.0",
       "Dapper >= 2.0.151",
       "MySql.Data >= 8.1.0",
       "System.Data.SqlClient >= 4.8.5"
@@ -2130,11 +2130,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\UsuariosConexion\\UsuariosConexion\\UsuariosConexion.csproj",
+      "projectUniqueName": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\UsuariosConexion\\UsuariosConexion\\UsuariosConexion.csproj",
       "projectName": "UsuariosConexion",
-      "projectPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\UsuariosConexion\\UsuariosConexion\\UsuariosConexion.csproj",
+      "projectPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\UsuariosConexion\\UsuariosConexion\\UsuariosConexion.csproj",
       "packagesPath": "C:\\Users\\Matias\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\UsuariosConexion\\UsuariosConexion\\obj\\",
+      "outputPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\UsuariosConexion\\UsuariosConexion\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Matias\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -2151,8 +2151,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\UsuariosConexion\\Daos\\Dao.csproj": {
-              "projectPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\UsuariosConexion\\Daos\\Dao.csproj"
+            "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\UsuariosConexion\\Daos\\Daos.csproj": {
+              "projectPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\UsuariosConexion\\Daos\\Daos.csproj"
             }
           }
         }
@@ -2196,7 +2196,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
       }
     }
   }

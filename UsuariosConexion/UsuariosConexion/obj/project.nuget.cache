@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "fUT+meDbO444LzPPS/sV6PJZVls99Y24TWnakO/gheb6QqEw/uEhMcJXH5rs5MMfZf3KtGfcF/2+ijYKpP0NgQ==",
+  "dgSpecHash": "SA6BAkkoy8cf/jsJLPUqXpOmNiBGSzn4rnKel/UAK3dSp3/xeEGse7+/pp8taaDS+cPb8ug9vCekOMh+bHtBtQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\UsuariosConexion\\UsuariosConexion\\UsuariosConexion.csproj",
+  "projectFilePath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\UsuariosConexion\\UsuariosConexion\\UsuariosConexion.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Matias\\.nuget\\packages\\dapper\\2.0.151\\dapper.2.0.151.nupkg.sha512",
     "C:\\Users\\Matias\\.nuget\\packages\\google.protobuf\\3.21.9\\google.protobuf.3.21.9.nupkg.sha512",

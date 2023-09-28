@@ -2118,10 +2118,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "Daos >= 1.0.0",
-      "Dapper >= 2.0.151",
-      "MySql.Data >= 8.1.0",
-      "System.Data.SqlClient >= 4.8.5"
+      "Daos >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -2166,20 +2163,6 @@
     "frameworks": {
       "net6.0": {
         "targetAlias": "net6.0",
-        "dependencies": {
-          "Dapper": {
-            "target": "Package",
-            "version": "[2.0.151, )"
-          },
-          "MySql.Data": {
-            "target": "Package",
-            "version": "[8.1.0, )"
-          },
-          "System.Data.SqlClient": {
-            "target": "Package",
-            "version": "[4.8.5, )"
-          }
-        },
         "imports": [
           "net461",
           "net462",

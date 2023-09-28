@@ -8,10 +8,7 @@
     ".NETCoreApp,Version=v6.0": {
       "UsuariosConexion/1.0.0": {
         "dependencies": {
-          "Daos": "1.0.0",
-          "Dapper": "2.0.151",
-          "MySql.Data": "8.1.0",
-          "System.Data.SqlClient": "4.8.5"
+          "Daos": "1.0.0"
         },
         "runtime": {
           "UsuariosConexion.dll": {}

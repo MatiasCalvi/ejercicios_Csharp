@@ -104,3 +104,4 @@ C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercic
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\UsuariosConexion\UsuariosConexion\obj\Debug\net6.0\UsuariosConexion.pdb
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\UsuariosConexion\UsuariosConexion\obj\Debug\net6.0\UsuariosConexion.genruntimeconfig.cache
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\UsuariosConexion\UsuariosConexion\obj\Debug\net6.0\ref\UsuariosConexion.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\UsuariosConexion\UsuariosConexion\bin\Debug\net6.0\Ninject.dll

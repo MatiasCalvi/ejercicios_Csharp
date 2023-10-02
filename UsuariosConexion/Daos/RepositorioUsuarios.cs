@@ -4,15 +4,17 @@ using MySql.Data.MySqlClient;
 
 namespace Daos
 {
-    public class RepositorioUsuarios
-    {
+
+    public class RepositorioUsuarios : IRepositorioUsuarios
+    {   
+
         private const string connectionString = "Server=localhost;Database=usuariosconexion;Uid=root;Pwd=12345678;";
 
-        readonly string queryObtUsuarios = "SELECT * FROM usuarios";
-        readonly string queryObtUsuarioId = "SELECT * FROM usuarios WHERE Usuario_Id = @Usuario_Id";
-        readonly string crearUsuario = "INSERT INTO usuarios (Usuario_Nombre, Usuario_Edad) VALUES (@Usuario_Nombre, @Usuario_Edad)";
-        readonly string actualizarUsuario = "UPDATE usuarios SET Usuario_Nombre = @Usuario_Nombre, Usuario_Edad = @Usuario_Edad WHERE Usuario_Id = @Usuario_Id";
-        readonly string eliminarUsuario = $"DELETE FROM usuarios WHERE Usuario_Id = @Usuario_Id";
+        private readonly string queryObtUsuarios = "SELECT * FROM usuarios";
+        private readonly string queryObtUsuarioId = "SELECT * FROM usuarios WHERE Usuario_Id = @Usuario_Id";
+        private readonly string crearUsuario = "INSERT INTO usuarios (Usuario_Nombre, Usuario_Edad) VALUES (@Usuario_Nombre, @Usuario_Edad)";
+        private readonly string actualizarUsuario = "UPDATE usuarios SET Usuario_Nombre = @Usuario_Nombre, Usuario_Edad = @Usuario_Edad WHERE Usuario_Id = @Usuario_Id";
+        private readonly string eliminarUsuario = "DELETE FROM usuarios WHERE Usuario_Id = @Usuario_Id";
 
         public static IDbConnection Connection
         {
@@ -57,7 +59,7 @@ namespace Daos
             }
         }
 
-        public void CrearUsuarioEnBD(Usuario usuario)
+        internal void CrearUsuarioEnBD(Usuario usuario)
         {
             using IDbConnection dbConnection = Connection;
             dbConnection.Open();
@@ -97,7 +99,7 @@ namespace Daos
             }
         }
 
-        public void ActualizarUsuarioEnBD(Usuario usuario)
+        internal void ActualizarUsuarioEnBD(Usuario usuario)
         {
             using IDbConnection dbConnection = Connection;
             dbConnection.Open();
@@ -109,8 +111,17 @@ namespace Daos
         {
             using IDbConnection dbConnection = Connection;
             dbConnection.Open();
-            dbConnection.Execute(eliminarUsuario, new { Usuario_Id = id });
-            Console.WriteLine("Usuario eliminado con éxito.");
+            int rowsAffected = dbConnection.Execute(eliminarUsuario, new { Usuario_Id = id });
+
+            if (rowsAffected > 0)
+            {
+                Console.WriteLine("Usuario eliminado con éxito.");
+            }
+            else
+            {
+                Console.WriteLine("No se encontró el usuario o ya ha sido eliminado.");
+            }
         }
+
     }
 }

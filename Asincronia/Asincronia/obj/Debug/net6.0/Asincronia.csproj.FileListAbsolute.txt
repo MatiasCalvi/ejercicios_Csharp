@@ -1,0 +1,14 @@
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\obj\Debug\net6.0\Asincronia.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\obj\Debug\net6.0\Asincronia.AssemblyInfoInputs.cache
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\obj\Debug\net6.0\Asincronia.AssemblyInfo.cs
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\obj\Debug\net6.0\Asincronia.csproj.CoreCompileInputs.cache
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\bin\Debug\net6.0\Asincronia.exe
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\bin\Debug\net6.0\Asincronia.deps.json
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\bin\Debug\net6.0\Asincronia.runtimeconfig.json
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\bin\Debug\net6.0\Asincronia.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\bin\Debug\net6.0\Asincronia.pdb
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\obj\Debug\net6.0\Asincronia.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\obj\Debug\net6.0\refint\Asincronia.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\obj\Debug\net6.0\Asincronia.pdb
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\obj\Debug\net6.0\Asincronia.genruntimeconfig.cache
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\obj\Debug\net6.0\ref\Asincronia.dll

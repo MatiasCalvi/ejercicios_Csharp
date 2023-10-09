@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Daos
+﻿namespace Daos
 {
     public class UsuariosManager
     {
@@ -22,5 +16,15 @@ namespace Daos
             string usuariosSeparadosPorComa = string.Join(", ", usuariosOrdenadosXEdad.Select(user=>user.Usuario_Nombre)); 
             return usuariosSeparadosPorComa;
         }
+
+        public void MostrarLista()
+        {
+            var usuarios = repositorioUsuarios.ListarTodosLosUsuarios();
+            foreach (var usuario in usuarios)
+            {
+                Console.WriteLine($"ID: {usuario.Usuario_Id}, Nombre: {usuario.Usuario_Nombre}, Edad: {usuario.Usuario_Edad}");
+            }
+        }
+
     }
 }

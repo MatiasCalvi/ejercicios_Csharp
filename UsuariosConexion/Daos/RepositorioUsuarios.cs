@@ -30,14 +30,7 @@ namespace Daos
             dbConnection.Open();
             return dbConnection.Query<Usuario>(queryObtUsuarios).ToList();
         }
-        public void MostrarLista()
-        {
-            var usuarios = ListarTodosLosUsuarios();
-            foreach (var usuario in usuarios) 
-            {
-                Console.WriteLine($"ID: {usuario.Usuario_Id}, Nombre: {usuario.Usuario_Nombre}, Edad: {usuario.Usuario_Edad}");
-            }
-        }
+
 
         public Usuario? ObtenerInformacionDeUnUsuario(int id) //---> posible nulidad
         {
@@ -59,7 +52,7 @@ namespace Daos
             }
         }
 
-        internal void CrearUsuarioEnBD(Usuario usuario)
+        public void CrearUsuarioEnBD(Usuario usuario)
         {
             using IDbConnection dbConnection = Connection;
             dbConnection.Open();
@@ -67,39 +60,8 @@ namespace Daos
             Console.WriteLine("Usuario creado con éxito.");
         }
 
-        public void CrearUsuario(string nombre, int edad)
-        {
-            Usuario usuario = new()
-            {
-                Usuario_Nombre = nombre,
-                Usuario_Edad = edad,
-            };
 
-            CrearUsuarioEnBD(usuario);
-        }
-
-        public void ActualizarUsuario(int id, string? nombre = null, int? edad = null)
-        {
-            if (ObtenerInformacionDeUnUsuario(id) is Usuario usuarioActualizado)
-            {
-                if (nombre != null)
-                {
-                    usuarioActualizado.Usuario_Nombre = nombre;
-                }
-
-                if (edad != null)
-                {
-                    usuarioActualizado.Usuario_Edad = edad ?? 0;
-                }
-                ActualizarUsuarioEnBD(usuarioActualizado); //-----> Update
-            }
-            else
-            {
-                Console.WriteLine("No se encontró el usuario.");
-            }
-        }
-
-        internal void ActualizarUsuarioEnBD(Usuario usuario)
+        public void ActualizarUsuarioEnBD(Usuario usuario)
         {
             using IDbConnection dbConnection = Connection;
             dbConnection.Open();

@@ -13,16 +13,13 @@
             }
 
             for (int i=0; i<=arrayCompleto.Length-1; i++){
-                if (arrayCompleto[i]==45000)
-                {
-                    Console.WriteLine("Array en Posicion {0} NUMERO MAXIMO", i, arrayCompleto[i]);
-                }
                 Console.WriteLine("Array en Posicion {0} tiene el numero: '{1}'", i, arrayCompleto[i]);
             }
 
             int mayor = 0;
             int posicion = 0;
             object bloqueo = new();
+
             
             Task tarea1 = Task.Run(() =>
             {
@@ -57,7 +54,5 @@
             
             Console.WriteLine("El numero Mayor esta ubicado en la posicion {0} y es {1}",posicion,mayor);
         }
-       
     }
-
 }

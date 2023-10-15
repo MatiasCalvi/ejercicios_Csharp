@@ -1,30 +1,11 @@
 {
   "version": 3,
   "targets": {
-    "net6.0": {
-      "ArrayAsync/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v6.0",
-        "compile": {
-          "bin/placeholder/ArrayAsync.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/ArrayAsync.dll": {}
-        }
-      }
-    }
+    "net6.0": {}
   },
-  "libraries": {
-    "ArrayAsync/1.0.0": {
-      "type": "project",
-      "path": "../ArrayAsync/ArrayAsync.csproj",
-      "msbuildProject": "../ArrayAsync/ArrayAsync.csproj"
-    }
-  },
+  "libraries": {},
   "projectFileDependencyGroups": {
-    "net6.0": [
-      "ArrayAsync >= 1.0.0"
-    ]
+    "net6.0": []
   },
   "packageFolders": {
     "C:\\Users\\Matias\\.nuget\\packages\\": {}
@@ -32,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\Asincronia\\Asincronia\\Asincronia.csproj",
-      "projectName": "Asincronia",
-      "projectPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\Asincronia\\Asincronia\\Asincronia.csproj",
+      "projectUniqueName": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\Asincronia\\ArrayAsync\\ArrayAsync.csproj",
+      "projectName": "ArrayAsync",
+      "projectPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\Asincronia\\ArrayAsync\\ArrayAsync.csproj",
       "packagesPath": "C:\\Users\\Matias\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\Asincronia\\Asincronia\\obj\\",
+      "outputPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\Asincronia\\ArrayAsync\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Matias\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -52,11 +33,7 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {
-            "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\Asincronia\\ArrayAsync\\ArrayAsync.csproj": {
-              "projectPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\Asincronia\\ArrayAsync\\ArrayAsync.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {

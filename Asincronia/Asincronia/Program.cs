@@ -1,60 +1,35 @@
-﻿namespace Asincronia
+﻿using System;
+using System.Threading.Tasks;
+using ArrayAsync;
+
+class Program
 {
-    class Program
+    static async Task Main()
     {
-        static async Task Main()
-        {
-            int[] arrayCompleto = new int[30000];
-            Random random = new();
-            
-            for (int i = 0; i <= arrayCompleto.Length-1; i++)
-            {   
-                arrayCompleto[i]= random.Next(0, 45001);
-            }
+        ArrayAsync.ArrayAsync metodos = new();
 
-            for (int i=0; i<=arrayCompleto.Length-1; i++){
-                Console.WriteLine("Array en Posicion {0} tiene el numero: '{1}'", i, arrayCompleto[i]);
-            }
+        int arrayLength = 100;
+        int[] arrayCompleto = new int[arrayLength];
 
-            int mayor = 0;
-            int posicion = 0;
-            object bloqueo = new();
+        metodos.Llenar_Imprimir(arrayCompleto, arrayLength);
 
-            
-            Task tarea1 = Task.Run(() =>
-            {
-                for(int i = 0; i <= arrayCompleto.Length/2; i++) {
-                    lock(bloqueo)
-                    {
-                        if (arrayCompleto[i] > mayor)
-                        {   
-                            mayor = arrayCompleto[i];
-                            posicion = i;
-                        }
-                    }
-                }
-            });
+        var tarea1 = metodos.Tarea1(arrayCompleto, arrayLength);
+        var tarea2 = metodos.Tarea2(arrayCompleto, arrayLength);
 
-            Task tarea2 = Task.Run(() =>
-            {
-                for(int i = arrayCompleto.Length / 2; i <= arrayCompleto.Length-1; i++)
-                {
-                    lock(bloqueo)
-                    {
-                        if (arrayCompleto[i] > mayor)
-                        {
-                            mayor = arrayCompleto[i];
-                            posicion = i;
-                        }
-                    }
-                }
-            });
+        await Task.WhenAll(tarea1, tarea2);
 
-            await Task.WhenAll(tarea1, tarea2);
-            
-            Console.WriteLine("El numero Mayor esta ubicado en la posicion {0} y es {1}",posicion,mayor);
-        }
+        int mayor = 0;
+        mayor = Math.Max(mayor, Math.Max(tarea1.Result, tarea2.Result));
+        int indiceMayor = Array.IndexOf(arrayCompleto, mayor);
 
+
+        Console.WriteLine("El número mayor es {0} en la posicion {1}", mayor, indiceMayor);
     }
-
 }
+
+
+
+
+
+
+

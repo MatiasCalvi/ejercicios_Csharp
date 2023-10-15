@@ -1,0 +1,11 @@
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\ArrayAsync\obj\Debug\net6.0\ArrayAsync.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\ArrayAsync\obj\Debug\net6.0\ArrayAsync.AssemblyInfoInputs.cache
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\ArrayAsync\obj\Debug\net6.0\ArrayAsync.AssemblyInfo.cs
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\ArrayAsync\obj\Debug\net6.0\ArrayAsync.csproj.CoreCompileInputs.cache
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\ArrayAsync\bin\Debug\net6.0\ArrayAsync.deps.json
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\ArrayAsync\bin\Debug\net6.0\ArrayAsync.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\ArrayAsync\bin\Debug\net6.0\ArrayAsync.pdb
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\ArrayAsync\obj\Debug\net6.0\ArrayAsync.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\ArrayAsync\obj\Debug\net6.0\refint\ArrayAsync.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\ArrayAsync\obj\Debug\net6.0\ArrayAsync.pdb
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\ArrayAsync\obj\Debug\net6.0\ref\ArrayAsync.dll

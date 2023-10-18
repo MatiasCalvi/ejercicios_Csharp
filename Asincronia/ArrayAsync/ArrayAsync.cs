@@ -4,7 +4,8 @@ namespace ArrayAsync
 {
     public class ArrayAsync
     {
-        private readonly object arrayLock = new();
+        private readonly object arrayLock1 = new();
+        private readonly object arrayLock2 = new();
 
         public int ProcesarElemento(int pInicio, int pFin, int[] pArray)
         {
@@ -12,11 +13,14 @@ namespace ArrayAsync
 
             for (int i = pInicio; i < pFin ; i++)
             {
-                lock (arrayLock)
+                lock (arrayLock1)
                 {
                     if (pArray[i] > mayorLocal)
                     {
-                        mayorLocal = pArray[i];
+                        lock (arrayLock2)
+                        {
+                            mayorLocal = pArray[i];
+                        }
                     }
                 }
             }
@@ -24,7 +28,7 @@ namespace ArrayAsync
             return mayorLocal;
         }
 
-        public void Llenar_Imprimir(int[] pArrayCompleto, int pArrayLength)
+        public static void Llenar_Imprimir(int[] pArrayCompleto, int pArrayLength)
         {
             Random random = new();
 

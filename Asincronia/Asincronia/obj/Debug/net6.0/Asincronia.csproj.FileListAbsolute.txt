@@ -12,3 +12,7 @@ C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercic
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\obj\Debug\net6.0\Asincronia.pdb
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\obj\Debug\net6.0\Asincronia.genruntimeconfig.cache
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\obj\Debug\net6.0\ref\Asincronia.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\obj\Debug\net6.0\Asincronia.csproj.AssemblyReference.cache
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\bin\Debug\net6.0\ArrayAsync.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\bin\Debug\net6.0\ArrayAsync.pdb
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\Asincronia\Asincronia\obj\Debug\net6.0\Asincronia.csproj.CopyComplete

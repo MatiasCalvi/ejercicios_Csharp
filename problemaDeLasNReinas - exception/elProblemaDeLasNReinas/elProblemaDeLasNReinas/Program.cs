@@ -6,7 +6,7 @@ namespace TuEspacioDeNombres
     class Program
     {
 
-        static void FuncionMostrar9(Torre pieza, NuevaPieza nuevaPieza)
+        static void FuncionMostrar9(PiezaT pieza, NuevaPieza nuevaPieza)
         {
             if (pieza.Backtracking(0))
             {
@@ -41,10 +41,21 @@ namespace TuEspacioDeNombres
 
         static void Main(string[] args)
         {
-            IPieza pieza = new Torre();
+            //IPieza pieza = new Torre();
             NuevaPieza nuevaPieza = new NuevaPieza();
 
-            FuncionMostrar9((Torre)pieza, nuevaPieza);
+            IPieza piezaT = new PiezaT();
+
+            try
+            {
+                FuncionMostrar9((PiezaT)piezaT, nuevaPieza);
+            }
+            catch (SinSolucionException e) 
+            {
+                Console.WriteLine(e.Message); 
+                Console.WriteLine(e.StackTrace); 
+            }
+
         }
     }
 }

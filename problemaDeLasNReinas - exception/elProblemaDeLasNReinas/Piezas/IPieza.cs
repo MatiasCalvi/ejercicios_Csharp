@@ -6,5 +6,6 @@
         Casilla[,] tablero { get; set; }
         bool EsMovimientoSeguro(int fila, int columna);
         bool Backtracking(int pPiezas);
+        void MostrarPosicion();
     }
 }

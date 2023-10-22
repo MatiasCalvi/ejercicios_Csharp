@@ -4,16 +4,16 @@ namespace Piezas.Piezas
 {
     public class Peon : IPieza
     {
-        public Casilla[,] tablero { get; set; }
+        public Casilla[,] Tablero { get; set; }
 
         public Peon()
         {
-            tablero = new Casilla[8, 8];
+            Tablero = new Casilla[8, 8];
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    tablero[i, j] = Casilla.Libre;
+                    Tablero[i, j] = Casilla.Libre;
                 }
             }
         }
@@ -25,7 +25,7 @@ namespace Piezas.Piezas
                 return false;
             }
 
-            if (tablero[fila, columna] == Casilla.Ocupada)
+            if (Tablero[fila, columna] == Casilla.Ocupada)
             {
                 return false;
             }
@@ -41,12 +41,12 @@ namespace Piezas.Piezas
                 {
                     for (int columna = 0; columna < 8; columna++)
                     {
-                        if (tablero[fila, columna] == Casilla.Ocupada)
+                        if (Tablero[fila, columna] == Casilla.Ocupada)
                         {
                             int nuevaFila = fila + 1;
-                            if (nuevaFila < 8 && tablero[nuevaFila, columna] == Casilla.Libre)
+                            if (nuevaFila < 8 && Tablero[nuevaFila, columna] == Casilla.Libre)
                             {
-                                tablero[nuevaFila, columna] = Casilla.Marcado;
+                                Tablero[nuevaFila, columna] = Casilla.Marcado;
                             }
                         }
                     }
@@ -59,14 +59,14 @@ namespace Piezas.Piezas
             {
                 if (EsMovimientoSeguro(pPiezas, columna))
                 {
-                    tablero[pPiezas, columna] = Casilla.Ocupada;
+                    Tablero[pPiezas, columna] = Casilla.Ocupada;
 
                     if (Backtracking(pPiezas + 1))
                     {
                         return true;
                     }
 
-                    tablero[pPiezas, columna] = Casilla.Libre;
+                    Tablero[pPiezas, columna] = Casilla.Libre;
                 }
             }
 
@@ -79,11 +79,11 @@ namespace Piezas.Piezas
             {
                 for (int columna = 0; columna < 8; columna++)
                 {
-                    if (tablero[fila, columna] == Casilla.Ocupada)
+                    if (Tablero[fila, columna] == Casilla.Ocupada)
                     {
                         Console.WriteLine("Peon en fila {0}, columna {1}", fila, columna);
                     }
-                    else if (tablero[fila, columna] == Casilla.Marcado)
+                    else if (Tablero[fila, columna] == Casilla.Marcado)
                     {
                         //Console.WriteLine("Casilla marcada en fila {0}, columna {1}", fila, columna);
                     }

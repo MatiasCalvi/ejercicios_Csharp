@@ -4,18 +4,18 @@ namespace Piezas.Piezas
 {
     public class Caballo : IPieza
     {
-        public Casilla[,] tablero { get; set; }
+        public Casilla[,] Tablero { get; set; }
         private int[] movimientosX = { 2, 1, -1, -2, -2, -1, 1, 2 };
         private int[] movimientosY = { 1, 2, 2, 1, -1, -2, -2, -1 };
 
         public Caballo()
         {
-            tablero = new Casilla[8, 8];
+            Tablero = new Casilla[8, 8];
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    tablero[i, j] = Casilla.Libre;
+                    Tablero[i, j] = Casilla.Libre;
                 }
             }
         }
@@ -27,7 +27,7 @@ namespace Piezas.Piezas
                 return false;
             }
 
-            if (tablero[fila, columna] == Casilla.Ocupada)
+            if (Tablero[fila, columna] == Casilla.Ocupada)
             {
                 return false;
             }
@@ -35,7 +35,7 @@ namespace Piezas.Piezas
 
             for (int i = 0; i < 8; i++)
             {
-                if (tablero[i, columna] == Casilla.Ocupada || tablero[fila, i] == Casilla.Ocupada)
+                if (Tablero[i, columna] == Casilla.Ocupada || Tablero[fila, i] == Casilla.Ocupada)
                 {
                     return false;
                 }
@@ -49,7 +49,7 @@ namespace Piezas.Piezas
                         {
                             if (columna + movimientosY[indice] > columna && columna + movimientosY[indice] < 8)
                             {
-                                if (tablero[movimientosX[indice], movimientosY[indice]] == Casilla.Ocupada)
+                                if (Tablero[movimientosX[indice], movimientosY[indice]] == Casilla.Ocupada)
                                 {
                                     return false;
                                 }
@@ -77,7 +77,7 @@ namespace Piezas.Piezas
                 {
                     if (EsMovimientoSeguro(fila, columna))
                     {
-                        tablero[fila, columna] = Casilla.Ocupada;
+                        Tablero[fila, columna] = Casilla.Ocupada;
 
                         for (int indice = 0; indice < movimientosX.Length; indice++)
                         {
@@ -86,9 +86,9 @@ namespace Piezas.Piezas
 
                             if (nuevaFila >= 0 && nuevaFila < 8 && nuevaColumna >= 0 && nuevaColumna < 8)
                             {
-                                if (tablero[nuevaFila, nuevaColumna] == Casilla.Libre)
+                                if (Tablero[nuevaFila, nuevaColumna] == Casilla.Libre)
                                 {
-                                    tablero[nuevaFila, nuevaColumna] = Casilla.Marcado;
+                                    Tablero[nuevaFila, nuevaColumna] = Casilla.Marcado;
                                 }
                             }
                         }
@@ -105,14 +105,14 @@ namespace Piezas.Piezas
 
                             if (nuevaFila >= 0 && nuevaFila < 8 && nuevaColumna >= 0 && nuevaColumna < 8)
                             {
-                                if (tablero[nuevaFila, nuevaColumna] == Casilla.Marcado)
+                                if (Tablero[nuevaFila, nuevaColumna] == Casilla.Marcado)
                                 {
-                                    tablero[nuevaFila, nuevaColumna] = Casilla.Libre;
+                                    Tablero[nuevaFila, nuevaColumna] = Casilla.Libre;
                                 }
                             }
                         }
 
-                        tablero[fila, columna] = Casilla.Libre;
+                        Tablero[fila, columna] = Casilla.Libre;
                     }
                 }
             }
@@ -126,7 +126,7 @@ namespace Piezas.Piezas
             {
                 for (int columna = 0; columna < 8; columna++)
                 {
-                    if (tablero[fila, columna] == Casilla.Ocupada)
+                    if (Tablero[fila, columna] == Casilla.Ocupada)
                     {
                         Console.WriteLine("Caballo en fila {0}, columna {1}", fila, columna);
                     }

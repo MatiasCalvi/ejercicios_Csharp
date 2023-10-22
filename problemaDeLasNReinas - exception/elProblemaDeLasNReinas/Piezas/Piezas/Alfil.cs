@@ -4,16 +4,16 @@ namespace Piezas.Piezas
 {
     public class Alfil : IPieza
     {
-        public Casilla[,] tablero { get; set; }
+        public Casilla[,] Tablero { get; set; }
 
         public Alfil()
         {
-            tablero = new Casilla[8, 8];
+            Tablero = new Casilla[8, 8];
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    tablero[i, j] = Casilla.Libre;
+                    Tablero[i, j] = Casilla.Libre;
                 }
             }
         }
@@ -26,12 +26,12 @@ namespace Piezas.Piezas
                 int deltaFila = Math.Abs(i - fila);
                 int deltaColumna = Math.Abs(i - columna);
 
-                if (tablero[i, i] == Casilla.Ocupada && deltaFila == deltaColumna)
+                if (Tablero[i, i] == Casilla.Ocupada && deltaFila == deltaColumna)
                 {
                     return false;
                 }
 
-                if (tablero[i, 7 - i] == Casilla.Ocupada && deltaFila == deltaColumna)
+                if (Tablero[i, 7 - i] == Casilla.Ocupada && deltaFila == deltaColumna)
                 {
                     return false;
                 }
@@ -48,21 +48,21 @@ namespace Piezas.Piezas
                 {
                     for (int columna = 0; columna < 8; columna++)
                     {
-                        if (tablero[fila, columna] == Casilla.Ocupada)
+                        if (Tablero[fila, columna] == Casilla.Ocupada)
                         {
                             for (int i = 0; i < 8; i++)
                             {
                                 int deltaFila = Math.Abs(i - fila);
                                 int deltaColumna = Math.Abs(i - columna);
 
-                                if (tablero[i, i] == Casilla.Libre && deltaFila == deltaColumna)
+                                if (Tablero[i, i] == Casilla.Libre && deltaFila == deltaColumna)
                                 {
-                                    tablero[i, i] = Casilla.Marcado;
+                                    Tablero[i, i] = Casilla.Marcado;
                                 }
 
-                                if (tablero[i, 7 - i] == Casilla.Libre && deltaFila == deltaColumna)
+                                if (Tablero[i, 7 - i] == Casilla.Libre && deltaFila == deltaColumna)
                                 {
-                                    tablero[i, 7 - i] = Casilla.Marcado;
+                                    Tablero[i, 7 - i] = Casilla.Marcado;
                                 }
                             }
                         }
@@ -76,14 +76,14 @@ namespace Piezas.Piezas
             {
                 if (EsMovimientoSeguro(filaActual, columna))
                 {
-                    tablero[filaActual, columna] = Casilla.Ocupada;
+                    Tablero[filaActual, columna] = Casilla.Ocupada;
 
                     if (Backtracking(filaActual + 1))
                     {
                         return true;
                     }
 
-                    tablero[filaActual, columna] = Casilla.Libre;
+                    Tablero[filaActual, columna] = Casilla.Libre;
                 }
             }
 
@@ -96,11 +96,11 @@ namespace Piezas.Piezas
             {
                 for (int columna = 0; columna < 8; columna++)
                 {
-                    if (tablero[fila, columna] == Casilla.Ocupada)
+                    if (Tablero[fila, columna] == Casilla.Ocupada)
                     {
                         Console.WriteLine("Alfil en fila {0}, columna {1}", fila, columna);
                     }
-                    else if (tablero[fila, columna] == Casilla.Marcado)
+                    else if (Tablero[fila, columna] == Casilla.Marcado)
                     {
                         //Console.WriteLine("Casilla marcada en fila {0}, columna {1}", fila, columna);
                     }

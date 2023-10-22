@@ -4,16 +4,16 @@ namespace Piezas.Piezas
 {
     public class Torre : IPieza
     {
-        public Casilla[,] tablero { get; set; }
+        public Casilla[,] Tablero { get; set; }
 
         public Torre()
         {
-            tablero = new Casilla[8, 8];
+            Tablero = new Casilla[8, 8];
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    tablero[i, j] = Casilla.Libre;
+                    Tablero[i, j] = Casilla.Libre;
                 }
             }
         }
@@ -23,7 +23,7 @@ namespace Piezas.Piezas
 
             for (int i = 0; i < fila; i++)
             {
-                if (tablero[i, columna] == Casilla.Ocupada)
+                if (Tablero[i, columna] == Casilla.Ocupada)
                 {
                     return false;
                 }
@@ -40,18 +40,18 @@ namespace Piezas.Piezas
                 {
                     for (int columna = 0; columna < 8; columna++)
                     {
-                        if (tablero[fila, columna] == Casilla.Ocupada)
+                        if (Tablero[fila, columna] == Casilla.Ocupada)
                         {
                             for (int i = 0; i < 8; i++)
                             {
-                                if (tablero[i, columna] == Casilla.Libre)
+                                if (Tablero[i, columna] == Casilla.Libre)
                                 {
-                                    tablero[i, columna] = Casilla.Marcado;
+                                    Tablero[i, columna] = Casilla.Marcado;
                                 }
 
-                                if (tablero[fila, i] == Casilla.Libre)
+                                if (Tablero[fila, i] == Casilla.Libre)
                                 {
-                                    tablero[fila, i] = Casilla.Marcado;
+                                    Tablero[fila, i] = Casilla.Marcado;
                                 }
                             }
                         }
@@ -65,14 +65,14 @@ namespace Piezas.Piezas
             {
                 if (EsMovimientoSeguro(pPiezas, columna))
                 {
-                    tablero[pPiezas, columna] = Casilla.Ocupada;
+                    Tablero[pPiezas, columna] = Casilla.Ocupada;
 
                     if (Backtracking(pPiezas + 1))
                     {
                         return true;
                     }
 
-                    tablero[pPiezas, columna] = Casilla.Libre;
+                    Tablero[pPiezas, columna] = Casilla.Libre;
                 }
             }
 
@@ -85,11 +85,11 @@ namespace Piezas.Piezas
             {
                 for (int columna = 0; columna < 8; columna++)
                 {
-                    if (tablero[fila, columna] == Casilla.Ocupada)
+                    if (Tablero[fila, columna] == Casilla.Ocupada)
                     {
                         Console.WriteLine("Torre en fila {0}, columna {1}", fila, columna);
                     }
-                    else if (tablero[fila, columna] == Casilla.Marcado)
+                    else if (Tablero[fila, columna] == Casilla.Marcado)
                     {
                         //Console.WriteLine("Casilla marcada en fila {0}, columna {1}", fila, columna);
                     }

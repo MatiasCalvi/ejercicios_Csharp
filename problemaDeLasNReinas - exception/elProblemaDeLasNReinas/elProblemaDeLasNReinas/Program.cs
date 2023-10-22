@@ -6,7 +6,7 @@ namespace TuEspacioDeNombres
     class Program
     {
 
-        static void FuncionMostrar9(PiezaT pieza, NuevaPieza nuevaPieza)
+        static void FuncionMostrar9(Caballo pieza, NuevaPieza nuevaPieza)
         {
             if (pieza.Backtracking(0))
             {
@@ -18,9 +18,9 @@ namespace TuEspacioDeNombres
 
                     for (int j = 0; j < 8; j++)
                     {
-                        if (pieza.tablero[i, j] == IPieza.Casilla.Libre)
+                        if (pieza.Tablero[i, j] == IPieza.Casilla.Libre)
                         {
-                            if (nuevaPieza.EsMovimientoSeguro(pieza.tablero, i, j, pieza))
+                            if (nuevaPieza.EsMovimientoSeguro(pieza.Tablero, i, j, pieza))
                             {
                                 Console.WriteLine("NuevaPieza en fila {0}, columna {1}", i, j);
                                 hayLugar = true;
@@ -39,16 +39,16 @@ namespace TuEspacioDeNombres
             }
         }
 
-        static void Main(string[] args)
+        static void Main()
         {
-            //IPieza pieza = new Peon();
-            NuevaPieza nuevaPieza = new NuevaPieza();
+            IPieza pieza = new Caballo();
+            NuevaPieza nuevaPieza = new();
 
             IPieza piezaT = new PiezaT();
 
             try
             {
-                FuncionMostrar9((PiezaT)piezaT, nuevaPieza);
+                FuncionMostrar9((Caballo)pieza, nuevaPieza);
             }
             catch (SinSolucionException e) 
             {

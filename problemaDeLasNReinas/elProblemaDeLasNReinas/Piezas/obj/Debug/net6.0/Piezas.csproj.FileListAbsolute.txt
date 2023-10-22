@@ -9,3 +9,14 @@ C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\problem
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\problemaDeLasNReinas\elProblemaDeLasNReinas\Piezas\obj\Debug\net6.0\refint\Piezas.dll
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\problemaDeLasNReinas\elProblemaDeLasNReinas\Piezas\obj\Debug\net6.0\Piezas.pdb
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\problemaDeLasNReinas\elProblemaDeLasNReinas\Piezas\obj\Debug\net6.0\ref\Piezas.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\problemaDeLasNReinas\elProblemaDeLasNReinas\Piezas\bin\Debug\net6.0\Piezas.deps.json
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\problemaDeLasNReinas\elProblemaDeLasNReinas\Piezas\bin\Debug\net6.0\Piezas.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\problemaDeLasNReinas\elProblemaDeLasNReinas\Piezas\bin\Debug\net6.0\Piezas.pdb
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\problemaDeLasNReinas\elProblemaDeLasNReinas\Piezas\obj\Debug\net6.0\Piezas.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\problemaDeLasNReinas\elProblemaDeLasNReinas\Piezas\obj\Debug\net6.0\Piezas.AssemblyInfoInputs.cache
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\problemaDeLasNReinas\elProblemaDeLasNReinas\Piezas\obj\Debug\net6.0\Piezas.AssemblyInfo.cs
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\problemaDeLasNReinas\elProblemaDeLasNReinas\Piezas\obj\Debug\net6.0\Piezas.csproj.CoreCompileInputs.cache
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\problemaDeLasNReinas\elProblemaDeLasNReinas\Piezas\obj\Debug\net6.0\Piezas.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\problemaDeLasNReinas\elProblemaDeLasNReinas\Piezas\obj\Debug\net6.0\refint\Piezas.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\problemaDeLasNReinas\elProblemaDeLasNReinas\Piezas\obj\Debug\net6.0\Piezas.pdb
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\problemaDeLasNReinas\elProblemaDeLasNReinas\Piezas\obj\Debug\net6.0\ref\Piezas.dll

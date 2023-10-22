@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Piezas.IPieza;
+﻿using static Piezas.IPieza;
 
 namespace Piezas.Piezas
 {
-    public class Caballo
+    public class Caballo : IPieza
     {
         public Casilla[,] tablero { get; set; }
         private int[] movimientosX = { 2, 1, -1, -2, -2, -1, 1, 2 };
@@ -37,16 +32,30 @@ namespace Piezas.Piezas
                 return false;
             }
 
-            for (int i = 0; i < movimientosX.Length; i++)
-            {
-                int nuevaFila = fila + movimientosX[i];
-                int nuevaColumna = columna + movimientosY[i];
 
-                if (nuevaFila >= 0 && nuevaFila < 8 && nuevaColumna >= 0 && nuevaColumna < 8)
+            for (int i = 0; i < 8; i++)
+            {
+                if (tablero[i, columna] == Casilla.Ocupada || tablero[fila, i] == Casilla.Ocupada)
                 {
-                    if (tablero[nuevaFila, nuevaColumna] == Casilla.Ocupada)
+                    return false;
+                }
+
+                for (int j = 0; j < 8; j++)
+                {
+
+                    for (int indice = 0; indice < movimientosX.Length; indice++)
                     {
-                        return false;
+                        if (fila + movimientosX[indice] > fila && fila + movimientosX[indice] < 8)
+                        {
+                            if (columna + movimientosY[indice] > columna && columna + movimientosY[indice] < 8)
+                            {
+                                if (tablero[movimientosX[indice], movimientosY[indice]] == Casilla.Ocupada)
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+
                     }
                 }
             }
@@ -54,9 +63,10 @@ namespace Piezas.Piezas
             return true;
         }
 
-        public bool Backtracking(int caballosColocados)
+        public bool Backtracking(int pPiezas)
         {
-            if (caballosColocados == 8)
+
+            if (pPiezas == 8)
             {
                 return true;
             }
@@ -69,9 +79,37 @@ namespace Piezas.Piezas
                     {
                         tablero[fila, columna] = Casilla.Ocupada;
 
-                        if (Backtracking(caballosColocados + 1))
+                        for (int indice = 0; indice < movimientosX.Length; indice++)
+                        {
+                            int nuevaFila = fila + movimientosX[indice];
+                            int nuevaColumna = columna + movimientosY[indice];
+
+                            if (nuevaFila >= 0 && nuevaFila < 8 && nuevaColumna >= 0 && nuevaColumna < 8)
+                            {
+                                if (tablero[nuevaFila, nuevaColumna] == Casilla.Libre)
+                                {
+                                    tablero[nuevaFila, nuevaColumna] = Casilla.Marcado;
+                                }
+                            }
+                        }
+
+                        if (Backtracking(pPiezas + 1))
                         {
                             return true;
+                        }
+
+                        for (int indice = 0; indice < movimientosX.Length; indice++)
+                        {
+                            int nuevaFila = fila + movimientosX[indice];
+                            int nuevaColumna = columna + movimientosY[indice];
+
+                            if (nuevaFila >= 0 && nuevaFila < 8 && nuevaColumna >= 0 && nuevaColumna < 8)
+                            {
+                                if (tablero[nuevaFila, nuevaColumna] == Casilla.Marcado)
+                                {
+                                    tablero[nuevaFila, nuevaColumna] = Casilla.Libre;
+                                }
+                            }
                         }
 
                         tablero[fila, columna] = Casilla.Libre;
@@ -92,6 +130,10 @@ namespace Piezas.Piezas
                     {
                         Console.WriteLine("Caballo en fila {0}, columna {1}", fila, columna);
                     }
+                    //else if (tablero[fila, columna] == Casilla.Marcado)
+                    //{
+                    //    Console.WriteLine("Casilla marcada en fila {0}, columna {1}", fila, columna);
+                    //}
                 }
             }
         }

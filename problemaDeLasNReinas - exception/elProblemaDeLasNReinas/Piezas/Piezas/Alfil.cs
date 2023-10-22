@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Piezas.IPieza;
+﻿using static Piezas.IPieza;
 
 namespace Piezas.Piezas
 {
@@ -25,7 +20,7 @@ namespace Piezas.Piezas
 
         public bool EsMovimientoSeguro(int fila, int columna)
         {
-            
+
             for (int i = 0; i < 8; i++)
             {
                 int deltaFila = Math.Abs(i - fila);
@@ -49,6 +44,31 @@ namespace Piezas.Piezas
         {
             if (filaActual == 8)
             {
+                for (int fila = 0; fila < 8; fila++)
+                {
+                    for (int columna = 0; columna < 8; columna++)
+                    {
+                        if (tablero[fila, columna] == Casilla.Ocupada)
+                        {
+                            for (int i = 0; i < 8; i++)
+                            {
+                                int deltaFila = Math.Abs(i - fila);
+                                int deltaColumna = Math.Abs(i - columna);
+
+                                if (tablero[i, i] == Casilla.Libre && deltaFila == deltaColumna)
+                                {
+                                    tablero[i, i] = Casilla.Marcado;
+                                }
+
+                                if (tablero[i, 7 - i] == Casilla.Libre && deltaFila == deltaColumna)
+                                {
+                                    tablero[i, 7 - i] = Casilla.Marcado;
+                                }
+                            }
+                        }
+                    }
+                }
+
                 return true;
             }
 
@@ -80,8 +100,13 @@ namespace Piezas.Piezas
                     {
                         Console.WriteLine("Alfil en fila {0}, columna {1}", fila, columna);
                     }
+                    else if (tablero[fila, columna] == Casilla.Marcado)
+                    {
+                        //Console.WriteLine("Casilla marcada en fila {0}, columna {1}", fila, columna);
+                    }
                 }
             }
         }
     }
 }
+

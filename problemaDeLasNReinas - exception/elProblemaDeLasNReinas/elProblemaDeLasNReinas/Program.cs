@@ -1,48 +1,53 @@
+using Piezas;
 using Piezas.Piezas;
 
-
 namespace TuEspacioDeNombres
-{   
+{
     class Program
-    {   
-  
-        static void FuncionMostrar9(Caballo pieza, NuevaPieza nuevaPieza)
+    {
+
+        static void FuncionMostrar9(Torre pieza, NuevaPieza nuevaPieza)
         {
             if (pieza.Backtracking(0))
             {
                 pieza.MostrarPosicion();
 
-                for (int fila = 0; fila < 8; fila++)
+                bool hayLugar = false;
+                for (int i = 0; i < 8; i++)
                 {
-                    for (int columna = 0; columna < 8; columna++)
+
+                    for (int j = 0; j < 8; j++)
                     {
-                        if (nuevaPieza.EsMovimientoSeguro(pieza.tablero, fila, columna))
+                        if (pieza.tablero[i, j] == IPieza.Casilla.Libre)
                         {
-                            Console.WriteLine("La NuevaPieza puede ser colocada en la fila {0}, columna {1}", fila, columna);
-                            return;
+                            if (nuevaPieza.EsMovimientoSeguro(pieza.tablero, i, j, pieza))
+                            {
+                                Console.WriteLine("NuevaPieza en fila {0}, columna {1}", i, j);
+                                hayLugar = true;
+                                break; 
+                            }
                         }
                     }
+
+                    if (hayLugar) break; 
                 }
 
-                Console.WriteLine("No se encontró una posición para la NuevaPieza.");
-            }
-            else
-            {
-                Console.WriteLine("No se encontró una solución.");
+                if (!hayLugar) 
+                {
+                    Console.WriteLine("No hay lugar para la nuevaPieza");
+                }
             }
         }
 
         static void Main(string[] args)
         {
-            Caballo pieza = new Caballo(); // *---> Puede ser cualquier pieza dependiendo del constructor "Peon","Rey","Caballo","Torre","Reina","Alfil".
-            NuevaPieza nuevaPieza = new NuevaPieza(); //*---> Nueva Pieza, se mueve en cualquier dialgonal pero no horizontal-vertical y solo una casilla a la vez
+            IPieza pieza = new Torre();
+            NuevaPieza nuevaPieza = new NuevaPieza();
 
-
-            FuncionMostrar9(pieza, nuevaPieza);
+            FuncionMostrar9((Torre)pieza, nuevaPieza);
         }
     }
 }
-
 
 
 

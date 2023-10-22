@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\problemaDeLasNReinas\\elProblemaDeLasNReinas\\Piezas\\Piezas.csproj": {}
+    "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\problemaDeLasNReinas - exception\\elProblemaDeLasNReinas\\Piezas\\Piezas.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\problemaDeLasNReinas\\elProblemaDeLasNReinas\\Piezas\\Piezas.csproj": {
+    "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\problemaDeLasNReinas - exception\\elProblemaDeLasNReinas\\Piezas\\Piezas.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\problemaDeLasNReinas\\elProblemaDeLasNReinas\\Piezas\\Piezas.csproj",
+        "projectUniqueName": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\problemaDeLasNReinas - exception\\elProblemaDeLasNReinas\\Piezas\\Piezas.csproj",
         "projectName": "Piezas",
-        "projectPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\problemaDeLasNReinas\\elProblemaDeLasNReinas\\Piezas\\Piezas.csproj",
+        "projectPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\problemaDeLasNReinas - exception\\elProblemaDeLasNReinas\\Piezas\\Piezas.csproj",
         "packagesPath": "C:\\Users\\Matias\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\problemaDeLasNReinas\\elProblemaDeLasNReinas\\Piezas\\obj\\",
+        "outputPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\problemaDeLasNReinas - exception\\elProblemaDeLasNReinas\\Piezas\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Matias\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -55,7 +55,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }

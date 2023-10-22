@@ -32,11 +32,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\problemaDeLasNReinas\\elProblemaDeLasNReinas\\elProblemaDeLasNReinas\\elProblemaDeLasNReinas.csproj",
+      "projectUniqueName": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\problemaDeLasNReinas - exception\\elProblemaDeLasNReinas\\elProblemaDeLasNReinas\\elProblemaDeLasNReinas.csproj",
       "projectName": "elProblemaDeLasNReinas",
-      "projectPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\problemaDeLasNReinas\\elProblemaDeLasNReinas\\elProblemaDeLasNReinas\\elProblemaDeLasNReinas.csproj",
+      "projectPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\problemaDeLasNReinas - exception\\elProblemaDeLasNReinas\\elProblemaDeLasNReinas\\elProblemaDeLasNReinas.csproj",
       "packagesPath": "C:\\Users\\Matias\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\problemaDeLasNReinas\\elProblemaDeLasNReinas\\elProblemaDeLasNReinas\\obj\\",
+      "outputPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\problemaDeLasNReinas - exception\\elProblemaDeLasNReinas\\elProblemaDeLasNReinas\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Matias\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -53,8 +53,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\problemaDeLasNReinas\\elProblemaDeLasNReinas\\Piezas\\Piezas.csproj": {
-              "projectPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\problemaDeLasNReinas\\elProblemaDeLasNReinas\\Piezas\\Piezas.csproj"
+            "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\problemaDeLasNReinas - exception\\elProblemaDeLasNReinas\\Piezas\\Piezas.csproj": {
+              "projectPath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\problemaDeLasNReinas - exception\\elProblemaDeLasNReinas\\Piezas\\Piezas.csproj"
             }
           }
         }
@@ -84,7 +84,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
       }
     }
   }

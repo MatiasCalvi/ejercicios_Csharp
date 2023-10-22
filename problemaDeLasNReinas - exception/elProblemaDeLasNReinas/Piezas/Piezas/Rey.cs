@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Piezas.IPieza;
+﻿using static Piezas.IPieza;
 
 namespace Piezas.Piezas
 {
@@ -25,7 +20,7 @@ namespace Piezas.Piezas
 
         public bool EsMovimientoSeguro(int fila, int columna)
         {
-            
+
             if (fila < 0 || columna < 0 || fila >= 8 || columna >= 8 || tablero[fila, columna] == Casilla.Ocupada)
             {
                 return false;
@@ -52,10 +47,36 @@ namespace Piezas.Piezas
         }
 
 
-        public bool Backtracking(int reyesColocados)
+        public bool Backtracking(int pPiezas)
         {
-            if (reyesColocados == 8)
+            if (pPiezas == 8)
             {
+                for (int fila = 0; fila < 8; fila++)
+                {
+                    for (int columna = 0; columna < 8; columna++)
+                    {
+                        if (tablero[fila, columna] == Casilla.Ocupada)
+                        {
+                            for (int i = -1; i <= 1; i++)
+                            {
+                                for (int j = -1; j <= 1; j++)
+                                {
+                                    int nuevaFila = fila + i;
+                                    int nuevaColumna = columna + j;
+
+                                    if (nuevaFila >= 0 && nuevaFila < 8 && nuevaColumna >= 0 && nuevaColumna < 8)
+                                    {
+                                        if (tablero[nuevaFila, nuevaColumna] == Casilla.Libre)
+                                        {
+                                            tablero[nuevaFila, nuevaColumna] = Casilla.Marcado;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 return true;
             }
 
@@ -67,7 +88,7 @@ namespace Piezas.Piezas
                     {
                         tablero[fila, columna] = Casilla.Ocupada;
 
-                        if (Backtracking(reyesColocados + 1))
+                        if (Backtracking(pPiezas + 1))
                         {
                             return true;
                         }
@@ -90,9 +111,14 @@ namespace Piezas.Piezas
                     {
                         Console.WriteLine("Rey en fila {0}, columna {1}", fila, columna);
                     }
+                    else if (tablero[fila, columna] == Casilla.Marcado)
+                    {
+                        //Console.WriteLine("Casilla marcada en fila {0}, columna {1}", fila, columna);
+                    }
                 }
             }
         }
     }
 }
+
 

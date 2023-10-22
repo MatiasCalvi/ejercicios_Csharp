@@ -41,7 +41,7 @@ namespace TuEspacioDeNombres
 
         static void Main(string[] args)
         {
-            //IPieza pieza = new Torre();
+            //IPieza pieza = new Peon();
             NuevaPieza nuevaPieza = new NuevaPieza();
 
             IPieza piezaT = new PiezaT();

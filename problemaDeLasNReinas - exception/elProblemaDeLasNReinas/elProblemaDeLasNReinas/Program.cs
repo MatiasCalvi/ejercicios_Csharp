@@ -44,7 +44,7 @@ namespace TuEspacioDeNombres
             //IPieza pieza = new Torre();
             NuevaPieza nuevaPieza = new NuevaPieza();
 
-            IPieza piezaT = new PiezaT();
+            IPieza piezaT = new PiezaT(); //----> Pieza sin solucion
 
             try
             {

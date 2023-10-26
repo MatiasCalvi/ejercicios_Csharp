@@ -5,15 +5,15 @@ namespace Clases
     public class Kiosco : IKiosco
     {
         private static readonly Kiosco instance = new();
-        private List<IProducto> productos;
+        private List<IProducto> Productos;
         private Kiosco()
         {
-            productos = new List<IProducto>();
-            productos.Add(new Producto("Coca-Cola", 500, 10, false, false));
-            productos.Add(new Producto("Chocolate", 400, 5, false, false));
-            productos.Add(new Producto("Galletitas", 300, 8, false, false));
-            productos.Add(new Producto("Brahma", 450, 6, true, true));
-            productos.Add(new Producto("Quilmes", 550, 7, true, true));
+            Productos = new List<IProducto>();
+            Productos.Add(new Producto("Coca-Cola", 500, 10, false, false));
+            Productos.Add(new Producto("Chocolate", 400, 5, false, false));
+            Productos.Add(new Producto("Galletitas", 300, 8, false, false));
+            Productos.Add(new Producto("Brahma", 450, 6, true, true));
+            Productos.Add(new Producto("Quilmes", 550, 7, true, true));
         }
 
         public static Kiosco Instance
@@ -27,19 +27,19 @@ namespace Clases
         public void MostrarProductos()
         {
             Console.WriteLine("Productos:");
-            foreach (var producto in this.productos)
+            foreach (var producto in Productos)
             {
                 Console.WriteLine($"{producto.Nombre} - Precio: ${producto.Precio} - Stock: {producto.Stock}");
             }
         }
 
-        public List<IProducto>Productos()
+        public List<IProducto>ListaProductos()
         {
-            return this.productos;
+            return Productos;
         }
         public Producto BuscarProducto(string pNombre)
         {
-            foreach(Producto produc in productos)
+            foreach(Producto produc in Productos)
             {
                 if(produc.Nombre == pNombre)
                 {

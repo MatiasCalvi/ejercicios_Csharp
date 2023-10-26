@@ -1,4 +1,4 @@
-﻿using Clases.Interfaces;
+using Clases.Interfaces;
 
 namespace Clases
 {
@@ -54,33 +54,38 @@ namespace Clases
             return true; //---> cambialo si queres consumir alcohol
         }
 
-        public void Comprar(IUsuario cliente, IProducto producto)
+        object locked = new();
+        public void Comprar(IUsuario pCliente, IProducto pProducto)
         {
 
-                if (producto.RequiereEdad && cliente.Edad < 18)
+            if (pProducto.RequiereEdad && pCliente.Edad < 18)
+            {
+                Console.WriteLine($"{pCliente.Nombre}: No puedes comprar {pProducto.Nombre} porque eres menor de edad.");
+            }
+
+            else if (pProducto.esAlcohol && EnVeda())
+            {
+                Console.WriteLine($"{pCliente.Nombre}: No puedes comprar {pProducto.Nombre} debido a la veda electoral.");
+            }
+
+            else
+            {
+                lock (locked)
                 {
-                    Console.WriteLine($"{cliente.Nombre}: No puedes comprar {producto.Nombre} porque eres menor de edad.");
-                }
-                else if (producto.esAlcohol && EnVeda())
-                {
-                    Console.WriteLine($"{cliente.Nombre}: No puedes comprar {producto.Nombre} debido a la veda electoral.");
-                }
-                else
-                {
-                    lock (producto)
+                    if (pProducto.Stock <= 0)
                     {
-                        if (producto.Stock <= 0)
+                        Console.WriteLine($"{pCliente.Nombre}: {pProducto.Nombre} no está en stock.");
+                    }
+                    else
+                    {
+                        lock (locked)
                         {
-                            Console.WriteLine($"{cliente.Nombre}: {producto.Nombre} no está en stock.");
-                        }
-                        else {
-                            producto.DescontarStock();
-                            Console.WriteLine($"{cliente.Nombre}: Compraste {producto.Nombre}. Stock restante: {producto.Stock}");
+                            pProducto.DescontarStock();
+                            Console.WriteLine($"{pCliente.Nombre}: Compraste {pProducto.Nombre}. Stock restante: {pProducto.Stock}");
                         }
                     }
                 }
+            }
         }
-
     }
 }
-

@@ -57,6 +57,11 @@ namespace Clases
         object locked = new();
         public void Comprar(IUsuario pCliente, IProducto pProducto)
         {
+            if(pProducto == null) 
+            {
+                Console.WriteLine("No tenemos dicho producto");
+                return;
+            }
 
             if (pProducto.RequiereEdad && pCliente.Edad < 18)
             {
@@ -74,8 +79,9 @@ namespace Clases
                 {
                     if (pProducto.Stock <= 0)
                     {
-                        Console.WriteLine($"{pCliente.Nombre}: {pProducto.Nombre} no está en stock.");
+                            Console.WriteLine($"{pCliente.Nombre}: {pProducto.Nombre} no está en stock.");
                     }
+                    
                     else
                     {
                         lock (locked)
@@ -83,8 +89,8 @@ namespace Clases
                             pProducto.DescontarStock();
                             Console.WriteLine($"{pCliente.Nombre}: Compraste {pProducto.Nombre}. Stock restante: {pProducto.Stock}");
                         }
-                    }
-                }
+                    }   
+                } 
             }
         }
     }

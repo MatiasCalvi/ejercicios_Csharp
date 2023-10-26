@@ -59,8 +59,7 @@ namespace Clases
         {
             if(pProducto == null) 
             {
-                Console.WriteLine("No tenemos dicho producto");
-                return;
+                Console.WriteLine("No tenemos dicho producto");
             }
 
             if (pProducto.RequiereEdad && pCliente.Edad < 18)

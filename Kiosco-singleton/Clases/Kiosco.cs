@@ -14,6 +14,7 @@ namespace Clases
             Productos.Add(new Producto("Galletitas", 300, 8, false, false));
             Productos.Add(new Producto("Brahma", 450, 6, true, true));
             Productos.Add(new Producto("Quilmes", 550, 7, true, true));
+            Productos.Add(new Producto("Cigarrillos", 800, 4, false, true));
         }
 
         public static Kiosco Instance

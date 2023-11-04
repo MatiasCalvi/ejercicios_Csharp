@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using Dapper;
 using MySql.Data.MySqlClient;
 
@@ -79,4 +79,3 @@ public class DaoLista : IDao
         dbConnection.Execute(eliminarProductoString, pProducto);
     }
 }
-

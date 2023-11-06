@@ -2,6 +2,7 @@ namespace Clases.Interfaces
 {
     public interface IProducto
     {
+        public int producto_ID { get; set; }
         public string producto_Nombre { get;set; }
         public int producto_Precio { get; set; }
         public int producto_Stock { get; set; }

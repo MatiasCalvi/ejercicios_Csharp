@@ -1,0 +1,12 @@
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\bin\Debug\net6.0\Datos.deps.json
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\bin\Debug\net6.0\Datos.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\bin\Debug\net6.0\Datos.pdb
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\obj\Debug\net6.0\Datos.csproj.AssemblyReference.cache
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\obj\Debug\net6.0\Datos.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\obj\Debug\net6.0\Datos.AssemblyInfoInputs.cache
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\obj\Debug\net6.0\Datos.AssemblyInfo.cs
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\obj\Debug\net6.0\Datos.csproj.CoreCompileInputs.cache
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\obj\Debug\net6.0\Datos.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\obj\Debug\net6.0\refint\Datos.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\obj\Debug\net6.0\Datos.pdb
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\obj\Debug\net6.0\ref\Datos.dll

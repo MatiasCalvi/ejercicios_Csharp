@@ -22,7 +22,6 @@ namespace apiWeb_MVC.Controllers
             _logger = logger;
         }
 
-
         [HttpGet("GetAll")]
 
         public List<UserOutput> GetAll()

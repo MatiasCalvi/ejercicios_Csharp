@@ -41,7 +41,7 @@ namespace apiWeb_MVC.Services
                 
                 if (user != null) users.Add(user);
                
-                else throw new NotFoundException($"El usuario con ID {userId} no se encontró en la base de datos.");
+                else throw new NotFoundException($"User with ID {userId} was not found in the database.");
             }
             return users;
         }

@@ -6,9 +6,10 @@ namespace Datos.Interfaces
     {
         List<UserOutput> GetAllUsers();
         UserOutput GetUserByID(int pId);
-        UserUpdate? GetUserByIDU(int pId);
-        UserOutput CreateNewUser(UserInput pUserInput);
+        UserInputUpdate? GetUserByIDU(int pId);
+        UserOutputCreate CreateNewUser(UserInput pUserInput);
+        bool UpdateUser(int id, UserInputUpdate pCurrentUser);
+        public bool DisableUser(int pUserId);
         void DeletedUser(int pId);
-        bool UpdateUser(int id, UserUpdate pCurrentUser);
     }
 }

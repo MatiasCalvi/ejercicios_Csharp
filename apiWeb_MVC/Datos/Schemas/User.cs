@@ -1,12 +1,14 @@
 ﻿using Datos.Interfaces;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace Datos.Schemas
 {
-    public class UserInput : IUser
+    public class UserInput: IUser
     {
+        [AllowNull]
+        [JsonIgnore]
         public int User_ID { get; set; }
 
         [Required(ErrorMessage = "The name is required.", AllowEmptyStrings = false)]
@@ -30,19 +32,16 @@ namespace Datos.Schemas
         [MaxLength(20, ErrorMessage = "The password cannot be more than 20 characters.")]
         public string User_Password { get; set; }
 
-        public UserInput() { }
+        [AllowNull]
+        [JsonIgnore]
+        public DateTime? User_CreationDate { get; set; }
 
     }
-    public class UserOutput : IUser
+    public class UserInputUpdate : IUser
     {
+        [AllowNull]
         public int User_ID { get; set; }
-        public string User_Name { get; set; }
-        public string User_LastName { get; set; }
-        public string User_Email { get; set; }
-        public UserOutput() { }
-    }
-    public class UserUpdate
-    {
+
         [AllowNull]
         [MinLength(2,ErrorMessage = "The name must be at least 2 characters.")]
         [RegularExpression("^[A-Z][a-z]+", ErrorMessage = "The name must begin with a capital letter and cannot contain numbers, hyphens, or underscores.")]
@@ -63,7 +62,25 @@ namespace Datos.Schemas
         [MinLength(6, ErrorMessage = "The password must be at least 6 characters.")]
         [MaxLength(20, ErrorMessage = "The password cannot be more than 20 characters.")]
         public string? User_Password { get; set; }
+        public UserInputUpdate() { }
+    }
 
-        public UserUpdate() { }
+    public class UserOutput: IUser 
+    {
+        public int User_ID { get; set; }
+        public string User_Name { get; set; }
+        public string User_LastName { get; set; }
+        public string User_Email { get; set; }
+        public UserOutput() { }
+    }
+
+    public class UserOutputCreate : IUserWithCreationDate
+    {
+        public int User_ID { get; set; }
+        public string User_Name { get; set; }
+        public string User_LastName { get; set; }
+        public string User_Email { get; set; }
+        public DateTime User_CreationDate {  get; set; } 
+        public UserOutputCreate() { }
     }
 }

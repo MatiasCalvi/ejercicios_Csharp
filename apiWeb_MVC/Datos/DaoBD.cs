@@ -12,8 +12,9 @@ namespace Datos
         private const string connectionString = "Server=localhost;Database=apiweb_mvc;Uid=root;Pwd=12345678";
         private const string getAllUserQuery = "SELECT * FROM users";
         private const string getUserByIDQuery = "SELECT * FROM users WHERE user_ID = @user_ID";
-        private const string createUserQuery = "INSERT INTO users(User_Name, User_LastName, User_Email, User_Password) VALUES(@User_Name, @User_LastName, @User_Email, @User_Password); SELECT* FROM users WHERE User_ID = LAST_INSERT_ID()";
+        private const string createUserQuery = "INSERT INTO users(User_Name, User_LastName, User_Email, User_Password, User_CreationDate) VALUES(@User_Name, @User_LastName, @User_Email, @User_Password, @User_CreationDate); SELECT* FROM users WHERE User_ID = LAST_INSERT_ID()";
         private const string deletedUserQuery = "DELETE FROM users WHERE User_ID = @User_ID";
+        private const string disableUserQuery = "UPDATE users SET User_Status = 0 WHERE User_ID = @User_ID";
         public static IDbConnection Connection 
         {
             get
@@ -22,7 +23,7 @@ namespace Datos
             }
         }
 
-        public List<UserOutput>GetAllUsers()
+        public List<UserOutput> GetAllUsers()
         {
             using IDbConnection dbConnection = Connection;
             dbConnection.Open();
@@ -36,24 +37,24 @@ namespace Datos
             return dbConnection.Query<UserOutput>(getUserByIDQuery,new { user_ID = pId }).FirstOrDefault();
         }
 
-        public UserUpdate? GetUserByIDU(int pId)
+        public UserInputUpdate? GetUserByIDU(int pId)
         {
             using IDbConnection dbConnection = Connection;
             dbConnection.Open();
-            return dbConnection.Query<UserUpdate>(getUserByIDQuery, new { user_ID = pId }).FirstOrDefault();
+            return dbConnection.Query<UserInputUpdate>(getUserByIDQuery, new { user_ID = pId }).FirstOrDefault();
         }
 
-        public UserOutput CreateNewUser(UserInput pUserInput)
+        public UserOutputCreate CreateNewUser(UserInput pUserInput)
         {
             using IDbConnection dbConnection = Connection;
             dbConnection.Open();
 
-            UserOutput userOutput = dbConnection.QuerySingle<UserOutput>(createUserQuery, pUserInput); 
+            UserOutputCreate userOutput = dbConnection.QuerySingle<UserOutputCreate>(createUserQuery, pUserInput); 
 
             return userOutput; 
         }
 
-        public bool UpdateUser(int id, UserUpdate pCurrentUser)
+        public bool UpdateUser(int id, UserInputUpdate pCurrentUser)
         {
             using IDbConnection dbConnection = Connection;
             dbConnection.Open();
@@ -94,6 +95,17 @@ namespace Datos
             int rowsAffected = dbConnection.Execute(updateUserQuery, parameters);
 
             return rowsAffected > 0;
+        }
+
+        public bool DisableUser(int pUserId)
+        {
+            using (IDbConnection dbConnection = Connection)
+            {
+                dbConnection.Open();
+                int rowsAffected = dbConnection.Execute(disableUserQuery, new { User_ID = pUserId });
+
+                return rowsAffected > 0;
+            }
         }
 
         public void DeletedUser(int pId)

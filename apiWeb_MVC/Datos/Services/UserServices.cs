@@ -21,9 +21,9 @@ namespace apiWeb_MVC.Services
             return user;
         }
 
-        internal UserUpdate GetInformationFromUserU(int pId)
+        internal UserInputUpdate GetInformationFromUserU(int pId)
         {
-            UserUpdate user = daoBD.GetUserByIDU(pId);
+            UserInputUpdate user = daoBD.GetUserByIDU(pId);
             return user;
         }
 
@@ -41,7 +41,7 @@ namespace apiWeb_MVC.Services
                 
                 if (user != null) users.Add(user);
                
-                else throw new NotFoundException($"User with ID {userId} was not found in the database.");
+                //else throw new NotFoundException($"User with ID {userId} was not found in the database.");
             }
             return users;
         }
@@ -73,29 +73,22 @@ namespace apiWeb_MVC.Services
             return hash == hashedInput;
         }
 
-        public UserOutput CreateNewUser(UserInput userInput)
+        public UserOutputCreate CreateNewUser(UserInput userInput)
         {
             var salt = new byte[32];
             RandomNumberGenerator.Fill(salt); // ---> llena el array con bytes aleatorios
             string saltString = Convert.ToBase64String(salt);
             string hashedPassword = HashPassword(userInput.User_Password + saltString); 
-
-            UserInput newUser = new UserInput
-            {
-                User_Name = userInput.User_Name,
-                User_LastName = userInput.User_LastName,
-                User_Email = userInput.User_Email,
-                User_Password = hashedPassword + saltString
-            };
-
-            UserOutput userOutput = daoBD.CreateNewUser(newUser); 
+            userInput.User_Password = hashedPassword + saltString;
+            userInput.User_CreationDate = DateTime.Now;
+            UserOutputCreate userOutput = daoBD.CreateNewUser(userInput); 
 
             return userOutput;
         }
 
-        public UserOutput UpdateUser(int id, UserUpdate userUpdate)
+        public UserOutput UpdateUser(int id, UserInputUpdate userUpdate)
         {
-            UserUpdate currentUser = GetInformationFromUserU(id);
+            UserInputUpdate currentUser = GetInformationFromUserU(id);
 
             if (currentUser == null) throw new NotFoundException($"The user with ID {id} was not found in the database.");
 
@@ -108,7 +101,7 @@ namespace apiWeb_MVC.Services
             if (passwordChanged)
             {
                 var salt = new byte[32];
-                RandomNumberGenerator.Fill(salt); // ---> llena el array con bytes aleatorios
+                RandomNumberGenerator.Fill(salt);
                 string saltString = Convert.ToBase64String(salt);
                 string hashedPassword = HashPassword(userUpdate.User_Password + saltString);
                 currentUser.User_Password = hashedPassword + saltString;
@@ -126,10 +119,13 @@ namespace apiWeb_MVC.Services
                 return null;
             }
         }
-
-        public void DeletedUser(int id)
+        public bool DisableUser(int pId) 
+        {  
+            return daoBD.DisableUser(pId);
+        }
+        public void DeletedUser(int pId)
         {
-            daoBD.DeletedUser(id);
+            daoBD.DeletedUser(pId);
         }
 
     }

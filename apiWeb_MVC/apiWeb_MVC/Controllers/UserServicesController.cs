@@ -27,6 +27,7 @@ namespace apiWeb_MVC.Controllers
         public List<UserOutput> GetAll()
         {
             List<UserOutput> user = userServices.GetAllUsers();
+
             return user;
         }
 
@@ -64,7 +65,7 @@ namespace apiWeb_MVC.Controllers
                 return BadRequest(ModelState);
             }
 
-            UserOutput user = userServices.CreateNewUser(userInput); 
+            UserOutputCreate user = userServices.CreateNewUser(userInput); 
 
             if (user != null)
             {
@@ -76,8 +77,23 @@ namespace apiWeb_MVC.Controllers
             }
         }
 
+        [HttpPost("DisableUser")]
+        public IActionResult DisableUser([FromQuery] int id)
+        {
+            bool result = userServices.DisableUser(id);
+
+            if (result)
+            {
+                return Ok("User disabled successfully.");
+            }
+            else
+            {
+                return NotFound("User not found or already disabled.");
+            }
+        }
+
         [HttpPatch("UpdateUser")]
-        public IActionResult UpdateUser([FromQuery] int id, [FromBody] UserUpdate userInput)
+        public IActionResult UpdateUser([FromQuery] int id, [FromBody] UserInputUpdate userInput)
         {   
             UserOutput user = userServices.GetInformationFromUser(id);
             if (user == null) return NotFound("User not found.");
@@ -89,6 +105,7 @@ namespace apiWeb_MVC.Controllers
             else return BadRequest("There was a problem updating the user.");
 
         }
+
 
         [HttpDelete("DeleteUser")]
         public IActionResult DeleteUser([FromQuery] int id)

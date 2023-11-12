@@ -7,4 +7,8 @@
         public string User_LastName { get; set;}
         public string User_Email { get; set;}
     }
+    public interface IUserWithCreationDate : IUser
+    {
+        DateTime User_CreationDate { get; set; }
+    }
 }

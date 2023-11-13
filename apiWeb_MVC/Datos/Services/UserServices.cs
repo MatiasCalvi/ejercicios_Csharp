@@ -28,7 +28,7 @@ namespace apiWeb_MVC.Services
             }
         }
 
-        internal UserInputUpdate GetInformationFromUserU(int pId)
+        public UserInputUpdate GetInformationFromUserU(int pId)
         {
             try
             {
@@ -46,10 +46,10 @@ namespace apiWeb_MVC.Services
             return daoBD.GetAllUsers();
         }
 
-        public List<UserOutput> GetUsersByIds(List<int> userIds)
+        public List<UserOutput> GetUsersByIds(List<int> pUserIds)
         {
             List<UserOutput> users = new();
-            foreach (int userId in userIds)
+            foreach (int userId in pUserIds)
             {
                 UserOutput user = daoBD.GetUserByID(userId);
 
@@ -65,11 +65,11 @@ namespace apiWeb_MVC.Services
             return users;
         }
 
-        public string HashPassword(string password)
+        internal string HashPassword(string pPassword)
         {
             using (SHA256 sha256 = SHA256.Create())
             {
-                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(pPassword);
 
                 byte[] hashBytes = sha256.ComputeHash(passwordBytes);
 
@@ -84,11 +84,11 @@ namespace apiWeb_MVC.Services
             }
         }
 
-        public bool VerifyPassword(string userInput, string hashedPassword)
+        public bool VerifyPassword(string pUserInput, string pHashedPassword)
         {
-            string salt = hashedPassword.Substring(hashedPassword.Length - 44);
-            string hash = hashedPassword.Substring(0, hashedPassword.Length - 44);
-            string hashedInput = HashPassword(userInput + salt);
+            string salt = pHashedPassword.Substring(pHashedPassword.Length - 44);
+            string hash = pHashedPassword.Substring(0, pHashedPassword.Length - 44);
+            string hashedInput = HashPassword(pUserInput + salt);
             return hash == hashedInput;
         }
 
@@ -117,47 +117,47 @@ namespace apiWeb_MVC.Services
             }
         }
 
-        public UserOutput UpdateUser(int id, UserInputUpdate userUpdate)
+        public UserOutput UpdateUser(int pId, UserInputUpdate pUserUpdate)
         {
             try
             {
-                UserInputUpdate currentUser = GetInformationFromUserU(id);
+                UserInputUpdate currentUser = GetInformationFromUserU(pId);
 
                 if (currentUser == null)
                 {
-                    throw new UserNotFoundException($"The user with ID {id} was not found in the database.");
+                    throw new UserNotFoundException($"The user with ID {pId} was not found in the database.");
                 }
 
-                bool passwordChanged = !VerifyPassword(userUpdate.User_Password, currentUser.User_Password);
+                bool passwordChanged = !VerifyPassword(pUserUpdate.User_Password, currentUser.User_Password);
 
-                currentUser.User_Name = userUpdate.User_Name ?? currentUser.User_Name;
-                currentUser.User_LastName = userUpdate.User_LastName ?? currentUser.User_LastName;
-                currentUser.User_Email = userUpdate.User_Email ?? currentUser.User_Email;
+                currentUser.User_Name = pUserUpdate.User_Name ?? currentUser.User_Name;
+                currentUser.User_LastName = pUserUpdate.User_LastName ?? currentUser.User_LastName;
+                currentUser.User_Email = pUserUpdate.User_Email ?? currentUser.User_Email;
 
                 if (passwordChanged)
                 {
                     var salt = new byte[32];
                     RandomNumberGenerator.Fill(salt);
                     string saltString = Convert.ToBase64String(salt);
-                    string hashedPassword = HashPassword(userUpdate.User_Password + saltString);
+                    string hashedPassword = HashPassword(pUserUpdate.User_Password + saltString);
                     currentUser.User_Password = hashedPassword + saltString;
                 }
 
-                bool updated = daoBD.UpdateUser(id, currentUser);
+                bool updated = daoBD.UpdateUser(pId, currentUser);
 
                 if (updated)
                 {
-                    UserOutput user = daoBD.GetUserByID(id);
+                    UserOutput user = daoBD.GetUserByID(pId);
                     return user;
                 }
                 else
                 {
-                    throw new UserUpdateFailedException($"Failed to update the user with ID {id}.");
+                    throw new UserUpdateFailedException($"Failed to update the user with ID {pId}.");
                 }
             }
             catch (Exception ex)
             {
-                throw new UserUpdateFailedException($"Error occurred while updating the user with ID {id}.", ex);
+                throw new UserUpdateFailedException($"Error occurred while updating the user with ID {pId}.", ex);
             }
         }
 

@@ -81,8 +81,38 @@ namespace apiWeb_MVC.Controllers
             }
         }
 
+        [HttpPost("PasswordVerify")]
+        public IActionResult PasswordVerify([FromQuery] int id,[FromBody] UserPassword password)
+        {
+            try
+            {
+                UserInputUpdate usuarioBD = userServices.GetInformationFromUserU(id);
 
-        [HttpPost("DisableUser")]
+                if (usuarioBD == null)
+                {
+                    return NotFound("User not found.");
+                }
+
+                bool correctPassword = userServices.VerifyPassword(password.User_Password, usuarioBD.User_Password);
+
+                if (correctPassword)
+                {
+                    UserOutput user = userServices.GetInformationFromUser(id);
+                    return Ok(user);
+                }
+                else
+                {
+                    return Unauthorized("Password does not match.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Codigo = 404, Mensaje = "Failed to verify password.", Detalle = ex.Message });
+            }
+        }
+
+
+        [HttpPatch("DisableUser")]
         public IActionResult DisableUser([FromQuery] int id)
         {
             bool result = userServices.DisableUser(id);

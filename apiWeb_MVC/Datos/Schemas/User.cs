@@ -83,4 +83,8 @@ namespace Datos.Schemas
         public DateTime User_CreationDate {  get; set; } 
         public UserOutputCreate() { }
     }
+    public class UserPassword
+    {  
+        public string User_Password { get; set; } 
+    }
 }

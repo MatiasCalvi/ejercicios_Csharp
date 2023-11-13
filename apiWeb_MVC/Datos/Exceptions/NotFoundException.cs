@@ -1,10 +1,11 @@
 ﻿namespace Datos.Exceptions
 {
-    public class NotFoundException : Exception
+    public class UserNotFoundException : Exception
     {
-        public NotFoundException() { }
+        public UserNotFoundException() { }
 
-        public NotFoundException(string message) : base(message) { }
+        public UserNotFoundException(string message) : base(message) { }
+
+        public UserNotFoundException(string message, Exception innerException) : base(message, innerException) { }
     }
-
 }

@@ -1,6 +1,6 @@
 ﻿using System.Data;
-using System.Text;
 using Dapper;
+using Datos.Exceptions;
 using Datos.Interfaces;
 using Datos.Schemas;
 using MySql.Data.MySqlClient;
@@ -25,94 +25,146 @@ namespace Datos
 
         public List<UserOutput> GetAllUsers()
         {
-            using IDbConnection dbConnection = Connection;
-            dbConnection.Open();
-            return dbConnection.Query<UserOutput>(getAllUserQuery).ToList();
+            try
+            {
+                using IDbConnection dbConnection = Connection;
+                dbConnection.Open();
+                return dbConnection.Query<UserOutput>(getAllUserQuery).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseQueryException("Failed to get all users.", ex);
+            }
         }
 
         public UserOutput? GetUserByID(int pId)
         {
-            using IDbConnection dbConnection = Connection;
-            dbConnection.Open();
-            return dbConnection.Query<UserOutput>(getUserByIDQuery,new { user_ID = pId }).FirstOrDefault();
+            try
+            {
+                using IDbConnection dbConnection = Connection;
+                dbConnection.Open();
+                return dbConnection.Query<UserOutput>(getUserByIDQuery, new { user_ID = pId }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseQueryException($"Error getting user with ID {pId}.", ex);
+            }
         }
 
         public UserInputUpdate? GetUserByIDU(int pId)
         {
-            using IDbConnection dbConnection = Connection;
-            dbConnection.Open();
-            return dbConnection.Query<UserInputUpdate>(getUserByIDQuery, new { user_ID = pId }).FirstOrDefault();
+            try
+            {
+                using (IDbConnection dbConnection = Connection)
+                {
+                    dbConnection.Open();
+                    return dbConnection.Query<UserInputUpdate>(getUserByIDQuery, new { user_ID = pId }).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseQueryException($"Error getting user with ID {pId}.", ex);
+            }
         }
 
         public UserOutputCreate CreateNewUser(UserInput pUserInput)
         {
-            using IDbConnection dbConnection = Connection;
-            dbConnection.Open();
-
-            UserOutputCreate userOutput = dbConnection.QuerySingle<UserOutputCreate>(createUserQuery, pUserInput); 
-
-            return userOutput; 
+            try
+            {
+                using (IDbConnection dbConnection = Connection)
+                {
+                    dbConnection.Open();
+                    return dbConnection.QuerySingle<UserOutputCreate>(createUserQuery, pUserInput);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseTransactionException("Error creating a new user.", ex);
+            }
         }
 
-        public bool UpdateUser(int id, UserInputUpdate pCurrentUser)
+        public bool UpdateUser(int pId, UserInputUpdate pCurrentUser)
         {
-            using IDbConnection dbConnection = Connection;
-            dbConnection.Open();
-
-            List<string> updateFields = new List<string>();
-            DynamicParameters parameters = new DynamicParameters();
-
-            if (pCurrentUser.User_Name != null)
+            try
             {
-                updateFields.Add("User_Name = @User_Name");
-                parameters.Add("User_Name", pCurrentUser.User_Name);
-            }
+                using (IDbConnection dbConnection = Connection)
+                {
+                    dbConnection.Open();
 
-            if (pCurrentUser.User_LastName != null)
+                    List<string> updateFields = new List<string>();
+                    DynamicParameters parameters = new DynamicParameters();
+
+                    if (pCurrentUser.User_Name != null)
+                    {
+                        updateFields.Add("User_Name = @User_Name");
+                        parameters.Add("User_Name", pCurrentUser.User_Name);
+                    }
+
+                    if (pCurrentUser.User_LastName != null)
+                    {
+                        updateFields.Add("User_LastName = @User_LastName");
+                        parameters.Add("User_LastName", pCurrentUser.User_LastName);
+                    }
+
+                    if (pCurrentUser.User_Email != null)
+                    {
+                        updateFields.Add("User_Email = @User_Email");
+                        parameters.Add("User_Email", pCurrentUser.User_Email);
+                    }
+
+                    if (pCurrentUser.User_Password != null)
+                    {
+                        updateFields.Add("User_Password = @User_Password");
+                        parameters.Add("User_Password", pCurrentUser.User_Password);
+                    }
+
+                    if (updateFields.Count == 0) return false;
+
+                    parameters.Add("User_ID", pId);
+
+                    string updateUserQuery = $"UPDATE users SET {string.Join(", ", updateFields)} WHERE User_ID = @User_ID";
+
+                    int rowsAffected = dbConnection.Execute(updateUserQuery, parameters);
+
+                    return rowsAffected > 0;
+                }
+            }
+            catch (Exception ex)
             {
-                updateFields.Add("User_LastName = @User_LastName");
-                parameters.Add("User_LastName", pCurrentUser.User_LastName);
+                throw new DatabaseTransactionException($"Error updating user with ID {pId}.", ex);
             }
-
-            if (pCurrentUser.User_Email != null)
-            {
-                updateFields.Add("User_Email = @User_Email");
-                parameters.Add("User_Email", pCurrentUser.User_Email);
-            }
-
-            if (pCurrentUser.User_Password != null)
-            {
-                updateFields.Add("User_Password = @User_Password");
-                parameters.Add("User_Password", pCurrentUser.User_Password);
-            }
-
-            if (updateFields.Count == 0) return false;
-
-            parameters.Add("User_ID", id);
-
-            string updateUserQuery = $"UPDATE users SET {String.Join(", ", updateFields)} WHERE User_ID = @User_ID";
-
-            int rowsAffected = dbConnection.Execute(updateUserQuery, parameters);
-
-            return rowsAffected > 0;
         }
 
         public bool DisableUser(int pUserId)
         {
-            using (IDbConnection dbConnection = Connection)
+            try
             {
-                dbConnection.Open();
-                int rowsAffected = dbConnection.Execute(disableUserQuery, new { User_ID = pUserId });
+                using (IDbConnection dbConnection = Connection)
+                {
+                    dbConnection.Open();
+                    int rowsAffected = dbConnection.Execute(disableUserQuery, new { User_ID = pUserId });
 
-                return rowsAffected > 0;
+                    return rowsAffected > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseTransactionException($"Error al deshabilitar el usuario con ID {pUserId}.", ex);
             }
         }
 
         public void DeletedUser(int pId)
         {
-            using IDbConnection dbConnection = Connection;
-            dbConnection.Open();
-            dbConnection.Execute(deletedUserQuery, new { User_ID = pId });
+            try
+            {
+                using IDbConnection dbConnection = Connection;
+                dbConnection.Open();
+                dbConnection.Execute(deletedUserQuery, new { User_ID = pId });
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseTransactionException($"Error al eliminar el usuario con ID {pId}.", ex);
+            }
         }
     }
 }

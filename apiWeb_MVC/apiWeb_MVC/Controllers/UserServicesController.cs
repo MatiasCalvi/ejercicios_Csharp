@@ -22,6 +22,7 @@ namespace apiWeb_MVC.Controllers
             _logger = logger;
         }
 
+
         [HttpGet("GetAll")]
 
         public List<UserOutput> GetAll()
@@ -30,6 +31,7 @@ namespace apiWeb_MVC.Controllers
 
             return user;
         }
+
 
         [HttpGet("GetUser")]
 
@@ -42,6 +44,7 @@ namespace apiWeb_MVC.Controllers
             }
             return Ok(user);
         }
+
 
         [HttpGet("GetUsers")]
         public IActionResult GetUsers([FromQuery]string ids)
@@ -56,6 +59,7 @@ namespace apiWeb_MVC.Controllers
 
             return Ok(users);
         }
+
 
         [HttpPost("CreateUser")]
         public IActionResult CreateUser([FromBody] UserInput userInput)
@@ -77,6 +81,7 @@ namespace apiWeb_MVC.Controllers
             }
         }
 
+
         [HttpPost("DisableUser")]
         public IActionResult DisableUser([FromQuery] int id)
         {
@@ -91,6 +96,7 @@ namespace apiWeb_MVC.Controllers
                 return NotFound("User not found or already disabled.");
             }
         }
+
 
         [HttpPatch("UpdateUser")]
         public IActionResult UpdateUser([FromQuery] int id, [FromBody] UserInputUpdate userInput)
@@ -121,5 +127,6 @@ namespace apiWeb_MVC.Controllers
                 return Ok("User deleted successfully."); 
             }
         }
+
     }
 }

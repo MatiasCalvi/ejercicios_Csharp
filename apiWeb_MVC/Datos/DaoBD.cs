@@ -91,8 +91,8 @@ namespace Datos
                 {
                     dbConnection.Open();
 
-                    List<string> updateFields = new List<string>();
-                    DynamicParameters parameters = new DynamicParameters();
+                    List<string> updateFields = new();
+                    DynamicParameters parameters = new();
 
                     if (pCurrentUser.User_Name != null)
                     {

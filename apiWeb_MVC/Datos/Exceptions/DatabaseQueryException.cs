@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Datos.Exceptions
+﻿namespace Datos.Exceptions
 {
-    internal class Class1
+    public class DatabaseQueryException : Exception
     {
+        public DatabaseQueryException(string message) : base(message) { }
+
+        public DatabaseQueryException(string message, Exception innerException) : base(message, innerException) { }
     }
 }

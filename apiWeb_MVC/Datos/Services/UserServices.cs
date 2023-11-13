@@ -28,7 +28,6 @@ namespace apiWeb_MVC.Services
             }
         }
 
-
         internal UserInputUpdate GetInformationFromUserU(int pId)
         {
             try
@@ -42,7 +41,6 @@ namespace apiWeb_MVC.Services
             }
         }
 
-
         public List<UserOutput> GetAllUsers()
         {
             return daoBD.GetAllUsers();
@@ -50,7 +48,7 @@ namespace apiWeb_MVC.Services
 
         public List<UserOutput> GetUsersByIds(List<int> userIds)
         {
-            List<UserOutput> users = new List<UserOutput>();
+            List<UserOutput> users = new();
             foreach (int userId in userIds)
             {
                 UserOutput user = daoBD.GetUserByID(userId);
@@ -75,7 +73,7 @@ namespace apiWeb_MVC.Services
 
                 byte[] hashBytes = sha256.ComputeHash(passwordBytes);
 
-                StringBuilder hashBuilder = new StringBuilder();
+                StringBuilder hashBuilder = new();
 
                 foreach (byte b in hashBytes)
                 {

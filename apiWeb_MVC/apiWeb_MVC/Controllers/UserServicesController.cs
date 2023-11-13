@@ -13,7 +13,7 @@ namespace apiWeb_MVC.Controllers
     public class UserServicesController : ControllerBase
     {
         static IKernel kernel = NinjectConfig.CreateKernel();
-        IDaoBD dao => kernel.Get<IDaoBD>();
+        static IDaoBD dao => kernel.Get<IDaoBD>();
         UserServices userServices => new(dao);
 
         private readonly ILogger<UserServicesController> _logger;
@@ -89,7 +89,7 @@ namespace apiWeb_MVC.Controllers
 
             if (result)
             {
-                return Ok("User disabled successfully.");
+                return NoContent();
             }
             else
             {
@@ -109,7 +109,6 @@ namespace apiWeb_MVC.Controllers
             if (updatedUser != null) return Ok(updatedUser);
 
             else return BadRequest("There was a problem updating the user.");
-
         }
 
 
@@ -124,7 +123,7 @@ namespace apiWeb_MVC.Controllers
             else 
             {
                 userServices.DeletedUser(id); 
-                return Ok("User deleted successfully."); 
+                return NoContent();
             }
         }
 

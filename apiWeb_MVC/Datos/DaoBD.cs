@@ -149,7 +149,7 @@ namespace Datos
             }
             catch (Exception ex)
             {
-                throw new DatabaseTransactionException($"Error al deshabilitar el usuario con ID {pUserId}.", ex);
+                throw new DatabaseTransactionException($"Error disabling user with ID{pUserId}.", ex);
             }
         }
 
@@ -163,7 +163,7 @@ namespace Datos
             }
             catch (Exception ex)
             {
-                throw new DatabaseTransactionException($"Error al eliminar el usuario con ID {pId}.", ex);
+                throw new DatabaseTransactionException($"Error deleting user with ID {pId}.", ex);
             }
         }
     }

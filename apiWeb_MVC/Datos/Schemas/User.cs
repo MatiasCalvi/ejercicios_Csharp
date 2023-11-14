@@ -1,4 +1,4 @@
-﻿using Datos.Interfaces;
+using Datos.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
@@ -30,6 +30,7 @@ namespace Datos.Schemas
         [Required(ErrorMessage = "The password is required.")]
         [MinLength(6, ErrorMessage = "The password must be at least 6 characters.")]
         [MaxLength(20, ErrorMessage = "The password cannot be more than 20 characters.")]
+        [RegularExpression("^(?=.*[A-Z])[A-Za-z0-9]{6,20}$", ErrorMessage = "The password must have at least one uppercase letter and cannot contain tildes or whitespace.")]
         public string User_Password { get; set; }
 
         [AllowNull]
@@ -40,6 +41,7 @@ namespace Datos.Schemas
     public class UserInputUpdate : IUser
     {
         [AllowNull]
+        [JsonIgnore]
         public int User_ID { get; set; }
 
         [AllowNull]
@@ -61,6 +63,8 @@ namespace Datos.Schemas
         [AllowNull]
         [MinLength(6, ErrorMessage = "The password must be at least 6 characters.")]
         [MaxLength(20, ErrorMessage = "The password cannot be more than 20 characters.")]
+        [RegularExpression("^(?=.*[A-Z])[A-Za-z0-9]{6,20}$", ErrorMessage = "The password must have at least one uppercase letter and cannot contain tildes or whitespace.")]
+
         public string? User_Password { get; set; }
         public UserInputUpdate() { }
     }

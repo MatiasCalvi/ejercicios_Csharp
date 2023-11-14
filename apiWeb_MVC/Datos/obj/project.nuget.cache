@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "rMgXa7WD1YUTsEtmMwKBnoja91LSLDqLVJTBoZ3VHX/6unPxWb03bTQfj9fbNWSZPF6DnMbX7go7v2XmLYRW9A==",
+  "dgSpecHash": "ViN0R/wXaOs3jDfJN4RkgGfxQ5ct7qUgYsF9QZdOC01h0HnoTiM5jp9yC5p5LB+90Fk4n8sInvXmHX/tbU4Ing==",
   "success": true,
   "projectFilePath": "C:\\Users\\Matias\\Desktop\\Desarrollo\\Desarrollo\\FullStack_Net\\C#\\programas\\ejercicios_Csharp\\apiWeb_MVC\\Datos\\Datos.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Matias\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Matias\\.nuget\\packages\\bouncycastle.cryptography\\2.2.1\\bouncycastle.cryptography.2.2.1.nupkg.sha512",
     "C:\\Users\\Matias\\.nuget\\packages\\dapper\\2.1.15\\dapper.2.1.15.nupkg.sha512",
     "C:\\Users\\Matias\\.nuget\\packages\\google.protobuf\\3.21.9\\google.protobuf.3.21.9.nupkg.sha512",

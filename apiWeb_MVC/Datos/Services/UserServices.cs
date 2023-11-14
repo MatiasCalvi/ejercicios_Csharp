@@ -1,8 +1,8 @@
-﻿using System.Security.Cryptography;
+﻿
 using Datos.Exceptions;
 using Datos.Interfaces;
 using Datos.Schemas;
-using System.Text;
+
 
 namespace apiWeb_MVC.Services
 {
@@ -64,43 +64,22 @@ namespace apiWeb_MVC.Services
             }
             return users;
         }
-
         internal string HashPassword(string pPassword)
         {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] passwordBytes = Encoding.UTF8.GetBytes(pPassword);
-
-                byte[] hashBytes = sha256.ComputeHash(passwordBytes);
-
-                StringBuilder hashBuilder = new();
-
-                foreach (byte b in hashBytes)
-                {
-                    hashBuilder.Append(b.ToString("x2"));
-                }
-
-                return hashBuilder.ToString();
-            }
+            return BCrypt.Net.BCrypt.HashPassword(pPassword);
         }
 
         public bool VerifyPassword(string pUserInput, string pHashedPassword)
         {
-            string salt = pHashedPassword.Substring(pHashedPassword.Length - 44);
-            string hash = pHashedPassword.Substring(0, pHashedPassword.Length - 44);
-            string hashedInput = HashPassword(pUserInput + salt);
-            return hash == hashedInput;
+            return BCrypt.Net.BCrypt.Verify(pUserInput, pHashedPassword);
         }
 
         public UserOutputCreate CreateNewUser(UserInput userInput)
         {
             try
             {
-                var salt = new byte[32];
-                RandomNumberGenerator.Fill(salt);
-                string saltString = Convert.ToBase64String(salt);
-                string hashedPassword = HashPassword(userInput.User_Password + saltString);
-                userInput.User_Password = hashedPassword + saltString;
+                string hashedPassword = HashPassword(userInput.User_Password);
+                userInput.User_Password = hashedPassword;
                 userInput.User_CreationDate = DateTime.Now;
                 UserOutputCreate userOutput = daoBD.CreateNewUser(userInput);
 
@@ -116,6 +95,7 @@ namespace apiWeb_MVC.Services
                 throw new UserCreationFailedException("Error occurred while creating a new user.", ex);
             }
         }
+
 
         public UserOutput UpdateUser(int pId, UserInputUpdate pUserUpdate)
         {
@@ -136,11 +116,8 @@ namespace apiWeb_MVC.Services
 
                 if (passwordChanged)
                 {
-                    var salt = new byte[32];
-                    RandomNumberGenerator.Fill(salt);
-                    string saltString = Convert.ToBase64String(salt);
-                    string hashedPassword = HashPassword(pUserUpdate.User_Password + saltString);
-                    currentUser.User_Password = hashedPassword + saltString;
+                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(pUserUpdate.User_Password);
+                    currentUser.User_Password = hashedPassword;
                 }
 
                 bool updated = daoBD.UpdateUser(pId, currentUser);

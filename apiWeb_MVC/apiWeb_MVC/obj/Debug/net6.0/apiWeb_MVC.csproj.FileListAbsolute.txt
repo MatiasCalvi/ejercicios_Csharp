@@ -68,3 +68,4 @@ C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercic
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\obj\Debug\net6.0\apiWeb_MVC.pdb
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\obj\Debug\net6.0\apiWeb_MVC.genruntimeconfig.cache
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\obj\Debug\net6.0\ref\apiWeb_MVC.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\BCrypt.Net-Next.dll

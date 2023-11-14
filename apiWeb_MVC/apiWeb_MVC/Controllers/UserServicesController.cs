@@ -60,7 +60,6 @@ namespace apiWeb_MVC.Controllers
             return Ok(users);
         }
 
-
         [HttpPost("CreateUser")]
         public IActionResult CreateUser([FromBody] UserInput userInput)
         {
@@ -69,11 +68,11 @@ namespace apiWeb_MVC.Controllers
                 return BadRequest(ModelState);
             }
 
-            UserOutputCreate user = userServices.CreateNewUser(userInput); 
+            UserOutputCreate user = userServices.CreateNewUser(userInput);
 
             if (user != null)
             {
-                return CreatedAtAction(nameof(GetUser), new { id = user.User_ID }, user); 
+                return CreatedAtAction(nameof(GetUser), new { id = user.User_ID }, user);
             }
             else
             {
@@ -82,7 +81,7 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpPost("PasswordVerify")]
-        public IActionResult PasswordVerify([FromQuery] int id,[FromBody] UserPassword password)
+        public IActionResult PasswordVerify([FromQuery] int id, [FromBody] UserPassword password)
         {
             try
             {
@@ -110,7 +109,6 @@ namespace apiWeb_MVC.Controllers
                 return BadRequest(new { Codigo = 404, Mensaje = "Failed to verify password.", Detalle = ex.Message });
             }
         }
-
 
         [HttpPatch("DisableUser")]
         public IActionResult DisableUser([FromQuery] int id)

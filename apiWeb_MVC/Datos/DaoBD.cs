@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using Dapper;
 using Datos.Exceptions;
 using Datos.Interfaces;
@@ -15,6 +15,7 @@ namespace Datos
         private const string createUserQuery = "INSERT INTO users(User_Name, User_LastName, User_Email, User_Password, User_CreationDate) VALUES(@User_Name, @User_LastName, @User_Email, @User_Password, @User_CreationDate); SELECT* FROM users WHERE User_ID = LAST_INSERT_ID()";
         private const string deletedUserQuery = "DELETE FROM users WHERE User_ID = @User_ID";
         private const string disableUserQuery = "UPDATE users SET User_Status = 0 WHERE User_ID = @User_ID";
+        private const string getUserByEmailQuery = "SELECT * FROM users WHERE user_Email = @user_Email;";
         public static IDbConnection Connection 
         {
             get
@@ -67,6 +68,20 @@ namespace Datos
             }
         }
 
+        public UserInputUpdate GetUserByEmail(string email)
+        {
+            try
+            {
+                using IDbConnection dbConnection = Connection;
+                dbConnection.Open();
+                return dbConnection.Query<UserInputUpdate>(getUserByEmailQuery, new { user_Email = email }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseQueryException($"Error getting user by email {email}.", ex);
+            }
+        }
+
         public UserOutputCreate CreateNewUser(UserInput pUserInput)
         {
             try
@@ -82,6 +97,8 @@ namespace Datos
                 throw new DatabaseTransactionException("Error creating a new user.", ex);
             }
         }
+
+
 
         public bool UpdateUser(int pId, UserInputUpdate pCurrentUser)
         {
@@ -121,6 +138,8 @@ namespace Datos
                     if (updateFields.Count == 0) return false;
 
                     parameters.Add("User_ID", pId);
+                    updateFields.Add("User_UpdateDate = @User_UpdateDate");
+                    parameters.Add("User_UpdateDate", pCurrentUser.User_UpdateDate);
 
                     string updateUserQuery = $"UPDATE users SET {string.Join(", ", updateFields)} WHERE User_ID = @User_ID";
 
@@ -149,7 +168,7 @@ namespace Datos
             }
             catch (Exception ex)
             {
-                throw new DatabaseTransactionException($"Error disabling user with ID{pUserId}.", ex);
+                throw new DatabaseTransactionException($"Error al deshabilitar el usuario con ID {pUserId}.", ex);
             }
         }
 
@@ -163,7 +182,7 @@ namespace Datos
             }
             catch (Exception ex)
             {
-                throw new DatabaseTransactionException($"Error deleting user with ID {pId}.", ex);
+                throw new DatabaseTransactionException($"Error al eliminar el usuario con ID {pId}.", ex);
             }
         }
     }

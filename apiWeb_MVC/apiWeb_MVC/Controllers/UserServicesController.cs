@@ -92,7 +92,10 @@ namespace apiWeb_MVC.Controllers
                     return NotFound("User not found.");
                 }
 
-                bool correctPassword = userServices.VerifyPassword(password.User_Password, usuarioBD.User_Password);
+                string passwordInput = password.User_Password;
+                Console.WriteLine("PasswordVerify controlador contraseña input: {0}", passwordInput);
+
+                bool correctPassword = userServices.VerifyPassword(passwordInput, usuarioBD.User_Password);
 
                 if (correctPassword)
                 {
@@ -154,6 +157,5 @@ namespace apiWeb_MVC.Controllers
                 return NoContent();
             }
         }
-
     }
 }

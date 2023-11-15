@@ -1,4 +1,4 @@
-﻿using Datos.Schemas;
+using Datos.Schemas;
 
 namespace Datos.Interfaces
 {
@@ -7,8 +7,9 @@ namespace Datos.Interfaces
         List<UserOutput> GetAllUsers();
         UserOutput GetUserByID(int pId);
         UserInputUpdate? GetUserByIDU(int pId);
+        UserInputUpdate GetUserByEmail(string email);
         UserOutputCreate CreateNewUser(UserInput pUserInput);
-        bool UpdateUser(int id, UserInputUpdate pCurrentUser);
+        bool UpdateUser(int pId, UserInputUpdate pCurrentUser);
         public bool DisableUser(int pUserId);
         void DeletedUser(int pId);
     }

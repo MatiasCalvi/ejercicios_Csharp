@@ -4,6 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using apiWeb_MVC.Services;
 using Ninject;
 using Datos.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace apiWeb_MVC.Controllers
 {
@@ -68,16 +73,58 @@ namespace apiWeb_MVC.Controllers
                 return BadRequest(ModelState);
             }
 
-            UserOutputCreate user = userServices.CreateNewUser(userInput);
-
+            UserInputUpdate user = userServices.GetUserByEmail(userInput.User_Email);
             if (user != null)
             {
-                return CreatedAtAction(nameof(GetUser), new { id = user.User_ID }, user);
+                return BadRequest("Email already in use.");
+            }
+
+            UserOutputCreate userOutput = userServices.CreateNewUser(userInput);
+
+            if (userOutput != null)
+            {
+                return CreatedAtAction(nameof(GetUser), new { id = userOutput.User_ID }, userOutput);
             }
             else
             {
                 return BadRequest("There was a problem creating the user.");
             }
+        }
+
+        [HttpPost("Login")]
+        public IActionResult Login([FromBody] UserLogin user)
+        {
+            UserOutput userOutput = userServices.VerifyUser(user.User_Email, user.User_Password);
+            if (userOutput == null)
+            {
+                return Unauthorized("Invalid email or password.");
+            }
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secret_secret_secret"));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Sid,userOutput.User_ID.ToString()),
+                new Claim(ClaimTypes.Name,userOutput.User_Name),
+                new Claim(ClaimTypes.Email,userOutput.User_Email)
+            };
+
+            var Sectoken = new JwtSecurityToken("yourco.com", 
+                "yourco.com",
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(120),
+                signingCredentials: credentials);
+
+            var token = new JwtSecurityTokenHandler().WriteToken(Sectoken);
+
+            return Ok(token);
+        }
+
+        [HttpGet("TestToken")]
+        [Authorize]
+        public string Prueba()
+        {
+            return "Success";
         }
 
         [HttpPost("PasswordVerify")]

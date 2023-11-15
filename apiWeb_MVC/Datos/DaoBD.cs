@@ -16,6 +16,7 @@ namespace Datos
         private const string deletedUserQuery = "DELETE FROM users WHERE User_ID = @User_ID";
         private const string disableUserQuery = "UPDATE users SET User_Status = 0 WHERE User_ID = @User_ID";
         private const string getUserByEmailQuery = "SELECT * FROM users WHERE user_Email = @user_Email;";
+        
         public static IDbConnection Connection 
         {
             get

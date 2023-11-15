@@ -1,6 +1,8 @@
 using Datos.Exceptions;
 using Datos.Interfaces;
 using Datos.Schemas;
+using System.Text;
+using System.Security.Cryptography;
 
 
 namespace apiWeb_MVC.Services
@@ -63,14 +65,27 @@ namespace apiWeb_MVC.Services
             }
             return users;
         }
+
         internal string HashPassword(string pPassword)
         {
-            return BCrypt.Net.BCrypt.HashPassword(pPassword);
+            using SHA256 sha256 = SHA256.Create();
+            byte[] passwordBytes = Encoding.UTF8.GetBytes(pPassword.Normalize(NormalizationForm.FormKD));
+            byte[] hashedBytes = sha256.ComputeHash(passwordBytes);
+            string hashedPassword = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+
+            return BCrypt.Net.BCrypt.HashPassword(hashedPassword, 4); 
         }
 
         public bool VerifyPassword(string pUserInput, string pHashedPassword)
         {
-            return BCrypt.Net.BCrypt.Verify(pUserInput, pHashedPassword);
+
+            using SHA256 sha256 = SHA256.Create();
+            byte[] passwordBytes = Encoding.UTF8.GetBytes(pUserInput.Normalize(NormalizationForm.FormKD));
+            byte[] hashedBytes = sha256.ComputeHash(passwordBytes);
+            string hashedPassword = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+
+            string hashedString = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+            return BCrypt.Net.BCrypt.Verify(hashedString, pHashedPassword);
         }
 
         public UserOutputCreate CreateNewUser(UserInput userInput)
@@ -95,7 +110,6 @@ namespace apiWeb_MVC.Services
             }
         }
 
-
         public UserOutput UpdateUser(int pId, UserInputUpdate pUserUpdate)
         {
             try
@@ -115,7 +129,7 @@ namespace apiWeb_MVC.Services
 
                 if (passwordChanged)
                 {
-                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(pUserUpdate.User_Password);
+                    string hashedPassword = HashPassword(pUserUpdate.User_Password);
                     currentUser.User_Password = hashedPassword;
                 }
 
@@ -162,4 +176,3 @@ namespace apiWeb_MVC.Services
         }
     }
 }
-

@@ -83,9 +83,7 @@ namespace apiWeb_MVC.Services
             byte[] passwordBytes = Encoding.UTF8.GetBytes(pUserInput.Normalize(NormalizationForm.FormKD));
             byte[] hashedBytes = sha256.ComputeHash(passwordBytes);
             string hashedPassword = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
-
-            string hashedString = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
-            return BCrypt.Net.BCrypt.Verify(hashedString, pHashedPassword);
+            return BCrypt.Net.BCrypt.Verify(hashedPassword, pHashedPassword);
         }
 
         public UserOutputCreate CreateNewUser(UserInput userInput)

@@ -3,6 +3,7 @@ using Datos.Interfaces;
 using Datos.Schemas;
 using System.Text;
 using System.Security.Cryptography;
+using MySql.Data.MySqlClient;
 
 
 namespace apiWeb_MVC.Services
@@ -40,6 +41,12 @@ namespace apiWeb_MVC.Services
             {
                 throw new UserNotFoundException($"User with ID {pId} was not found in the database.", ex);
             }
+        }
+
+        public UserInputUpdate GetUserByEmail(string email)
+        {
+            UserInputUpdate user = daoBD.GetUserByEmail(email);
+            return user;
         }
 
         public List<UserOutput> GetAllUsers()
@@ -93,7 +100,15 @@ namespace apiWeb_MVC.Services
                 string hashedPassword = HashPassword(userInput.User_Password);
                 userInput.User_Password = hashedPassword;
                 userInput.User_CreationDate = DateTime.Now;
-                UserOutputCreate userOutput = daoBD.CreateNewUser(userInput);
+                UserOutputCreate userOutput = null;
+                try
+                {
+                    userOutput = daoBD.CreateNewUser(userInput);
+                }
+                catch (MySqlException ex)
+                {
+                    return null;
+                }
 
                 if (userOutput == null)
                 {
@@ -113,6 +128,7 @@ namespace apiWeb_MVC.Services
             try
             {
                 UserInputUpdate currentUser = GetInformationFromUserU(pId);
+                DateTime UpdateDate = DateTime.Now;
 
                 if (currentUser == null)
                 {
@@ -124,6 +140,7 @@ namespace apiWeb_MVC.Services
                 currentUser.User_Name = pUserUpdate.User_Name ?? currentUser.User_Name;
                 currentUser.User_LastName = pUserUpdate.User_LastName ?? currentUser.User_LastName;
                 currentUser.User_Email = pUserUpdate.User_Email ?? currentUser.User_Email;
+                currentUser.User_UpdateDate = UpdateDate;
 
                 if (passwordChanged)
                 {
@@ -136,7 +153,16 @@ namespace apiWeb_MVC.Services
                 if (updated)
                 {
                     UserOutput user = daoBD.GetUserByID(pId);
-                    return user;
+                    UserUpdateDate userWithDate = new UserUpdateDate
+                    {
+                        User_ID = user.User_ID,
+                        User_Name = user.User_Name,
+                        User_LastName = user.User_LastName,
+                        User_Email = user.User_Email,
+                        User_UpdateDate = UpdateDate
+                    };
+
+                    return userWithDate;
                 }
                 else
                 {
@@ -146,6 +172,32 @@ namespace apiWeb_MVC.Services
             catch (Exception ex)
             {
                 throw new UserUpdateFailedException($"Error occurred while updating the user with ID {pId}.", ex);
+            }
+        }
+
+        public UserOutput VerifyUser(string email, string password)
+        {
+            UserInputUpdate user = daoBD.GetUserByEmail(email);
+            if (user == null)
+            {
+                return null;
+            }
+
+            bool passwordMatch = VerifyPassword(password, user.User_Password);
+            if (passwordMatch)
+            {
+                UserOutput userOutput = new UserOutput
+                {
+                    User_ID = user.User_ID,
+                    User_Name = user.User_Name,
+                    User_LastName = user.User_LastName,
+                    User_Email = user.User_Email
+                };
+                return userOutput;
+            }
+            else
+            {
+                return null;
             }
         }
 

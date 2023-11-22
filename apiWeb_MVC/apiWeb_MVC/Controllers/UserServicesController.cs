@@ -6,6 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using Configuracion;
+using Microsoft.Extensions.Options;
 
 namespace apiWeb_MVC.Controllers
 {
@@ -15,14 +17,15 @@ namespace apiWeb_MVC.Controllers
     public class UserServicesController : ControllerBase
     {
         private IUserServices _userServices;
+        private JwtConfiguration _jwtConfiguration;
 
         private readonly ILogger<UserServicesController> _logger;
-        public UserServicesController(ILogger<UserServicesController> logger, IUserServices userServices)
+        public UserServicesController(ILogger<UserServicesController> logger, IUserServices userServices, IOptions<JwtConfiguration>jwtConfiguration)
         {
             _logger = logger;
             _userServices = userServices;
+            _jwtConfiguration = jwtConfiguration.Value;
         }
-
 
         [HttpGet("GetAll")]
 
@@ -32,7 +35,6 @@ namespace apiWeb_MVC.Controllers
 
             return user;
         }
-
 
         [HttpGet("GetUser")]
 
@@ -45,7 +47,6 @@ namespace apiWeb_MVC.Controllers
             }
             return Ok(user);
         }
-
 
         [HttpGet("GetUsers")]
         public IActionResult GetUsers([FromQuery]string ids)
@@ -96,7 +97,7 @@ namespace apiWeb_MVC.Controllers
                 return Unauthorized("Invalid email or password.");
             }
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secret_secret_secret"));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfiguration.Secret));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new List<Claim>
             {
@@ -105,8 +106,8 @@ namespace apiWeb_MVC.Controllers
                 new Claim(ClaimTypes.Email,userOutput.User_Email)
             };
 
-            var Sectoken = new JwtSecurityToken("yourco.com", 
-                "yourco.com",
+            var Sectoken = new JwtSecurityToken(_jwtConfiguration.Issuer,
+                _jwtConfiguration.Audience,
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(120),
                 signingCredentials: credentials);
@@ -136,7 +137,6 @@ namespace apiWeb_MVC.Controllers
                 }
 
                 string passwordInput = password.User_Password;
-                Console.WriteLine("PasswordVerify controlador contraseña input: {0}", passwordInput);
 
                 bool correctPassword = _userServices.VerifyPassword(passwordInput, usuarioBD.User_Password);
 
@@ -171,7 +171,6 @@ namespace apiWeb_MVC.Controllers
             }
         }
 
-
         [HttpPatch("UpdateUser")]
         public IActionResult UpdateUser([FromQuery] int id, [FromBody] UserInputUpdate userInput)
         {   
@@ -184,7 +183,6 @@ namespace apiWeb_MVC.Controllers
 
             else return BadRequest("There was a problem updating the user.");
         }
-
 
         [HttpDelete("DeleteUser")]
         public IActionResult DeleteUser([FromQuery] int id)

@@ -43,9 +43,9 @@ namespace apiWeb_MVC.Services
             }
         }
 
-        public UserInputUpdate GetUserByEmail(string email)
+        public UserInputUpdate GetUserByEmail(string pEmail)
         {
-            UserInputUpdate user = _daoBD.GetUserByEmail(email);
+            UserInputUpdate user = _daoBD.GetUserByEmail(pEmail);
             return user;
         }
 
@@ -93,17 +93,17 @@ namespace apiWeb_MVC.Services
             return BCrypt.Net.BCrypt.Verify(hashedPassword, pHashedPassword);
         }
 
-        public UserOutputCreate CreateNewUser(UserInput userInput)
+        public UserOutputCreate CreateNewUser(UserInput pUserInput)
         {
             try
             {
-                string hashedPassword = HashPassword(userInput.User_Password);
-                userInput.User_Password = hashedPassword;
-                userInput.User_CreationDate = DateTime.Now;
+                string hashedPassword = HashPassword(pUserInput.User_Password);
+                pUserInput.User_Password = hashedPassword;
+                pUserInput.User_CreationDate = DateTime.Now;
                 UserOutputCreate userOutput = null;
                 try
                 {
-                    userOutput = _daoBD.CreateNewUser(userInput);
+                    userOutput = _daoBD.CreateNewUser(pUserInput);
                 }
                 catch (MySqlException ex)
                 {
@@ -175,15 +175,15 @@ namespace apiWeb_MVC.Services
             }
         }
 
-        public UserOutput VerifyUser(string email, string password)
+        public UserOutput VerifyUser(string pEmail, string pPassword)
         {
-            UserInputUpdate user = _daoBD.GetUserByEmail(email);
+            UserInputUpdate user = _daoBD.GetUserByEmail(pEmail);
             if (user == null)
             {
                 return null;
             }
 
-            bool passwordMatch = VerifyPassword(password, user.User_Password);
+            bool passwordMatch = VerifyPassword(pPassword, user.User_Password);
             if (passwordMatch)
             {
                 UserOutput userOutput = new UserOutput

@@ -66,6 +66,10 @@ namespace Datos.Schemas
         [RegularExpression("^(?=.*[A-Z])[A-Za-z0-9]{6,20}$", ErrorMessage = "The password must have at least one uppercase letter and cannot contain tildes or whitespace.")]
 
         public string? User_Password { get; set; }
+
+        [AllowNull]
+        [JsonIgnore]
+        public DateTime? User_UpdateDate { get; set; }
         public UserInputUpdate() { }
     }
 
@@ -87,8 +91,20 @@ namespace Datos.Schemas
         public DateTime User_CreationDate {  get; set; } 
         public UserOutputCreate() { }
     }
+
+    public class UserUpdateDate : UserOutput
+    {
+        public DateTime User_UpdateDate { get; set; }
+    }
+
     public class UserPassword
     {  
         public string User_Password { get; set; } 
+    }
+
+    public class UserLogin
+    {
+        public string User_Email { get; set; }
+        public string User_Password { get; set; }
     }
 }

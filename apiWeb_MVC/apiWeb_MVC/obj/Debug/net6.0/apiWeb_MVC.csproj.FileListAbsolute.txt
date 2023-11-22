@@ -21,7 +21,6 @@ C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercic
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\Microsoft.OpenApi.dll
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\MySql.Data.dll
-C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\Ninject.dll
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -69,3 +68,16 @@ C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercic
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\obj\Debug\net6.0\apiWeb_MVC.genruntimeconfig.cache
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\obj\Debug\net6.0\ref\apiWeb_MVC.dll
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\BCrypt.Net-Next.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\obj\Debug\net6.0\apiWeb_MVC.sourcelink.json
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\Microsoft.Extensions.Options.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\Configuracion.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\apiWeb_MVC\bin\Debug\net6.0\Configuracion.pdb

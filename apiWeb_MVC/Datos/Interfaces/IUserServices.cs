@@ -8,8 +8,12 @@ namespace Datos.Interfaces
         UserInputUpdate GetInformationFromUserU(int pId);
         List<UserOutput> GetAllUsers();
         List<UserOutput> GetUsersByIds(List<int> userIds);
+        UserInputUpdate GetUserByEmail(string email);
         UserOutputCreate CreateNewUser(UserInput userInput);
-        public bool DisableUser(int pId);
+        UserOutput UpdateUser(int pId, UserInputUpdate pUserUpdate);
+        bool VerifyPassword(string pUserInput, string pHashedPassword);
+        UserOutput VerifyUser(string email, string password);
+        bool DisableUser(int pId);
         void DeletedUser(int id);
     }
 }

@@ -4,30 +4,37 @@ using Datos.Exceptions;
 using Datos.Interfaces;
 using Datos.Schemas;
 using MySql.Data.MySqlClient;
+using Microsoft.Extensions.Options;
+using Configuracion;
 
 namespace Datos
 {
     public class DaoBD : IDaoBD
     {
-        private const string connectionString = "Server=localhost;Database=apiweb_mvc;Uid=root;Pwd=12345678";
+        private readonly string connectionString; 
         private const string getAllUserQuery = "SELECT * FROM users";
         private const string getUserByIDQuery = "SELECT * FROM users WHERE user_ID = @user_ID";
         private const string createUserQuery = "INSERT INTO users(User_Name, User_LastName, User_Email, User_Password, User_CreationDate) VALUES(@User_Name, @User_LastName, @User_Email, @User_Password, @User_CreationDate); SELECT* FROM users WHERE User_ID = LAST_INSERT_ID()";
         private const string deletedUserQuery = "DELETE FROM users WHERE User_ID = @User_ID";
         private const string disableUserQuery = "UPDATE users SET User_Status = 0 WHERE User_ID = @User_ID";
-        public static IDbConnection Connection 
+        private const string getUserByEmailQuery = "SELECT * FROM users WHERE user_Email = @user_Email;";
+
+        public DaoBD(IOptions<BDConfiguration> dbConfig)
         {
-            get
-            {
-                return new MySqlConnection(connectionString);
-            }
+            connectionString = dbConfig.Value.ConnectionString;
+        }
+
+        private IDbConnection CreateConnection()
+        {
+            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            return dbConnection;
         }
 
         public List<UserOutput> GetAllUsers()
         {
             try
             {
-                using IDbConnection dbConnection = Connection;
+                using IDbConnection dbConnection = CreateConnection();
                 dbConnection.Open();
                 return dbConnection.Query<UserOutput>(getAllUserQuery).ToList();
             }
@@ -41,7 +48,7 @@ namespace Datos
         {
             try
             {
-                using IDbConnection dbConnection = Connection;
+                using IDbConnection dbConnection = CreateConnection();
                 dbConnection.Open();
                 return dbConnection.Query<UserOutput>(getUserByIDQuery, new { user_ID = pId }).FirstOrDefault();
             }
@@ -55,7 +62,7 @@ namespace Datos
         {
             try
             {
-                using (IDbConnection dbConnection = Connection)
+                using IDbConnection dbConnection = CreateConnection();
                 {
                     dbConnection.Open();
                     return dbConnection.Query<UserInputUpdate>(getUserByIDQuery, new { user_ID = pId }).FirstOrDefault();
@@ -67,11 +74,25 @@ namespace Datos
             }
         }
 
+        public UserInputUpdate GetUserByEmail(string email)
+        {
+            try
+            {
+                using IDbConnection dbConnection = CreateConnection();
+                dbConnection.Open();
+                return dbConnection.Query<UserInputUpdate>(getUserByEmailQuery, new { user_Email = email }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseQueryException($"Error getting user by email {email}.", ex);
+            }
+        }
+
         public UserOutputCreate CreateNewUser(UserInput pUserInput)
         {
             try
             {
-                using (IDbConnection dbConnection = Connection)
+                using IDbConnection dbConnection = CreateConnection();
                 {
                     dbConnection.Open();
                     return dbConnection.QuerySingle<UserOutputCreate>(createUserQuery, pUserInput);
@@ -87,7 +108,7 @@ namespace Datos
         {
             try
             {
-                using (IDbConnection dbConnection = Connection)
+                using IDbConnection dbConnection = CreateConnection();
                 {
                     dbConnection.Open();
 
@@ -121,6 +142,8 @@ namespace Datos
                     if (updateFields.Count == 0) return false;
 
                     parameters.Add("User_ID", pId);
+                    updateFields.Add("User_UpdateDate = @User_UpdateDate");
+                    parameters.Add("User_UpdateDate", pCurrentUser.User_UpdateDate);
 
                     string updateUserQuery = $"UPDATE users SET {string.Join(", ", updateFields)} WHERE User_ID = @User_ID";
 
@@ -139,7 +162,7 @@ namespace Datos
         {
             try
             {
-                using (IDbConnection dbConnection = Connection)
+                using IDbConnection dbConnection = CreateConnection();
                 {
                     dbConnection.Open();
                     int rowsAffected = dbConnection.Execute(disableUserQuery, new { User_ID = pUserId });
@@ -149,7 +172,7 @@ namespace Datos
             }
             catch (Exception ex)
             {
-                throw new DatabaseTransactionException($"Error al deshabilitar el usuario con ID {pUserId}.", ex);
+                throw new DatabaseTransactionException($"Error disabling user with ID {pUserId}.", ex);
             }
         }
 
@@ -157,13 +180,13 @@ namespace Datos
         {
             try
             {
-                using IDbConnection dbConnection = Connection;
+                using IDbConnection dbConnection = CreateConnection();
                 dbConnection.Open();
                 dbConnection.Execute(deletedUserQuery, new { User_ID = pId });
             }
             catch (Exception ex)
             {
-                throw new DatabaseTransactionException($"Error al eliminar el usuario con ID {pId}.", ex);
+                throw new DatabaseTransactionException($"Error deleting user with ID {pId}.", ex);
             }
         }
     }

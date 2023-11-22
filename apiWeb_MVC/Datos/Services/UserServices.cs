@@ -1,4 +1,4 @@
-﻿using Datos.Exceptions;
+using Datos.Exceptions;
 using Datos.Interfaces;
 using Datos.Schemas;
 using System.Text;
@@ -226,4 +226,3 @@ namespace apiWeb_MVC.Services
         }
     }
 }
-

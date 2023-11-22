@@ -1,26 +1,19 @@
-﻿using Clases.Interfaces;
+using Clases.Interfaces;
 
 public class Producto : IProducto
-{
-    public string Nombre { get; set; }
-    public int Precio { get; set; }
-    public int Stock { get; set; }
-    public bool esAlcohol { get; set; }
-    public bool RequiereEdad { get; set; }
-
-    public Producto(string nombre, int precio, int stock, bool pEsAlcohol, bool requiereEdad)
+{   
+    public int producto_ID { get; set; }
+    public string producto_Nombre { get; set; }
+    public int producto_Precio { get; set; }
+    public int producto_Stock { get; set; }
+    public bool producto_EsAlcohol { get; set; }
+    public bool producto_RequiereEdad { get; set; }
+    public Producto()
     {
-        Nombre = nombre;
-        Precio = precio;
-        Stock = stock;
-        esAlcohol = pEsAlcohol;
-        RequiereEdad = requiereEdad;
-    }
 
+    }
     public void DescontarStock()
     {
-        Stock--;
+        producto_Stock--;
     }
 }
-
-

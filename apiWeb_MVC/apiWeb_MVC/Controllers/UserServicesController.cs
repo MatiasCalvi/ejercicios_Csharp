@@ -75,7 +75,7 @@ namespace apiWeb_MVC.Controllers
             {
                 return BadRequest("Email already in use.");
             }
-
+            
             UserOutputCreate userOutput = _userServices.CreateNewUser(userInput);
 
             if (userOutput != null)
@@ -137,7 +137,6 @@ namespace apiWeb_MVC.Controllers
                 }
 
                 string passwordInput = password.User_Password;
-
                 bool correctPassword = _userServices.VerifyPassword(passwordInput, usuarioBD.User_Password);
 
                 if (correctPassword)

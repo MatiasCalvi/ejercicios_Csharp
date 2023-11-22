@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using Dapper;
 using Datos.Exceptions;
 using Datos.Interfaces;
@@ -103,6 +103,8 @@ namespace Datos
                 throw new DatabaseTransactionException("Error creating a new user.", ex);
             }
         }
+
+
 
         public bool UpdateUser(int pId, UserInputUpdate pCurrentUser)
         {

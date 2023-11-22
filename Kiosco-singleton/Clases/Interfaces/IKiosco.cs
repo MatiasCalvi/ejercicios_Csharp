@@ -1,9 +1,9 @@
-﻿namespace Clases.Interfaces
+namespace Clases.Interfaces
 {
     public interface IKiosco
     {
         public void MostrarProductos();
-        public List<IProducto> Productos();
+        public List<Producto> ListaProductos();
         public Producto BuscarProducto(string pNombre);
     }
 }

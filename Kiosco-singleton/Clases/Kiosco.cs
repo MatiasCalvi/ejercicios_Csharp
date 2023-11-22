@@ -1,19 +1,15 @@
-﻿using Clases.Interfaces;
+using Clases.Interfaces;
+using Clases.Exceptions;
 
 namespace Clases
 {
     public class Kiosco : IKiosco
     {
         private static readonly Kiosco instance = new();
-        private List<IProducto> productos;
+        private List<Producto> Productos;
         private Kiosco()
         {
-            productos = new List<IProducto>();
-            productos.Add(new Producto("Coca-Cola", 500, 10, false, false));
-            productos.Add(new Producto("Chocolate", 400, 5, false, false));
-            productos.Add(new Producto("Galletitas", 300, 8, false, false));
-            productos.Add(new Producto("Brahma", 450, 6, true, true));
-            productos.Add(new Producto("Quilmes", 550, 7, true, true));
+            Productos = new List<Producto>();
         }
 
         public static Kiosco Instance
@@ -24,24 +20,30 @@ namespace Clases
             }
         }
 
+        public void CargarProductosDesdeBaseDeDatos()
+        {
+            var dao = new DaoLista();
+            Productos = dao.ObtenerTodosLosProductos();
+        }
+
         public void MostrarProductos()
         {
             Console.WriteLine("Productos:");
-            foreach (var producto in this.productos)
+            foreach (var producto in Productos)
             {
-                Console.WriteLine($"{producto.Nombre} - Precio: ${producto.Precio} - Stock: {producto.Stock}");
+                Console.WriteLine($"{producto.producto_Nombre} - Precio: ${producto.producto_Precio} - Stock: {producto.producto_Stock}");
             }
         }
 
-        public List<IProducto>Productos()
+        public List<Producto> ListaProductos()
         {
-            return this.productos;
+            return Productos;
         }
         public Producto BuscarProducto(string pNombre)
         {
-            foreach(Producto produc in productos)
+            foreach (Producto produc in Productos)
             {
-                if(produc.Nombre == pNombre)
+                if (produc.producto_Nombre == pNombre)
                 {
                     return produc;
                 }
@@ -51,36 +53,67 @@ namespace Clases
 
         public static bool EnVeda()
         {
-            return true; //---> cambialo si queres consumir alcohol
+            return false; //---> cambialo si queres consumir alcohol
         }
 
-        public void Comprar(IUsuario cliente, IProducto producto)
+        object locked = new();
+        public void Comprar(IUsuario pCliente, Producto pProducto)
         {
-
-                if (producto.RequiereEdad && cliente.Edad < 18)
+            lock (locked)
+            {
+                try
                 {
-                    Console.WriteLine($"{cliente.Nombre}: No puedes comprar {producto.Nombre} porque eres menor de edad.");
-                }
-                else if (producto.esAlcohol && EnVeda())
-                {
-                    Console.WriteLine($"{cliente.Nombre}: No puedes comprar {producto.Nombre} debido a la veda electoral.");
-                }
-                else
-                {
-                    lock (producto)
+                    if (pProducto == null)
                     {
-                        if (producto.Stock <= 0)
+                        throw new NoHayProductoException();
+                    }
+
+                    if (pProducto.producto_RequiereEdad && pCliente.Edad < 18)
+                    {
+                        throw new EresMenorException(pCliente.Nombre, pProducto.producto_Nombre);
+                    }
+
+                    else if (pProducto.producto_EsAlcohol && EnVeda())
+                    {
+                        throw new VedaElectoralException(pCliente.Nombre, pProducto.producto_Nombre);
+                    }
+
+                    else
+                    {
+                        if (pProducto.producto_Stock <= 0)
                         {
-                            Console.WriteLine($"{cliente.Nombre}: {producto.Nombre} no está en stock.");
+                            throw new NoHayStockException(pCliente.Nombre, pProducto.producto_Nombre);
                         }
-                        else {
-                            producto.DescontarStock();
-                            Console.WriteLine($"{cliente.Nombre}: Compraste {producto.Nombre}. Stock restante: {producto.Stock}");
+
+                        else
+                        {
+                            lock (locked)
+                            {
+                                pProducto.DescontarStock();
+                                var dao = new DaoLista();
+                                dao.ActualizarStock(pProducto);
+                                Console.WriteLine($"{pCliente.Nombre}: Compraste {pProducto.producto_Nombre}. Stock restante: {pProducto.producto_Stock}");
+                            }
                         }
                     }
                 }
+                catch (EresMenorException e)
+                {
+                    Console.WriteLine($"{pCliente.Nombre}: {e.Message}");
+                }
+                catch (VedaElectoralException e)
+                {
+                    Console.WriteLine($"{pCliente.Nombre}: {e.Message}");
+                }
+                catch (NoHayStockException e)
+                {
+                    Console.WriteLine($"{pCliente.Nombre}: {e.Message}");
+                }
+                catch (NoHayProductoException e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
         }
-
     }
 }
-

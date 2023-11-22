@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\apiWeb_MVC.props" />
+</Project>

@@ -74,17 +74,17 @@ namespace Datos
             }
         }
 
-        public UserInputUpdate GetUserByEmail(string email)
+        public UserInputUpdate GetUserByEmail(string pEmail)
         {
             try
             {
                 using IDbConnection dbConnection = CreateConnection();
                 dbConnection.Open();
-                return dbConnection.Query<UserInputUpdate>(getUserByEmailQuery, new { user_Email = email }).FirstOrDefault();
+                return dbConnection.Query<UserInputUpdate>(getUserByEmailQuery, new { user_Email = pEmail }).FirstOrDefault();
             }
             catch (Exception ex)
             {
-                throw new DatabaseQueryException($"Error getting user by email {email}.", ex);
+                throw new DatabaseQueryException($"Error getting user by email {pEmail}.", ex);
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using Datos.Interfaces;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
@@ -32,6 +33,11 @@ namespace Datos.Schemas
         [MaxLength(20, ErrorMessage = "The password cannot be more than 20 characters.")]
         [RegularExpression("^(?=.*[A-Z])[A-Za-z0-9]{6,20}$", ErrorMessage = "The password must have at least one uppercase letter and cannot contain tildes or whitespace.")]
         public string User_Password { get; set; }
+
+        [AllowNull]
+        [JsonIgnore]
+        [DefaultValue("user")]
+        public string? User_Role { get; set; }
 
         [AllowNull]
         [JsonIgnore]
@@ -69,6 +75,10 @@ namespace Datos.Schemas
 
         [AllowNull]
         [JsonIgnore]
+        public string? User_Role { get; set; }
+
+        [AllowNull]
+        [JsonIgnore]
         public DateTime? User_UpdateDate { get; set; }
         public UserInputUpdate() { }
     }
@@ -79,6 +89,10 @@ namespace Datos.Schemas
         public string User_Name { get; set; }
         public string User_LastName { get; set; }
         public string User_Email { get; set; }
+        
+        [JsonIgnore]
+        [AllowNull]
+        public string? User_Role {  get; set; }
         public UserOutput() { }
     }
 
@@ -88,7 +102,8 @@ namespace Datos.Schemas
         public string User_Name { get; set; }
         public string User_LastName { get; set; }
         public string User_Email { get; set; }
-        public DateTime User_CreationDate {  get; set; } 
+        public DateTime User_CreationDate {  get; set; }
+        public string? User_Role { get; set; }
         public UserOutputCreate() { }
     }
 

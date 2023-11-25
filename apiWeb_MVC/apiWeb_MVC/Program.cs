@@ -5,6 +5,9 @@ using Datos.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Datos.Services;
+using Datos.Schemas;
+using Datos.Validate;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,10 +18,19 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpContextAccessor();
 
 //DI
 builder.Services.AddScoped<IDaoBD,DaoBD>();
 builder.Services.AddScoped<IUserServices, UserServices>();
+builder.Services.AddScoped<IValidateMethodes, ValidateMethodes>();
+builder.Services.AddScoped<IDaoBDBook, DaoBDBook>();
+builder.Services.AddScoped<IBookServices, BookServices>();
+builder.Services.AddScoped<IDaoBDRentedBook, DaoBDRentedBook>();
+builder.Services.AddScoped<IRentedBook, RentedBook>();
+builder.Services.AddScoped<IRentedServices, RentedServices>();
+builder.Services.AddScoped<IDaoBDAuthor, DaoBDAuthor>();
+builder.Services.AddScoped<IAuthorServices, AuthorServices>();
 builder.Services.Configure<JwtConfiguration>(builder.Configuration.GetSection("Jwt"));
 builder.Services.Configure<BDConfiguration>(builder.Configuration.GetSection("BD"));
 

@@ -1,8 +1,6 @@
 ﻿using Datos.Exceptions;
 using Datos.Interfaces;
 using Datos.Schemas;
-using System.Text;
-using System.Security.Cryptography;
 using MySql.Data.MySqlClient;
 
 
@@ -11,10 +9,16 @@ namespace apiWeb_MVC.Services
     public class UserServices : IUserServices
     {
         private IDaoBD _daoBD;
+        private IValidateMethodes _validateMethodes;
 
-        public UserServices(IDaoBD daoBD)
+        public UserServices(IDaoBD daoBD, IValidateMethodes validateMethodes)
         {
             _daoBD = daoBD;
+            _validateMethodes = validateMethodes;
+        }
+        public List<UserOutput> GetAllUsers()
+        {
+            return _daoBD.GetAllUsers();
         }
 
         public UserOutput GetInformationFromUser(int pId)
@@ -26,7 +30,7 @@ namespace apiWeb_MVC.Services
             }
             catch (Exception ex)
             {
-                throw new UserNotFoundException($"User with ID {pId} was not found in the database.", ex);
+                throw new NotFoundException($"User with ID {pId} was not found in the database.", ex);
             }
         }
 
@@ -39,7 +43,7 @@ namespace apiWeb_MVC.Services
             }
             catch (Exception ex)
             {
-                throw new UserNotFoundException($"User with ID {pId} was not found in the database.", ex);
+                throw new NotFoundException($"User with ID {pId} was not found in the database.", ex);
             }
         }
 
@@ -49,10 +53,6 @@ namespace apiWeb_MVC.Services
             return user;
         }
 
-        public List<UserOutput> GetAllUsers()
-        {
-            return _daoBD.GetAllUsers();
-        }
 
         public List<UserOutput> GetUsersByIds(List<int> pUserIds)
         {
@@ -67,37 +67,17 @@ namespace apiWeb_MVC.Services
                 }
                 else
                 {
-                    throw new UserNotFoundException($"User with ID {userId} was not found in the database.");
+                    throw new NotFoundException($"User with ID {userId} was not found in the database.");
                 }
             }
             return users;
-        }
-
-        internal string HashPassword(string pPassword)
-        {
-            using SHA256 sha256 = SHA256.Create();
-            byte[] passwordBytes = Encoding.UTF8.GetBytes(pPassword.Normalize(NormalizationForm.FormKD));
-            byte[] hashedBytes = sha256.ComputeHash(passwordBytes);
-            string hashedPassword = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
-
-            return BCrypt.Net.BCrypt.HashPassword(hashedPassword, 4); 
-        }
-
-        public bool VerifyPassword(string pUserInput, string pHashedPassword)
-        {
-
-            using SHA256 sha256 = SHA256.Create();
-            byte[] passwordBytes = Encoding.UTF8.GetBytes(pUserInput.Normalize(NormalizationForm.FormKD));
-            byte[] hashedBytes = sha256.ComputeHash(passwordBytes);
-            string hashedPassword = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
-            return BCrypt.Net.BCrypt.Verify(hashedPassword, pHashedPassword);
         }
 
         public UserOutputCreate CreateNewUser(UserInput pUserInput)
         {
             try
             {
-                string hashedPassword = HashPassword(pUserInput.User_Password);
+                string hashedPassword = _validateMethodes.HashPassword(pUserInput.User_Password);
                 pUserInput.User_Password = hashedPassword;
                 pUserInput.User_CreationDate = DateTime.Now;
                 UserOutputCreate userOutput = null;
@@ -112,14 +92,14 @@ namespace apiWeb_MVC.Services
 
                 if (userOutput == null)
                 {
-                    throw new UserCreationFailedException("Failed to create a new user.");
+                    throw new CreationFailedException("Failed to create a new user.");
                 }
 
                 return userOutput;
             }
             catch (Exception ex)
             {
-                throw new UserCreationFailedException("Error occurred while creating a new user.", ex);
+                throw new CreationFailedException("Error occurred while creating a new user.", ex);
             }
         }
 
@@ -132,10 +112,10 @@ namespace apiWeb_MVC.Services
 
                 if (currentUser == null)
                 {
-                    throw new UserNotFoundException($"The user with ID {pId} was not found in the database.");
+                    throw new NotFoundException($"The user with ID {pId} was not found in the database.");
                 }
 
-                bool passwordChanged = !VerifyPassword(pUserUpdate.User_Password, currentUser.User_Password);
+                bool passwordChanged = !_validateMethodes.VerifyPassword(pUserUpdate.User_Password, currentUser.User_Password);
 
                 currentUser.User_Name = pUserUpdate.User_Name ?? currentUser.User_Name;
                 currentUser.User_LastName = pUserUpdate.User_LastName ?? currentUser.User_LastName;
@@ -144,7 +124,7 @@ namespace apiWeb_MVC.Services
 
                 if (passwordChanged)
                 {
-                    string hashedPassword = HashPassword(pUserUpdate.User_Password);
+                    string hashedPassword = _validateMethodes.HashPassword(pUserUpdate.User_Password);
                     currentUser.User_Password = hashedPassword;
                 }
 
@@ -166,12 +146,12 @@ namespace apiWeb_MVC.Services
                 }
                 else
                 {
-                    throw new UserUpdateFailedException($"Failed to update the user with ID {pId}.");
+                    throw new UpdateFailedException($"Failed to update the user with ID {pId}.");
                 }
             }
             catch (Exception ex)
             {
-                throw new UserUpdateFailedException($"Error occurred while updating the user with ID {pId}.", ex);
+                throw new UpdateFailedException($"Error occurred while updating the user with ID {pId}.", ex);
             }
         }
 
@@ -183,7 +163,7 @@ namespace apiWeb_MVC.Services
                 return null;
             }
 
-            bool passwordMatch = VerifyPassword(pPassword, user.User_Password);
+            bool passwordMatch = _validateMethodes.VerifyPassword(pPassword, user.User_Password);
             if (passwordMatch)
             {
                 UserOutput userOutput = new UserOutput
@@ -191,7 +171,8 @@ namespace apiWeb_MVC.Services
                     User_ID = user.User_ID,
                     User_Name = user.User_Name,
                     User_LastName = user.User_LastName,
-                    User_Email = user.User_Email
+                    User_Email = user.User_Email,
+                    User_Role = user.User_Role
                 };
                 return userOutput;
             }
@@ -207,7 +188,7 @@ namespace apiWeb_MVC.Services
 
             if (!result)
             {
-                throw new UserDeletionFailedException($"Failed to disable the user with ID {pId}.");
+                throw new DeletionFailedException($"Failed to disable the user with ID {pId}.");
             }
 
             return result;
@@ -221,7 +202,7 @@ namespace apiWeb_MVC.Services
             }
             catch (Exception ex)
             {
-                throw new UserDeletionFailedException($"Error occurred while deleting the user with ID {pId}.", ex);
+                throw new DeletionFailedException($"Error occurred while deleting the user with ID {pId}.", ex);
             }
         }
     }

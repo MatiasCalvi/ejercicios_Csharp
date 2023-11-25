@@ -10,18 +10,18 @@ namespace apiWeb_MVC.Services
 {
     public class UserServices : IUserServices
     {
-        private readonly IDaoBD daoBD;
+        private IDaoBD _daoBD;
 
-        public UserServices(IDaoBD _daoBD)
+        public UserServices(IDaoBD daoBD)
         {
-            daoBD = _daoBD;
+            _daoBD = daoBD;
         }
 
         public UserOutput GetInformationFromUser(int pId)
         {
             try
             {
-                UserOutput user = daoBD.GetUserByID(pId);
+                UserOutput user = _daoBD.GetUserByID(pId);
                 return user;
             }
             catch (Exception ex)
@@ -34,7 +34,7 @@ namespace apiWeb_MVC.Services
         {
             try
             {
-                UserInputUpdate user = daoBD.GetUserByIDU(pId);
+                UserInputUpdate user = _daoBD.GetUserByIDU(pId);
                 return user;
             }
             catch (Exception ex)
@@ -43,15 +43,15 @@ namespace apiWeb_MVC.Services
             }
         }
 
-        public UserInputUpdate GetUserByEmail(string email)
+        public UserInputUpdate GetUserByEmail(string pEmail)
         {
-            UserInputUpdate user = daoBD.GetUserByEmail(email);
+            UserInputUpdate user = _daoBD.GetUserByEmail(pEmail);
             return user;
         }
 
         public List<UserOutput> GetAllUsers()
         {
-            return daoBD.GetAllUsers();
+            return _daoBD.GetAllUsers();
         }
 
         public List<UserOutput> GetUsersByIds(List<int> pUserIds)
@@ -59,7 +59,7 @@ namespace apiWeb_MVC.Services
             List<UserOutput> users = new();
             foreach (int userId in pUserIds)
             {
-                UserOutput user = daoBD.GetUserByID(userId);
+                UserOutput user = _daoBD.GetUserByID(userId);
 
                 if (user != null)
                 {
@@ -93,17 +93,17 @@ namespace apiWeb_MVC.Services
             return BCrypt.Net.BCrypt.Verify(hashedPassword, pHashedPassword);
         }
 
-        public UserOutputCreate CreateNewUser(UserInput userInput)
+        public UserOutputCreate CreateNewUser(UserInput pUserInput)
         {
             try
             {
-                string hashedPassword = HashPassword(userInput.User_Password);
-                userInput.User_Password = hashedPassword;
-                userInput.User_CreationDate = DateTime.Now;
+                string hashedPassword = HashPassword(pUserInput.User_Password);
+                pUserInput.User_Password = hashedPassword;
+                pUserInput.User_CreationDate = DateTime.Now;
                 UserOutputCreate userOutput = null;
                 try
                 {
-                    userOutput = daoBD.CreateNewUser(userInput);
+                    userOutput = _daoBD.CreateNewUser(pUserInput);
                 }
                 catch (MySqlException ex)
                 {
@@ -148,11 +148,11 @@ namespace apiWeb_MVC.Services
                     currentUser.User_Password = hashedPassword;
                 }
 
-                bool updated = daoBD.UpdateUser(pId, currentUser);
+                bool updated = _daoBD.UpdateUser(pId, currentUser);
 
                 if (updated)
                 {
-                    UserOutput user = daoBD.GetUserByID(pId);
+                    UserOutput user = _daoBD.GetUserByID(pId);
                     UserUpdateDate userWithDate = new UserUpdateDate
                     {
                         User_ID = user.User_ID,
@@ -175,15 +175,15 @@ namespace apiWeb_MVC.Services
             }
         }
 
-        public UserOutput VerifyUser(string email, string password)
+        public UserOutput VerifyUser(string pEmail, string pPassword)
         {
-            UserInputUpdate user = daoBD.GetUserByEmail(email);
+            UserInputUpdate user = _daoBD.GetUserByEmail(pEmail);
             if (user == null)
             {
                 return null;
             }
 
-            bool passwordMatch = VerifyPassword(password, user.User_Password);
+            bool passwordMatch = VerifyPassword(pPassword, user.User_Password);
             if (passwordMatch)
             {
                 UserOutput userOutput = new UserOutput
@@ -203,7 +203,7 @@ namespace apiWeb_MVC.Services
 
         public bool DisableUser(int pId)
         {
-            bool result = daoBD.DisableUser(pId);
+            bool result = _daoBD.DisableUser(pId);
 
             if (!result)
             {
@@ -217,7 +217,7 @@ namespace apiWeb_MVC.Services
         {
             try
             {
-                daoBD.DeletedUser(pId);
+                _daoBD.DeletedUser(pId);
             }
             catch (Exception ex)
             {

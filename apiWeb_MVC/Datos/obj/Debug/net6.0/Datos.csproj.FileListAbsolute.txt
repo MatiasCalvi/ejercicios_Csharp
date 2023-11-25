@@ -10,3 +10,7 @@ C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercic
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\obj\Debug\net6.0\refint\Datos.dll
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\obj\Debug\net6.0\Datos.pdb
 C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\obj\Debug\net6.0\ref\Datos.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\obj\Debug\net6.0\Datos.sourcelink.json
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\bin\Debug\net6.0\Configuracion.dll
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\bin\Debug\net6.0\Configuracion.pdb
+C:\Users\Matias\Desktop\Desarrollo\Desarrollo\FullStack_Net\C#\programas\ejercicios_Csharp\apiWeb_MVC\Datos\obj\Debug\net6.0\Datos.csproj.CopyComplete

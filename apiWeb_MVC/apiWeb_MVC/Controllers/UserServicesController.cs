@@ -1,14 +1,13 @@
-using Daos;
 using Datos.Schemas;
 using Microsoft.AspNetCore.Mvc;
-using apiWeb_MVC.Services;
-using Ninject;
 using Datos.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using Configuracion;
+using Microsoft.Extensions.Options;
 
 namespace apiWeb_MVC.Controllers
 {
@@ -17,32 +16,31 @@ namespace apiWeb_MVC.Controllers
 
     public class UserServicesController : ControllerBase
     {
-        static IKernel kernel = NinjectConfig.CreateKernel();
-        static IDaoBD dao => kernel.Get<IDaoBD>();
-        UserServices userServices => new(dao);
+        private IUserServices _userServices;
+        private JwtConfiguration _jwtConfiguration;
 
         private readonly ILogger<UserServicesController> _logger;
-        public UserServicesController(ILogger<UserServicesController> logger)
+        public UserServicesController(ILogger<UserServicesController> logger, IUserServices userServices, IOptions<JwtConfiguration>jwtConfiguration)
         {
             _logger = logger;
+            _userServices = userServices;
+            _jwtConfiguration = jwtConfiguration.Value;
         }
-
 
         [HttpGet("GetAll")]
 
         public List<UserOutput> GetAll()
         {
-            List<UserOutput> user = userServices.GetAllUsers();
+            List<UserOutput> user = _userServices.GetAllUsers();
 
             return user;
         }
-
 
         [HttpGet("GetUser")]
 
         public IActionResult GetUser([FromQuery] int id)
         {
-            UserOutput user = userServices.GetInformationFromUser(id);
+            UserOutput user = _userServices.GetInformationFromUser(id);
             if (user == null)
             {
                 return NotFound("User not found");
@@ -50,12 +48,11 @@ namespace apiWeb_MVC.Controllers
             return Ok(user);
         }
 
-
         [HttpGet("GetUsers")]
         public IActionResult GetUsers([FromQuery]string ids)
         {
             List<int> userIds = ids.Split(',').Select(int.Parse).ToList();
-            List<UserOutput> users = userServices.GetUsersByIds(userIds);
+            List<UserOutput> users = _userServices.GetUsersByIds(userIds);
 
             if (users.Count == 0)
             {
@@ -73,13 +70,13 @@ namespace apiWeb_MVC.Controllers
                 return BadRequest(ModelState);
             }
 
-            UserInputUpdate user = userServices.GetUserByEmail(userInput.User_Email);
+            UserInputUpdate user = _userServices.GetUserByEmail(userInput.User_Email);
             if (user != null)
             {
                 return BadRequest("Email already in use.");
             }
 
-            UserOutputCreate userOutput = userServices.CreateNewUser(userInput);
+            UserOutputCreate userOutput = _userServices.CreateNewUser(userInput);
 
             if (userOutput != null)
             {
@@ -94,13 +91,13 @@ namespace apiWeb_MVC.Controllers
         [HttpPost("Login")]
         public IActionResult Login([FromBody] UserLogin user)
         {
-            UserOutput userOutput = userServices.VerifyUser(user.User_Email, user.User_Password);
+            UserOutput userOutput = _userServices.VerifyUser(user.User_Email, user.User_Password);
             if (userOutput == null)
             {
                 return Unauthorized("Invalid email or password.");
             }
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secret_secret_secret"));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfiguration.Secret));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new List<Claim>
             {
@@ -109,8 +106,8 @@ namespace apiWeb_MVC.Controllers
                 new Claim(ClaimTypes.Email,userOutput.User_Email)
             };
 
-            var Sectoken = new JwtSecurityToken("yourco.com", 
-                "yourco.com",
+            var Sectoken = new JwtSecurityToken(_jwtConfiguration.Issuer,
+                _jwtConfiguration.Audience,
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(120),
                 signingCredentials: credentials);
@@ -132,7 +129,7 @@ namespace apiWeb_MVC.Controllers
         {
             try
             {
-                UserInputUpdate usuarioBD = userServices.GetInformationFromUserU(id);
+                UserInputUpdate usuarioBD = _userServices.GetInformationFromUserU(id);
 
                 if (usuarioBD == null)
                 {
@@ -140,13 +137,12 @@ namespace apiWeb_MVC.Controllers
                 }
 
                 string passwordInput = password.User_Password;
-                Console.WriteLine("PasswordVerify controlador contraseña input: {0}", passwordInput);
 
-                bool correctPassword = userServices.VerifyPassword(passwordInput, usuarioBD.User_Password);
+                bool correctPassword = _userServices.VerifyPassword(passwordInput, usuarioBD.User_Password);
 
                 if (correctPassword)
                 {
-                    UserOutput user = userServices.GetInformationFromUser(id);
+                    UserOutput user = _userServices.GetInformationFromUser(id);
                     return Ok(user);
                 }
                 else
@@ -163,7 +159,7 @@ namespace apiWeb_MVC.Controllers
         [HttpPatch("DisableUser")]
         public IActionResult DisableUser([FromQuery] int id)
         {
-            bool result = userServices.DisableUser(id);
+            bool result = _userServices.DisableUser(id);
 
             if (result)
             {
@@ -175,32 +171,30 @@ namespace apiWeb_MVC.Controllers
             }
         }
 
-
         [HttpPatch("UpdateUser")]
         public IActionResult UpdateUser([FromQuery] int id, [FromBody] UserInputUpdate userInput)
         {   
-            UserOutput user = userServices.GetInformationFromUser(id);
+            UserOutput user = _userServices.GetInformationFromUser(id);
             if (user == null) return NotFound("User not found.");
 
-            UserOutput updatedUser = userServices.UpdateUser(id, userInput);
+            UserOutput updatedUser = _userServices.UpdateUser(id, userInput);
 
             if (updatedUser != null) return Ok(updatedUser);
 
             else return BadRequest("There was a problem updating the user.");
         }
 
-
         [HttpDelete("DeleteUser")]
         public IActionResult DeleteUser([FromQuery] int id)
         {
-            UserOutput user = userServices.GetInformationFromUser(id); 
+            UserOutput user = _userServices.GetInformationFromUser(id); 
             if (user == null) 
             {
                 return NotFound("User not found."); 
             }
             else 
             {
-                userServices.DeletedUser(id); 
+                _userServices.DeletedUser(id); 
                 return NoContent();
             }
         }

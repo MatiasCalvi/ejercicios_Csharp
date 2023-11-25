@@ -1,4 +1,5 @@
-﻿using Clases;
+using Clases;
+using Clases.Interfaces;
 
 namespace Kiosco{
     class Program
@@ -6,10 +7,12 @@ namespace Kiosco{
         static async Task Main()
         {
             var kiosco = Clases.Kiosco.Instance;
+            kiosco.CargarProductosDesdeBaseDeDatos();
+           
             var cliente1 = new Usuario("Cliente1", 20);
             var cliente2 = new Usuario("Cliente2", 18);
-            var producto1 = kiosco.BuscarProducto("Braham"); 
-            var producto2 = kiosco.BuscarProducto("Braham");
+            var producto1 = kiosco.BuscarProducto("Brahma"); 
+            var producto2 = kiosco.BuscarProducto("Brahma");
 
             var tasks = new List<Task>();
 

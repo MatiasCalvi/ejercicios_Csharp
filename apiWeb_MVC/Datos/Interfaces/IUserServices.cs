@@ -1,4 +1,4 @@
-﻿using Datos.Schemas;
+using Datos.Schemas;
 
 namespace Datos.Interfaces
 {

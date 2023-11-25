@@ -1,4 +1,4 @@
-﻿using Datos.Interfaces;
+using Datos.Interfaces;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;

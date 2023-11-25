@@ -1,4 +1,4 @@
-﻿using Datos.Exceptions;
+using Datos.Exceptions;
 using Datos.Interfaces;
 using Datos.Schemas;
 using MySql.Data.MySqlClient;
@@ -207,4 +207,3 @@ namespace apiWeb_MVC.Services
         }
     }
 }
-

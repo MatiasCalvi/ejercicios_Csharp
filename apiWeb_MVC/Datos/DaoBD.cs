@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using Dapper;
 using Datos.Exceptions;
 using Datos.Interfaces;

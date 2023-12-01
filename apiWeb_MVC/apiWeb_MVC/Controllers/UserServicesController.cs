@@ -17,14 +17,16 @@ namespace apiWeb_MVC.Controllers
     public class UserServicesController : ControllerBase
     {
         private IUserServices _userServices;
+        private IValidateMethodes _validateMethodes;
         private JwtConfiguration _jwtConfiguration;
 
         private readonly ILogger<UserServicesController> _logger;
-        public UserServicesController(ILogger<UserServicesController> logger, IUserServices userServices, IOptions<JwtConfiguration>jwtConfiguration)
+        public UserServicesController(ILogger<UserServicesController> logger, IUserServices userServices, IOptions<JwtConfiguration>jwtConfiguration, IValidateMethodes validateMethodes)
         {
             _logger = logger;
             _userServices = userServices;
             _jwtConfiguration = jwtConfiguration.Value;
+            _validateMethodes = validateMethodes;
         }
 
         [HttpGet("GetAll")]
@@ -96,14 +98,15 @@ namespace apiWeb_MVC.Controllers
             {
                 return Unauthorized("Invalid email or password.");
             }
-
+            Console.WriteLine(userOutput.User_Role);
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfiguration.Secret));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Sid,userOutput.User_ID.ToString()),
                 new Claim(ClaimTypes.Name,userOutput.User_Name),
-                new Claim(ClaimTypes.Email,userOutput.User_Email)
+                new Claim(ClaimTypes.Email,userOutput.User_Email),
+                new Claim(ClaimTypes.Role,userOutput.User_Role)
             };
 
             var Sectoken = new JwtSecurityToken(_jwtConfiguration.Issuer,
@@ -138,7 +141,7 @@ namespace apiWeb_MVC.Controllers
 
                 string passwordInput = password.User_Password;
 
-                bool correctPassword = _userServices.VerifyPassword(passwordInput, usuarioBD.User_Password);
+                bool correctPassword = _validateMethodes.VerifyPassword(passwordInput, usuarioBD.User_Password);
 
                 if (correctPassword)
                 {

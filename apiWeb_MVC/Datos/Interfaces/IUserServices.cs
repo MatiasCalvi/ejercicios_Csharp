@@ -4,15 +4,15 @@ namespace Datos.Interfaces
 {
     public interface IUserServices
     {
-        UserOutput GetInformationFromUser(int pId);
-        UserInputUpdate GetInformationFromUserU(int pId);
-        List<UserOutput> GetAllUsers();
-        List<UserOutput> GetUsersByIds(List<int> userIds);
-        UserInputUpdate GetUserByEmail(string email);
-        UserOutputCreate CreateNewUser(UserInput userInput);
-        UserOutput UpdateUser(int pId, UserInputUpdate pUserUpdate);
-        UserOutput VerifyUser(string email, string password);
-        bool DisableUser(int pId);
-        void DeletedUser(int id);
+        Task<UserOutput> GetInformationFromUserAsync(int pId);
+        Task<UserInputUpdate> GetInformationFromUserUAsync(int pId);
+        Task<List<UserOutput>> GetAllUsersAsync();
+        Task<List<UserOutput>> GetUsersByIdsAsync(List<int> pUserIds);
+        Task<UserInputUpdate> GetUserByEmailAsync(string pEmail);
+        Task<UserOutputCreate> CreateNewUserAsync(UserInput pUserInput);
+        Task<UserOutput> UpdateUserAsync(int pId, UserInputUpdate pUserUpdate);
+        Task<UserOutput> VerifyUserAsync(string pEmail, string pPassword);
+        Task<bool> DisableUserAsync(int pId);
+        Task DeletedUserAsync(int pId);
     }
 }

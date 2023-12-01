@@ -3,10 +3,10 @@
 namespace Datos.Interfaces
 {
     public interface IRentedServices
-    {   
-        List<RentedBook> GetAllRented();
-        RentedBookOut GetRentByID(int pId);
-        RentedBookOut CreateNewRent(BookOutput bookId, int userId);
-        
+    {
+        Task<List<RentedBookOut>> GetAllRentedAsync();
+        Task<RentedBookOut> GetRentByIDAsync(int pId);
+        Task<RentedBookOut> CreateNewRentAsync(BookOutput pBookId, int pUserId);
+
     }
 }

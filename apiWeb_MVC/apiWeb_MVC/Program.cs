@@ -8,6 +8,7 @@ using System.Text;
 using Datos.Services;
 using Datos.Schemas;
 using Datos.Validate;
+using Microsoft.OpenApi.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,37 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Sales API", Version = "v1" });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = @"JWT Authorization header using the Bearer scheme. <br /> <br />
+                      Enter 'Bearer' [space] and then your token in the text input below.<br /> <br />
+                      Example: 'Bearer 12345abcdef'<br /> <br />",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+      {
+        {
+          new OpenApiSecurityScheme
+          {
+            Reference = new OpenApiReference
+              {
+                Type = ReferenceType.SecurityScheme,
+                Id = "Bearer"
+              },
+              Scheme = "oauth2",
+              Name = "Bearer",
+              In = ParameterLocation.Header,
+            },
+            new List<string>()
+          }
+        });
+});
 builder.Services.AddHttpContextAccessor();
 
 //DI
@@ -31,6 +63,7 @@ builder.Services.AddScoped<IRentedBook, RentedBook>();
 builder.Services.AddScoped<IRentedServices, RentedServices>();
 builder.Services.AddScoped<IDaoBDAuthor, DaoBDAuthor>();
 builder.Services.AddScoped<IAuthorServices, AuthorServices>();
+builder.Services.AddScoped<IDaoBDAccesUser, DaoBDAccesUser>();
 builder.Services.Configure<JwtConfiguration>(builder.Configuration.GetSection("Jwt"));
 builder.Services.Configure<BDConfiguration>(builder.Configuration.GetSection("BD"));
 

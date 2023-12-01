@@ -30,13 +30,13 @@ namespace Datos
             return dbConnection;
         }
 
-        public List<UserOutput> GetAllUsers()
+        public async Task<List<UserOutput>> GetAllUsersAsync()
         {
             try
             {
                 using IDbConnection dbConnection = CreateConnection();
-                dbConnection.Open();
-                return dbConnection.Query<UserOutput>(getAllUserQuery).ToList();
+                dbConnection.Open();  
+                return (await dbConnection.QueryAsync<UserOutput>(getAllUserQuery)).ToList();
             }
             catch (Exception ex)
             {
@@ -44,13 +44,13 @@ namespace Datos
             }
         }
 
-        public UserOutput? GetUserByID(int pId)
+        public async Task<UserOutput?> GetUserByIDAsync(int pId)
         {
             try
             {
                 using IDbConnection dbConnection = CreateConnection();
                 dbConnection.Open();
-                return dbConnection.Query<UserOutput>(getUserByIDQuery, new { user_ID = pId }).FirstOrDefault();
+                return (await dbConnection.QueryAsync<UserOutput>(getUserByIDQuery, new { user_ID = pId })).FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -58,15 +58,13 @@ namespace Datos
             }
         }
 
-        public UserInputUpdate? GetUserByIDU(int pId)
+        public async Task<UserInputUpdate?> GetUserByIDUAsync(int pId)
         {
             try
             {
                 using IDbConnection dbConnection = CreateConnection();
-                {
-                    dbConnection.Open();
-                    return dbConnection.Query<UserInputUpdate>(getUserByIDQuery, new { user_ID = pId }).FirstOrDefault();
-                }
+                dbConnection.Open();
+                return (await dbConnection.QueryAsync<UserInputUpdate>(getUserByIDQuery, new { user_ID = pId })).FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -74,13 +72,13 @@ namespace Datos
             }
         }
 
-        public UserInputUpdate GetUserByEmail(string pEmail)
+        public async Task<UserInputUpdate> GetUserByEmailAsync(string pEmail)
         {
             try
             {
                 using IDbConnection dbConnection = CreateConnection();
                 dbConnection.Open();
-                return dbConnection.Query<UserInputUpdate>(getUserByEmailQuery, new { user_Email = pEmail }).FirstOrDefault();
+                return await dbConnection.QueryFirstOrDefaultAsync<UserInputUpdate>(getUserByEmailQuery, new { user_Email = pEmail });
             }
             catch (Exception ex)
             {
@@ -88,15 +86,13 @@ namespace Datos
             }
         }
 
-        public UserOutputCreate CreateNewUser(UserInput pUserInput)
+        public async Task<UserOutputCreate> CreateNewUserAsync(UserInput pUserInput)
         {
             try
             {
                 using IDbConnection dbConnection = CreateConnection();
-                {
-                    dbConnection.Open();
-                    return dbConnection.QuerySingle<UserOutputCreate>(createUserQuery, pUserInput);
-                }
+                dbConnection.Open();
+                return await dbConnection.QuerySingleAsync<UserOutputCreate>(createUserQuery, pUserInput);
             }
             catch (Exception ex)
             {
@@ -104,53 +100,51 @@ namespace Datos
             }
         }
 
-        public bool UpdateUser(int pId, UserInputUpdate pCurrentUser)
+        public async Task<bool> UpdateUserAsync(int pId, UserInputUpdate pCurrentUser)
         {
             try
             {
                 using IDbConnection dbConnection = CreateConnection();
+                dbConnection.Open();
+
+                List<string> updateFields = new();
+                DynamicParameters parameters = new();
+
+                if (pCurrentUser.User_Name != null)
                 {
-                    dbConnection.Open();
-
-                    List<string> updateFields = new();
-                    DynamicParameters parameters = new();
-
-                    if (pCurrentUser.User_Name != null)
-                    {
-                        updateFields.Add("User_Name = @User_Name");
-                        parameters.Add("User_Name", pCurrentUser.User_Name);
-                    }
-
-                    if (pCurrentUser.User_LastName != null)
-                    {
-                        updateFields.Add("User_LastName = @User_LastName");
-                        parameters.Add("User_LastName", pCurrentUser.User_LastName);
-                    }
-
-                    if (pCurrentUser.User_Email != null)
-                    {
-                        updateFields.Add("User_Email = @User_Email");
-                        parameters.Add("User_Email", pCurrentUser.User_Email);
-                    }
-
-                    if (pCurrentUser.User_Password != null)
-                    {
-                        updateFields.Add("User_Password = @User_Password");
-                        parameters.Add("User_Password", pCurrentUser.User_Password);
-                    }
-
-                    if (updateFields.Count == 0) return false;
-
-                    parameters.Add("User_ID", pId);
-                    updateFields.Add("User_UpdateDate = @User_UpdateDate");
-                    parameters.Add("User_UpdateDate", pCurrentUser.User_UpdateDate);
-
-                    string updateUserQuery = $"UPDATE users SET {string.Join(", ", updateFields)} WHERE User_ID = @User_ID";
-
-                    int rowsAffected = dbConnection.Execute(updateUserQuery, parameters);
-
-                    return rowsAffected > 0;
+                    updateFields.Add("User_Name = @User_Name");
+                    parameters.Add("User_Name", pCurrentUser.User_Name);
                 }
+
+                if (pCurrentUser.User_LastName != null)
+                {
+                    updateFields.Add("User_LastName = @User_LastName");
+                    parameters.Add("User_LastName", pCurrentUser.User_LastName);
+                }
+
+                if (pCurrentUser.User_Email != null)
+                {
+                    updateFields.Add("User_Email = @User_Email");
+                    parameters.Add("User_Email", pCurrentUser.User_Email);
+                }
+
+                if (pCurrentUser.User_Password != null)
+                {
+                    updateFields.Add("User_Password = @User_Password");
+                    parameters.Add("User_Password", pCurrentUser.User_Password);
+                }
+
+                if (updateFields.Count == 0) return false;
+
+                parameters.Add("User_ID", pId);
+                updateFields.Add("User_UpdateDate = @User_UpdateDate");
+                parameters.Add("User_UpdateDate", pCurrentUser.User_UpdateDate);
+
+                string updateUserQuery = $"UPDATE users SET {string.Join(", ", updateFields)} WHERE User_ID = @User_ID";
+
+                int rowsAffected = await dbConnection.ExecuteAsync(updateUserQuery, parameters);
+
+                return rowsAffected > 0;
             }
             catch (Exception ex)
             {
@@ -158,17 +152,15 @@ namespace Datos
             }
         }
 
-        public bool DisableUser(int pUserId)
+        public async Task<bool> DisableUserAsync(int pUserId)
         {
             try
             {
                 using IDbConnection dbConnection = CreateConnection();
-                {
-                    dbConnection.Open();
-                    int rowsAffected = dbConnection.Execute(disableUserQuery, new { User_ID = pUserId });
+                dbConnection.Open();
+                int rowsAffected = await dbConnection.ExecuteAsync(disableUserQuery, new { User_ID = pUserId });
 
-                    return rowsAffected > 0;
-                }
+                return rowsAffected > 0;
             }
             catch (Exception ex)
             {
@@ -176,13 +168,13 @@ namespace Datos
             }
         }
 
-        public void DeletedUser(int pId)
+        public async Task DeletedUserAsync(int pId)
         {
             try
             {
                 using IDbConnection dbConnection = CreateConnection();
                 dbConnection.Open();
-                dbConnection.Execute(deletedUserQuery, new { User_ID = pId });
+                await dbConnection.ExecuteAsync(deletedUserQuery, new { User_ID = pId });
             }
             catch (Exception ex)
             {

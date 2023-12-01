@@ -26,13 +26,13 @@ namespace Datos
             return dbConnection;
         }
 
-        public List<RentedBook> GetAllRented()
+        public async Task<List<RentedBookOut>> GetAllRentedAsync()
         {
             try
             {
                 using IDbConnection dbConnection = CreateConnection();
                 dbConnection.Open();
-                return dbConnection.Query<RentedBook>(getAllRentendQuery).ToList();
+                return (await dbConnection.QueryAsync<RentedBookOut>(getAllRentendQuery)).ToList();
             }
             catch (Exception ex)
             {
@@ -40,13 +40,13 @@ namespace Datos
             }
         }
 
-        public RentedBookOut? GetRentByID(int pId)
+        public async Task<RentedBookOut?> GetRentByIDAsync(int pId)
         {
             try
             {
                 using IDbConnection dbConnection = CreateConnection();
                 dbConnection.Open();
-                return dbConnection.Query<RentedBookOut>(getRentedByIDQuery, new { RB_Id = pId }).FirstOrDefault();
+                return await dbConnection.QueryFirstOrDefaultAsync<RentedBookOut>(getRentedByIDQuery, new { RB_Id = pId });
             }
             catch (Exception ex)
             {
@@ -54,20 +54,19 @@ namespace Datos
             }
         }
 
-        public RentedBookOut CreateNewRent(RentedBook pBookInput)
+        public async Task<RentedBookOut> CreateNewRentAsync(RentedBook pBookInput)
         {
             try
-            {   
+            {
                 using IDbConnection dbConnection = CreateConnection();
-                {
-                    dbConnection.Open();
-                    return dbConnection.QuerySingle<RentedBookOut>(createRentQuery, pBookInput);
-                }
+                dbConnection.Open();
+                return await dbConnection.QuerySingleAsync<RentedBookOut>(createRentQuery, pBookInput);
             }
             catch (Exception ex)
             {
                 throw new DatabaseTransactionException("Error creating a new rent.", ex);
             }
         }
+
     }
 }

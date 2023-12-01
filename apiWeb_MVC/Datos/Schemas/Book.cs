@@ -87,4 +87,13 @@ namespace Datos.Schemas
         public int Book_AuthorID { set; get; }
     }
 
+    public class Book
+    {
+        public int Book_ID { get; set; }
+        public string Book_Name { get; set; }
+        public int? Book_Price { get; set; }
+        public short? Book_CreationYear { get; set; }
+        public int? Book_AuthorID { get; set; }
+        public AuthorPrueba Author { get; set; }
+    }
 }

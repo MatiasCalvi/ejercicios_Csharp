@@ -14,8 +14,10 @@ namespace Datos
         private readonly string connectionString;
         private const string getAllAuthorsQuery = "SELECT * FROM authors";
         private const string getBookByAuthorNameQuery = "SELECT * FROM authors where author_Name = @author_Name";
-        private const string createBookAuthorQuery = "INSERT INTO authors(Author_Name) VALUES(@Author_Name); SELECT* FROM authors WHERE author_ID = LAST_INSERT_ID()";
+        private const string createBookAuthorQuery = "INSERT INTO authors(Author_Name,Author_CreateDate) VALUES(@Author_Name,@Author_CreateDate); SELECT* FROM authors WHERE author_ID = LAST_INSERT_ID()";
         private const string getAuthorByIDQuery = "SELECT * FROM authors where Author_ID = @Author_ID";
+        private const string disableAuthorQuery = "UPDATE authors SET Author_Status = 0 WHERE Author_ID = @Author_ID";
+        private const string deletedAuthorQuery = "DELETE FROM authors WHERE Author_ID = @Author_ID";
 
         public DaoBDAuthor(IOptions<BDConfiguration> dbConfig)
         {
@@ -28,13 +30,13 @@ namespace Datos
             return dbConnection;
         }
 
-        public List<Author> GetAll()
+        public async Task<List<Author>> GetAllAsync()
         {
             try
             {
                 using IDbConnection dbConnection = CreateConnection();
                 dbConnection.Open();
-                return dbConnection.Query<Author>(getAllAuthorsQuery).ToList();
+                return (await dbConnection.QueryAsync<Author>(getAllAuthorsQuery)).ToList();
             }
             catch (Exception ex)
             {
@@ -42,13 +44,13 @@ namespace Datos
             }
         }
 
-        public Author GetAuthorByName(string pName)
+        public async Task<Author> GetAuthorByNameAsync(string pName)
         {
             try
             {
                 using IDbConnection dbConnection = CreateConnection();
                 dbConnection.Open();
-                return dbConnection.Query<Author>(getBookByAuthorNameQuery, new { author_Name = pName }).FirstOrDefault();
+                return (await dbConnection.QueryAsync<Author>(getBookByAuthorNameQuery, new { author_Name = pName })).FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -56,13 +58,13 @@ namespace Datos
             }
         }
 
-        public Author? GetAuthorByID(int pId)
+        public async Task<Author?> GetAuthorByIDAsync(int pId)
         {
             try
             {
                 using IDbConnection dbConnection = CreateConnection();
                 dbConnection.Open();
-                return dbConnection.Query<Author>(getAuthorByIDQuery, new { Author_ID = pId }).FirstOrDefault();
+                return (await dbConnection.QueryAsync<Author>(getAuthorByIDQuery, new { Author_ID = pId })).FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -70,20 +72,84 @@ namespace Datos
             }
         }
 
-        public Author CreateNewAuthor(string pAuthorCurrent)
+        public async Task<AuthorCreate> CreateNewAuthorAsync(string pAuthorCurrent)
+        {
+            try
+            {
+                using IDbConnection dbConnection = CreateConnection();
+                dbConnection.Open();
+                var param = new { Author_Name = pAuthorCurrent, Author_CreateDate = DateTime.Now };
+                return await dbConnection.QuerySingleAsync<AuthorCreate>(createBookAuthorQuery, param);
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseTransactionException("Error creating a new author.", ex);
+            }
+        }
+
+        public async Task<bool> UpdateAuthorAsync(int pId, AuthorUpdateOut pCurrentAuthor)
+        {
+            try
+            {
+                using IDbConnection dbConnection = CreateConnection();
+                dbConnection.Open();
+
+                List<string> updateFields = new();
+                DynamicParameters parameters = new();
+
+                if (pCurrentAuthor.Author_Name != null)
+                {
+                    updateFields.Add("Author_Name = @Author_Name");
+                    parameters.Add("Author_Name", pCurrentAuthor.Author_Name);
+                }
+
+                if (updateFields.Count == 0) return false;
+
+                parameters.Add("Author_ID", pId);
+                updateFields.Add("Author_UpdateDate = @Author_UpdateDate");
+                parameters.Add("Author_UpdateDate", pCurrentAuthor.Author_UpdateDate);
+
+                string updateUserQuery = $"UPDATE authors SET {string.Join(", ", updateFields)} WHERE Author_ID = @Author_ID";
+
+                int rowsAffected = await dbConnection.ExecuteAsync(updateUserQuery, parameters);
+
+                return rowsAffected > 0;
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseTransactionException($"Error updating author with ID {pId}.", ex);
+            }
+        }
+
+        public async Task<bool> DisableAuthorAsync(int pAuthorId)
         {
             try
             {
                 using IDbConnection dbConnection = CreateConnection();
                 {
                     dbConnection.Open();
-                    var param = new { Author_Name = pAuthorCurrent };
-                    return dbConnection.QuerySingle<Author>(createBookAuthorQuery, param);
+                    int rowsAffected = await dbConnection.ExecuteAsync(disableAuthorQuery, new { Author_ID = pAuthorId });
+
+                    return rowsAffected > 0;
                 }
             }
             catch (Exception ex)
             {
-                throw new DatabaseTransactionException("Error creating a new author.", ex);
+                throw new DatabaseTransactionException($"Error disabling author with ID {pAuthorId}.", ex);
+            }
+        }
+
+        public async Task DeletedAuthorAsync(int pId)
+        {
+            try
+            {
+                using IDbConnection dbConnection = CreateConnection();
+                dbConnection.Open();
+                await dbConnection.ExecuteAsync(deletedAuthorQuery, new { Author_ID = pId });
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseTransactionException($"Error deleting author with ID {pId}.", ex);
             }
         }
     }

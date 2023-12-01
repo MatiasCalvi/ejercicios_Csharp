@@ -24,108 +24,88 @@ namespace Datos.Services
                 Book_AuthorID = authorId, }; 
         
         }
-        public List<BookOutput> GetAllBooks()
-        {
-            return _daoBDBook.GetAllBooks();
-        }
-
-        public BookOutput GetInformationFromBook(int pId)
+        public async Task<List<BookOutput>> GetAllBooksAsync()
         {
             try
             {
-                BookOutput book = _daoBDBook.GetBookByID(pId);
-                return book;
+                return await _daoBDBook.GetAllBooksAsync();
             }
             catch (Exception ex)
             {
-                throw new NotFoundException($"Book with ID {pId} was not found in the database.", ex);
+                throw new DatabaseQueryException("Failed to get all books.", ex);
             }
         }
 
-        public BookOutput GetInformationFromBookName(string pName)
+        public async Task<BookOutput> GetBookByIdAsync(int bookId)
         {
             try
             {
-                BookOutput book = _daoBDBook.GetBookByName(pName);
-                return book;
+                return await _daoBDBook.GetBookByIDAsync(bookId) ?? throw new NotFoundException($"Book with ID {bookId} was not found in the database.");
             }
             catch (Exception ex)
             {
-                throw new NotFoundException($"Book with {pName} was not found in the database.", ex);
+                throw new DatabaseQueryException($"Error getting book with ID {bookId}.", ex);
             }
         }
 
-        public BookOutput CreateNewBookWithAuthorName(BookWithAuthorID pBookInput)
+        public async Task<BookOutput> GetBookByNameAsync(string bookName)
         {
             try
             {
-                Author author = _authorServices.GetAuthorByName(pBookInput.Book_AuthorID); int authorId;
-
-                if (author == null)
-                {
-                    author = _authorServices.CreateNewAuthor(pBookInput.Book_AuthorID); 
-                    authorId = author.Author_Id;
-                }
-                else
-                {
-                    authorId = author.Author_Id;
-                }
-                var bookWithIdInt = CreateBooWithAuthorIDInt(pBookInput, authorId);
-                return CreateNewBook(bookWithIdInt);
+                return await _daoBDBook.GetBookByNameAsync(bookName) ?? throw new NotFoundException($"Book with name {bookName} was not found in the database.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(pBookInput.Book_CreationYear);
+                throw new DatabaseQueryException($"Error getting book with name {bookName}.", ex);
+            }
+        }
+
+        public async Task<BookOutput> CreateNewBookWithAuthorNameAsync(BookWithAuthorID bookInput)
+        {
+            try
+            {
+                Author author = await _authorServices.GetAuthorByNameAsync(bookInput.Book_AuthorID);
+                int authorId = (author == null) ? (await _authorServices.CreateNewAuthorAsync(bookInput.Book_AuthorID)).Author_Id : author.Author_Id;
+
+                var bookWithIdInt = CreateBooWithAuthorIDInt(bookInput, authorId);
+                return await CreateNewBookAsync(bookWithIdInt);
+            }
+            catch (Exception ex)
+            {
                 throw new CreationFailedException("An error occurred while creating a new book with the author's name.", ex);
             }
-
         }
 
-        internal BookOutput CreateNewBook(BooWithAuthorIDInt pBookInput)
+        private async Task<BookOutput> CreateNewBookAsync(BooWithAuthorIDInt bookInput)
         {
             try
             {
-                BookOutput bookOutput = _daoBDBook.CreateNewBook(pBookInput);
-
-                if (bookOutput == null)
-                {
-                    throw new CreationFailedException("Failed to create a new book.");
-                }
+                BookOutput bookOutput = await _daoBDBook.CreateNewBookAsync(bookInput) ?? throw new CreationFailedException("Failed to create a new book.");
 
                 return bookOutput;
             }
             catch (Exception ex)
             {
-                throw new CreationFailedException("Error occurred while creating a new book.", ex);
+                throw new DatabaseTransactionException("Error occurred while creating a new book.", ex);
             }
-
         }
 
-        public BookOutput UpdateBook(int pId, BookInputUpdateAidString pBookUpdate)
+        public async Task<BookOutput> UpdateBookAsync(int bookId, BookInputUpdateAidString bookUpdate)
         {
             try
             {
-                BookOutput currentBook = GetInformationFromBook(pId);
+                BookOutput currentBook = await GetBookByIdAsync(bookId) ?? throw new NotFoundException($"The book with ID {bookId} was not found in the database.");
+
                 Author author = null;
 
-                if (currentBook == null)
+                if (bookUpdate.Book_AuthorID != null)
                 {
-                    throw new NotFoundException($"The book with ID {pId} was not found in the database.");
+                    author = await _authorServices.GetAuthorByNameAsync(bookUpdate.Book_AuthorID) ?? throw new NotFoundException($"The author was not found in the database.");
                 }
 
-                if (pBookUpdate.Book_AuthorID != null)
-                {
-                    author = _authorServices.GetAuthorByName(pBookUpdate.Book_AuthorID);
-
-                    if (author == null)
-                    {
-                        throw new NotFoundException($"The author was not found in the database.");
-                    }
-                }
-
-                currentBook.Book_Name = pBookUpdate.Book_Name ?? currentBook.Book_Name;
-                currentBook.Book_Price = pBookUpdate.Book_Price ?? currentBook.Book_Price;
-                currentBook.Book_CreationYear = pBookUpdate.Book_CreationYear ?? currentBook.Book_CreationYear;
+                currentBook.Book_Name = bookUpdate.Book_Name ?? currentBook.Book_Name;
+                currentBook.Book_Price = bookUpdate.Book_Price ?? currentBook.Book_Price;
+                currentBook.Book_CreationYear = bookUpdate.Book_CreationYear ?? currentBook.Book_CreationYear;
 
                 if (author != null && author.Author_Id != currentBook.Book_AuthorID)
                 {
@@ -138,25 +118,38 @@ namespace Datos.Services
                     Book_Name = currentBook.Book_Name,
                     Book_Price = currentBook.Book_Price,
                     Book_CreationYear = currentBook.Book_CreationYear,
-                    Book_AuthorID = currentBook.Book_AuthorID,
+                    Book_AuthorID = currentBook.Book_AuthorID
                 };
 
-                bool updated = _daoBDBook.UpdateBook(pId, bookInputUpdate);
+                bool updated = await _daoBDBook.UpdateBookAsync(bookId, bookInputUpdate);
 
-                if (updated)
-                {
-                    BookOutput book = _daoBDBook.GetBookByID(pId);
-
-                    return book;
-                }
-                else
-                {
-                    throw new UpdateFailedException($"Failed to update the book with ID {pId}.");
-                }
+                return updated ? await GetBookByIdAsync(bookId) : throw new UpdateFailedException($"Failed to update the book with ID {bookId}.");
             }
             catch (Exception ex)
             {
-                throw new UpdateFailedException($"Error occurred while updating the book with ID {pId}.", ex);
+                throw new UpdateFailedException($"Error occurred while updating the book with ID {bookId}.", ex);
+            }
+        }
+
+        public async Task<List<string>> GetBooksAndAuthorsAsync()
+        {
+            try
+            {
+                var books = await _daoBDBook.GetBooksAndAuthorsAsync();
+
+                var results = new List<string>();
+
+                foreach (var book in books)
+                {
+                    results.Add($"Book: {book.Book_Name}, Author: {book.Author.Author_Name}");
+                }
+
+                return results;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return new List<string>(); 
             }
         }
     }

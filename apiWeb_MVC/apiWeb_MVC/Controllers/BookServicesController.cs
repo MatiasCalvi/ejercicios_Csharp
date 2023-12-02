@@ -1,12 +1,14 @@
 ﻿using Datos.Interfaces;
 using Datos.Schemas;
 using Datos.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace apiWeb_MVC.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+
     public class BookServicesController : ControllerBase
     {
         private readonly ILogger<BookServicesController> _logger;
@@ -92,6 +94,7 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpPatch("UpdateBook")]
+
         public async Task<IActionResult> UpdateBook([FromQuery] int id, [FromBody] BookInputUpdateAidString bookInput)
         {
             try
@@ -137,6 +140,39 @@ namespace apiWeb_MVC.Controllers
             catch (Exception ex)
             {
                 return BadRequest($"Error updating book: {ex.Message}");
+            }
+        }
+
+        [HttpPatch("DisableBook")]
+
+        public async Task<IActionResult> DisableBook([FromQuery] int id)
+        {
+            bool result = await _bookServices.DisableBookAsync(id);
+
+            if (result)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound("Book not found or already disabled.");
+            }
+        }
+
+        [HttpDelete("DeleteBook")]
+
+        public async Task<IActionResult> DeleteBook([FromQuery] int id)
+        {
+            BookOutput book = await _bookServices.GetBookByIdAsync(id);
+
+            if (book == null)
+            {
+                return NotFound("book not found.");
+            }
+            else
+            {
+                await _bookServices.DeletedBookAsync(id);
+                return NoContent();
             }
         }
 

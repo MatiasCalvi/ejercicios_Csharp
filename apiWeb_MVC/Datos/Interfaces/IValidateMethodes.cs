@@ -7,6 +7,7 @@ namespace Datos.Interfaces
     public interface IValidateMethodes
     {
         public int GetUserIdFromToken();
+        Task<string> GetRefreshTokenAsync(int userId);
         public bool VerifyPassword(string pUserInput, string pHashedPassword);
         public string HashPassword(string pPassword);
         Task<string> GenerateAndStoreRefreshTokenAsync(int userId, string userRole);

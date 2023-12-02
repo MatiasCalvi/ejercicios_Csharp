@@ -55,6 +55,18 @@ namespace Datos.Validate
             return BCrypt.Net.BCrypt.Verify(hashedPassword, pHashedPassword);
         }
 
+        public async Task<string> GetRefreshTokenAsync(int userId)
+        {
+            try
+            {
+                return await _daoBDAccessUser.GetRefreshTokenAsync(userId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error getting the refresh token from the service.", ex);
+            }
+        }
+
         public string GenerateAccessToken(SigningCredentials credentials, List<Claim> claims)
         {
             var now = DateTime.UtcNow;

@@ -7,6 +7,8 @@ namespace apiWeb_MVC.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize(Roles = "admin, user")]
+
     public class RentedServicesController : ControllerBase
     {
         private IValidateMethodes _validateMethodes;
@@ -26,12 +28,14 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpGet("GetListRented")]
+        [Authorize(Roles = "admin")]
         public async Task<List<RentedBookOut>> GetListRented()
         {
             return await _rentedServices.GetAllRentedAsync();
         }
 
         [HttpGet("GetRent")]
+        [Authorize(Roles = "admin, user")]
         public async Task<IActionResult> GetRent([FromQuery] int id)
         {
             RentedBookOut rent = await _rentedServices.GetRentByIDAsync(id);

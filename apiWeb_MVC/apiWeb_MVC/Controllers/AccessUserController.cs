@@ -81,29 +81,47 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpPost("RefreshToken")]
-        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request)
+        public async Task<IActionResult> RefreshToken()
         {
             try
             {
-                if (!await _validateMethodes.ValidateRefreshTokenAsync(request.UserId, request.RefreshToken))
+      
+                var userRoleClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+                if (string.IsNullOrEmpty(userRoleClaim))
                 {
-                    return Unauthorized("Invalid refresh token.");
+                    return Unauthorized("User not authenticated or missing role claim.");
+                }
+
+                var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid)?.Value;
+
+                if (!int.TryParse(userIdClaim, out int userId))
+                {
+                    return Unauthorized("Invalid UserId claim.");
+                }
+
+                var refreshToken = await _validateMethodes.GetRefreshTokenAsync(userId);
+
+                if (string.IsNullOrEmpty(refreshToken))
+                {
+                    return Unauthorized("Refresh token not found in the database.");
                 }
 
                 var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfiguration.Secret));
                 var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Sid, request.UserId.ToString()),
-                    new Claim(ClaimTypes.Role, request.UserRole),
+                    new Claim(ClaimTypes.Sid, userId.ToString()),
+                    new Claim(ClaimTypes.Role, userRoleClaim),
                 };
 
                 var token = _validateMethodes.GenerateAccessToken(credentials, claims);
-                var refreshToken = await _validateMethodes.GenerateAndStoreRefreshTokenAsync(request.UserId, request.UserRole);
 
                 var cookie = Request.Cookies["RefreshToken"];
-                
-                if(cookie == null) return Unauthorized("Refresh token is missing or invalid.");
+                if (cookie == null)
+                {
+                    return Unauthorized("Refresh token is missing or invalid.");
+                }
 
                 _validateMethodes.UpdateCookieExpiration(refreshToken, cookie);
 
@@ -114,6 +132,7 @@ namespace apiWeb_MVC.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
+
 
         [HttpGet("TestToken")]
         [Authorize]

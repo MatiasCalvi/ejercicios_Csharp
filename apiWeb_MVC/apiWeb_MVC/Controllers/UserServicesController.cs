@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Datos.Interfaces;
 using Configuracion;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
 
 namespace apiWeb_MVC.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize(Roles = "admin,user")]
 
     public class UserServicesController : ControllerBase
     {
@@ -21,6 +23,7 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpGet("GetAll")]
+        [Authorize(Roles = "admin")]
 
         public async Task<List<UserOutput>> GetAll()
         {
@@ -30,6 +33,7 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpGet("GetUser")]
+        [Authorize(Roles = "admin,user")]
 
         public async Task <IActionResult> GetUser([FromQuery] int id)
         {
@@ -42,6 +46,7 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpGet("GetUsers")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetUsers([FromQuery] string ids)
         {
             List<int> userIds = ids.Split(',').Select(int.Parse).ToList();
@@ -56,6 +61,7 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpPost("CreateUser")]
+        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> CreateUser([FromBody] UserInput userInput)
         {
             if (!ModelState.IsValid)
@@ -82,6 +88,7 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpPatch("DisableUser")]
+        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> DisableUser([FromQuery] int id)
         {
             bool result = await _userServices.DisableUserAsync(id);
@@ -97,6 +104,7 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpPatch("UpdateUser")]
+        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> UpdateUser([FromQuery] int id, [FromBody] UserInputUpdate userInput)
         {
             UserOutput user = await _userServices.GetInformationFromUserAsync(id);
@@ -110,6 +118,7 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpDelete("DeleteUser")]
+        [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> DeleteUser([FromQuery] int id)
         {
             UserOutput user = await _userServices.GetInformationFromUserAsync(id);

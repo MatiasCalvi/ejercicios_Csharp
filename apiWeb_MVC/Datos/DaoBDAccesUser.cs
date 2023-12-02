@@ -27,27 +27,23 @@ namespace Datos
             return dbConnection;
         }
 
-        public void StoreRefreshToken(int userId, string refreshToken)
+        public async Task<string> GetRefreshTokenAsync(int userId)
         {
             try
             {
-                using IDbConnection dbConnection = CreateConnection();
-                dbConnection.Open();
-
-                var existingToken = dbConnection.QueryFirstOrDefault<string>(existingTokenQuery, new { UserId = userId });
-
-                if (existingToken != null)
+                using (IDbConnection dbConnection = CreateConnection())
                 {
-                    dbConnection.Execute(updateTokenQuery, new { UserId = userId, RefreshToken = refreshToken });
-                }
-                else
-                {
-                    dbConnection.Execute(createTokenQuery, new { UserId = userId, RefreshToken = refreshToken });
+                    dbConnection.Open();
+
+                    var refreshToken = await dbConnection.QueryFirstOrDefaultAsync<string>(existingTokenQuery, new { UserId = userId }
+                    );
+
+                    return refreshToken;
                 }
             }
             catch (Exception ex)
             {
-                throw new DatabaseTransactionException("Error storing the refresh token in the database.", ex);
+                throw new DatabaseQueryException("Error getting the refresh token from the database.", ex);
             }
         }
 

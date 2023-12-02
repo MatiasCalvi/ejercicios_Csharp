@@ -3,12 +3,14 @@ using Datos.Exceptions;
 using Datos.Interfaces;
 using Datos.Schemas;
 using Datos.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace apiWeb_MVC.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize(Roles = "admin")]
     public class AuthorServicesController : ControllerBase
     {
         private readonly ILogger<AuthorServicesController> _logger;

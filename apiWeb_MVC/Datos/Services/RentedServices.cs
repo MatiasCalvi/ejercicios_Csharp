@@ -13,25 +13,24 @@ namespace Datos.Services
             _daoBDRentedBook = daoBDRentedBook;
         }
 
-        public List<RentedBook> GetAllRented()
+        public async Task<List<RentedBookOut>> GetAllRentedAsync()
         {
-            return _daoBDRentedBook.GetAllRented();
+            return await _daoBDRentedBook.GetAllRentedAsync();
         }
 
-        public RentedBookOut GetRentByID(int pId)
+        public async Task<RentedBookOut> GetRentByIDAsync(int pId)
         {
             try
             {
-                RentedBookOut rent = _daoBDRentedBook.GetRentByID(pId);
-                return rent;
+                return await _daoBDRentedBook.GetRentByIDAsync(pId); ;
             }
             catch (Exception ex)
             {
-                throw new NotFoundException($"Rent with ID {pId} was not found in the database.", ex);
+                throw new NotFoundException($"An error occurred while getting rent with ID {pId}.", ex);
             }
         }
 
-        public RentedBookOut CreateNewRent(BookOutput pBookId, int pUserId)
+        public async Task<RentedBookOut> CreateNewRentAsync(BookOutput pBookId, int pUserId)
         {
             try
             {
@@ -47,7 +46,7 @@ namespace Datos.Services
                     RB_Price = pBookId.Book_Price
                 };
 
-                return _daoBDRentedBook.CreateNewRent(newRent);
+                return await _daoBDRentedBook.CreateNewRentAsync(newRent);
             }
             catch (Exception ex)
             {

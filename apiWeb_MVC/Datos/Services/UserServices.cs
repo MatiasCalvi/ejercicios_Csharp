@@ -16,17 +16,16 @@ namespace apiWeb_MVC.Services
             _daoBD = daoBD;
             _validateMethodes = validateMethodes;
         }
-        public List<UserOutput> GetAllUsers()
+        public async Task<List<UserOutput>> GetAllUsersAsync()
         {
-            return _daoBD.GetAllUsers();
+            return await _daoBD.GetAllUsersAsync();
         }
 
-        public UserOutput GetInformationFromUser(int pId)
+        public async Task<UserOutput> GetInformationFromUserAsync(int pId)
         {
             try
             {
-                UserOutput user = _daoBD.GetUserByID(pId);
-                return user;
+                return await _daoBD.GetUserByIDAsync(pId);
             }
             catch (Exception ex)
             {
@@ -34,12 +33,11 @@ namespace apiWeb_MVC.Services
             }
         }
 
-        public UserInputUpdate GetInformationFromUserU(int pId)
+        public async Task<UserInputUpdate> GetInformationFromUserUAsync(int pId)
         {
             try
             {
-                UserInputUpdate user = _daoBD.GetUserByIDU(pId);
-                return user;
+                return await _daoBD.GetUserByIDUAsync(pId);
             }
             catch (Exception ex)
             {
@@ -47,19 +45,19 @@ namespace apiWeb_MVC.Services
             }
         }
 
-        public UserInputUpdate GetUserByEmail(string pEmail)
+        public async Task<UserInputUpdate> GetUserByEmailAsync(string pEmail)
         {
-            UserInputUpdate user = _daoBD.GetUserByEmail(pEmail);
+            UserInputUpdate user = await _daoBD.GetUserByEmailAsync(pEmail);
             return user;
         }
 
-
-        public List<UserOutput> GetUsersByIds(List<int> pUserIds)
+        public async Task<List<UserOutput>> GetUsersByIdsAsync(List<int> pUserIds)
         {
-            List<UserOutput> users = new();
+            List<UserOutput> users = new List<UserOutput>();
+
             foreach (int userId in pUserIds)
             {
-                UserOutput user = _daoBD.GetUserByID(userId);
+                UserOutput user = await _daoBD.GetUserByIDAsync(userId);
 
                 if (user != null)
                 {
@@ -70,10 +68,11 @@ namespace apiWeb_MVC.Services
                     throw new NotFoundException($"User with ID {userId} was not found in the database.");
                 }
             }
+
             return users;
         }
 
-        public UserOutputCreate CreateNewUser(UserInput pUserInput)
+        public async Task<UserOutputCreate> CreateNewUserAsync(UserInput pUserInput)
         {
             try
             {
@@ -83,7 +82,7 @@ namespace apiWeb_MVC.Services
                 UserOutputCreate userOutput = null;
                 try
                 {
-                    userOutput = _daoBD.CreateNewUser(pUserInput);
+                    userOutput = await _daoBD.CreateNewUserAsync(pUserInput);
                 }
                 catch (MySqlException ex)
                 {
@@ -103,11 +102,11 @@ namespace apiWeb_MVC.Services
             }
         }
 
-        public UserOutput UpdateUser(int pId, UserInputUpdate pUserUpdate)
+        public async Task<UserOutput> UpdateUserAsync(int pId, UserInputUpdate pUserUpdate)
         {
             try
             {
-                UserInputUpdate currentUser = GetInformationFromUserU(pId);
+                UserInputUpdate currentUser = await GetInformationFromUserUAsync(pId);
                 DateTime UpdateDate = DateTime.Now;
 
                 if (currentUser == null)
@@ -128,11 +127,11 @@ namespace apiWeb_MVC.Services
                     currentUser.User_Password = hashedPassword;
                 }
 
-                bool updated = _daoBD.UpdateUser(pId, currentUser);
+                bool updated = await _daoBD.UpdateUserAsync(pId, currentUser);
 
                 if (updated)
                 {
-                    UserOutput user = _daoBD.GetUserByID(pId);
+                    UserOutput user = await _daoBD.GetUserByIDAsync(pId);
                     UserUpdateDate userWithDate = new UserUpdateDate
                     {
                         User_ID = user.User_ID,
@@ -155,9 +154,9 @@ namespace apiWeb_MVC.Services
             }
         }
 
-        public UserOutput VerifyUser(string pEmail, string pPassword)
+        public async Task<UserOutput> VerifyUserAsync(string pEmail, string pPassword)
         {
-            UserInputUpdate user = _daoBD.GetUserByEmail(pEmail);
+            UserInputUpdate user = await _daoBD.GetUserByEmailAsync(pEmail);
             if (user == null)
             {
                 return null;
@@ -182,9 +181,9 @@ namespace apiWeb_MVC.Services
             }
         }
 
-        public bool DisableUser(int pId)
+        public async Task<bool> DisableUserAsync(int pId)
         {
-            bool result = _daoBD.DisableUser(pId);
+            bool result = await _daoBD.DisableUserAsync(pId);
 
             if (!result)
             {
@@ -194,11 +193,11 @@ namespace apiWeb_MVC.Services
             return result;
         }
 
-        public void DeletedUser(int pId)
+        public async Task DeletedUserAsync(int pId)
         {
             try
             {
-                _daoBD.DeletedUser(pId);
+                await _daoBD.DeletedUserAsync(pId);
             }
             catch (Exception ex)
             {

@@ -4,11 +4,13 @@ namespace Datos.Interfaces
 {
     public interface IBookServices
     {
-        List<BookOutput> GetAllBooks();
-        BookOutput GetInformationFromBook(int pId);
-        BookOutput CreateNewBookWithAuthorName(BookWithAuthorID pBookInput);
-        BookOutput GetInformationFromBookName(string pName);
-        BookOutput UpdateBook(int pId, BookInputUpdateAidString pBookUpdate);
-
+        Task<List<BookOutput>> GetAllBooksAsync();
+        Task<BookOutput> GetBookByIdAsync(int bookId);
+        Task<BookOutput> GetBookByNameAsync(string bookName);
+        Task<BookOutput> CreateNewBookWithAuthorNameAsync(BookWithAuthorID bookInput);
+        Task<BookOutput> UpdateBookAsync(int bookId, BookInputUpdateAidString bookUpdate);
+        Task<bool> DisableBookAsync(int pId);
+        Task DeletedBookAsync(int pId);
+        Task<List<string>> GetBooksAndAuthorsAsync();
     }
 }

@@ -1,48 +1,43 @@
 using Datos.Schemas;
 using Microsoft.AspNetCore.Mvc;
 using Datos.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
 using Configuracion;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
 
 namespace apiWeb_MVC.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize(Roles = "admin,user")]
 
     public class UserServicesController : ControllerBase
     {
         private IUserServices _userServices;
-        private IValidateMethodes _validateMethodes;
-        private JwtConfiguration _jwtConfiguration;
 
         private readonly ILogger<UserServicesController> _logger;
-        public UserServicesController(ILogger<UserServicesController> logger, IUserServices userServices, IOptions<JwtConfiguration>jwtConfiguration, IValidateMethodes validateMethodes)
+        public UserServicesController(ILogger<UserServicesController> logger, IUserServices userServices, IOptions<JwtConfiguration>jwtConfiguration)
         {
             _logger = logger;
             _userServices = userServices;
-            _jwtConfiguration = jwtConfiguration.Value;
-            _validateMethodes = validateMethodes;
         }
 
         [HttpGet("GetAll")]
+        [Authorize(Roles = "admin")]
 
-        public List<UserOutput> GetAll()
+        public async Task<List<UserOutput>> GetAll()
         {
-            List<UserOutput> user = _userServices.GetAllUsers();
+            List<UserOutput> user = await _userServices.GetAllUsersAsync();
 
             return user;
         }
 
         [HttpGet("GetUser")]
+        [Authorize(Roles = "admin,user")]
 
-        public IActionResult GetUser([FromQuery] int id)
+        public async Task <IActionResult> GetUser([FromQuery] int id)
         {
-            UserOutput user = _userServices.GetInformationFromUser(id);
+            UserOutput user = await _userServices.GetInformationFromUserAsync(id);
             if (user == null)
             {
                 return NotFound("User not found");
@@ -51,10 +46,11 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpGet("GetUsers")]
-        public IActionResult GetUsers([FromQuery]string ids)
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> GetUsers([FromQuery] string ids)
         {
             List<int> userIds = ids.Split(',').Select(int.Parse).ToList();
-            List<UserOutput> users = _userServices.GetUsersByIds(userIds);
+            List<UserOutput> users = await _userServices.GetUsersByIdsAsync(userIds);
 
             if (users.Count == 0)
             {
@@ -65,20 +61,21 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpPost("CreateUser")]
-        public IActionResult CreateUser([FromBody] UserInput userInput)
+        [Authorize(Roles = "admin,user")]
+        public async Task<IActionResult> CreateUser([FromBody] UserInput userInput)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            UserInputUpdate user = _userServices.GetUserByEmail(userInput.User_Email);
+            UserInputUpdate user = await _userServices.GetUserByEmailAsync(userInput.User_Email);
             if (user != null)
             {
                 return BadRequest("Email already in use.");
             }
 
-            UserOutputCreate userOutput = _userServices.CreateNewUser(userInput);
+            UserOutputCreate userOutput = await _userServices.CreateNewUserAsync(userInput);
 
             if (userOutput != null)
             {
@@ -90,79 +87,11 @@ namespace apiWeb_MVC.Controllers
             }
         }
 
-        [HttpPost("Login")]
-        public IActionResult Login([FromBody] UserLogin user)
-        {
-            UserOutput userOutput = _userServices.VerifyUser(user.User_Email, user.User_Password);
-            if (userOutput == null)
-            {
-                return Unauthorized("Invalid email or password.");
-            }
-            Console.WriteLine(userOutput.User_Role);
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfiguration.Secret));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Sid,userOutput.User_ID.ToString()),
-                new Claim(ClaimTypes.Name,userOutput.User_Name),
-                new Claim(ClaimTypes.Email,userOutput.User_Email),
-                new Claim(ClaimTypes.Role,userOutput.User_Role)
-            };
-
-            var Sectoken = new JwtSecurityToken(_jwtConfiguration.Issuer,
-                _jwtConfiguration.Audience,
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(120),
-                signingCredentials: credentials);
-
-            var token = new JwtSecurityTokenHandler().WriteToken(Sectoken);
-
-            return Ok(token);
-        }
-
-        [HttpGet("TestToken")]
-        [Authorize]
-        public string Prueba()
-        {
-            return "Success";
-        }
-
-        [HttpPost("PasswordVerify")]
-        public IActionResult PasswordVerify([FromQuery] int id, [FromBody] UserPassword password)
-        {
-            try
-            {
-                UserInputUpdate usuarioBD = _userServices.GetInformationFromUserU(id);
-
-                if (usuarioBD == null)
-                {
-                    return NotFound("User not found.");
-                }
-
-                string passwordInput = password.User_Password;
-
-                bool correctPassword = _validateMethodes.VerifyPassword(passwordInput, usuarioBD.User_Password);
-
-                if (correctPassword)
-                {
-                    UserOutput user = _userServices.GetInformationFromUser(id);
-                    return Ok(user);
-                }
-                else
-                {
-                    return Unauthorized("Password does not match.");
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Codigo = 404, Mensaje = "Failed to verify password.", Detalle = ex.Message });
-            }
-        }
-
         [HttpPatch("DisableUser")]
-        public IActionResult DisableUser([FromQuery] int id)
+        [Authorize(Roles = "admin,user")]
+        public async Task<IActionResult> DisableUser([FromQuery] int id)
         {
-            bool result = _userServices.DisableUser(id);
+            bool result = await _userServices.DisableUserAsync(id);
 
             if (result)
             {
@@ -175,12 +104,13 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpPatch("UpdateUser")]
-        public IActionResult UpdateUser([FromQuery] int id, [FromBody] UserInputUpdate userInput)
-        {   
-            UserOutput user = _userServices.GetInformationFromUser(id);
+        [Authorize(Roles = "admin,user")]
+        public async Task<IActionResult> UpdateUser([FromQuery] int id, [FromBody] UserInputUpdate userInput)
+        {
+            UserOutput user = await _userServices.GetInformationFromUserAsync(id);
             if (user == null) return NotFound("User not found.");
 
-            UserOutput updatedUser = _userServices.UpdateUser(id, userInput);
+            UserOutput updatedUser = await _userServices.UpdateUserAsync(id, userInput);
 
             if (updatedUser != null) return Ok(updatedUser);
 
@@ -188,16 +118,18 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpDelete("DeleteUser")]
-        public IActionResult DeleteUser([FromQuery] int id)
+        [Authorize(Roles = "admin,user")]
+        public async Task<IActionResult> DeleteUser([FromQuery] int id)
         {
-            UserOutput user = _userServices.GetInformationFromUser(id); 
-            if (user == null) 
+            UserOutput user = await _userServices.GetInformationFromUserAsync(id);
+
+            if (user == null)
             {
-                return NotFound("User not found."); 
+                return NotFound("User not found.");
             }
-            else 
+            else
             {
-                _userServices.DeletedUser(id); 
+                await _userServices.DeletedUserAsync(id);
                 return NoContent();
             }
         }

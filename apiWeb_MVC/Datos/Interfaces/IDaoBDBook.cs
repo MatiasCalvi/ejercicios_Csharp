@@ -4,10 +4,13 @@ namespace Datos.Interfaces
 {
     public interface IDaoBDBook
     {
-        List<BookOutput> GetAllBooks();
-        BookOutput? GetBookByID(int pId);
-        BookOutput CreateNewBook(BooWithAuthorIDInt pBookInput);
-        BookOutput? GetBookByName(string pName);
-        bool UpdateBook(int pId, BookInputUpdate pCurrentBook);
+        Task<List<BookOutput>> GetAllBooksAsync();
+        Task<BookOutput?> GetBookByIDAsync(int pId);
+        Task<BookOutput?> GetBookByNameAsync(string pName);
+        Task<BookOutput> CreateNewBookAsync(BooWithAuthorIDInt pBookInput);
+        Task<bool> UpdateBookAsync(int pId, BookInputUpdate pCurrentBook);
+        Task<List<Book>> GetBooksAndAuthorsAsync();
+        Task<bool> DisableBookAsync(int pBookId);
+        Task DeletedBookAsync(int pId);
     }
 }

@@ -7,6 +7,8 @@ namespace apiWeb_MVC.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize(Roles = "admin, user")]
+
     public class RentedServicesController : ControllerBase
     {
         private IValidateMethodes _validateMethodes;
@@ -26,17 +28,16 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpGet("GetListRented")]
-
-        public List<RentedBook> GetListRented()
+        [Authorize(Roles = "admin")]
+        public async Task<List<RentedBookOut>> GetListRented()
         {
-            List<RentedBook> list = _rentedServices.GetAllRented();
-            return list;
+            return await _rentedServices.GetAllRentedAsync();
         }
 
         [HttpGet("GetRent")]
-        public IActionResult GetRent([FromQuery] int id)
+        public async Task<IActionResult> GetRent([FromQuery] int id)
         {
-            RentedBookOut rent = _rentedServices.GetRentByID(id);
+            RentedBookOut rent = await _rentedServices.GetRentByIDAsync(id);
             if (rent == null)
             {
                 return NotFound("Rent not found");
@@ -46,37 +47,38 @@ namespace apiWeb_MVC.Controllers
 
         [HttpPost("CreateRent")]
         [Authorize(Roles = "user")]
-        public IActionResult CreateRent([FromQuery] int bookId, [FromBody] string email)
+        public async Task<IActionResult> CreateRent([FromQuery] int bookId, [FromBody] string email)
         {
             try
             {
                 int userIdToken = _validateMethodes.GetUserIdFromToken();
-                UserInputUpdate userIdReq = _userServices.GetUserByEmail(email);
+                UserInputUpdate user = await _userServices.GetUserByEmailAsync(email);
 
-                BookOutput bookReq = _bookServices.GetInformationFromBook(bookId);
-
-                if (userIdReq == null)
+                if (user == null)
                 {
                     return NotFound("User not found in the database");
                 }
 
-                if (userIdToken != userIdReq.User_ID)
+                if (userIdToken != user.User_ID)
                 {
                     return Forbid();
                 }
 
-                if (bookReq == null)
+                BookOutput book = await _bookServices.GetBookByIdAsync(bookId);
+
+                if (book == null)
                 {
                     return NotFound("Book not found in the database");
                 }
 
-                RentedBookOut newRental = _rentedServices.CreateNewRent(bookReq, userIdToken);
+                RentedBookOut newRental = await _rentedServices.CreateNewRentAsync(book, userIdToken);
 
                 if (newRental == null)
                 {
-                    BadRequest("Error creating rent");
+                    return BadRequest("Error creating rent");
                 }
-                return CreatedAtAction(nameof(GetRent), new { id = newRental.RB_Id}, newRental);
+
+                return CreatedAtAction(nameof(GetRent), new { id = newRental.RB_Id }, newRental);
             }
             catch (Exception ex)
             {

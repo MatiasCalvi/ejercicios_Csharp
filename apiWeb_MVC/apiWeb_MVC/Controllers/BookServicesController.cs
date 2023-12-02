@@ -1,11 +1,14 @@
 ﻿using Datos.Interfaces;
 using Datos.Schemas;
+using Datos.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace apiWeb_MVC.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize(Roles = "admin,user")]
     public class BookServicesController : ControllerBase
     {
         private readonly ILogger<BookServicesController> _logger;
@@ -21,26 +24,43 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpGet("GetAll")]
-        public List<BookOutput> GetAll()
+        [Authorize(Roles = "admin")]
+        public async Task<List<BookOutput>> GetAll()
         {
-            List<BookOutput> books = _bookServices.GetAllBooks();
-
-            return books;
-        }
-        
-        [HttpGet("GetBook")]
-        public IActionResult GetBook([FromQuery] int id)
-        {
-            BookOutput book = _bookServices.GetInformationFromBook(id);
-            if (book == null)
+            try
             {
-                return NotFound("Book not found");
+                List<BookOutput> books = await _bookServices.GetAllBooksAsync();
+                return books;
             }
-            return Ok(book);
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to get all books.", ex);
+            }
+        }
+
+        [HttpGet("GetBook")]
+        public async Task<IActionResult> GetBook([FromQuery] int id)
+        {
+            try
+            {
+                BookOutput book = await _bookServices.GetBookByIdAsync(id);
+
+                if (book == null)
+                {
+                    return NotFound("Book not found");
+                }
+
+                return Ok(book);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error getting book: {ex.Message}");
+            }
         }
 
         [HttpPost("CreateBook")]
-        public IActionResult CreateBookWithAuthorName([FromBody] BookWithAuthorID bookInput)
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> CreateBookWithAuthorName([FromBody] BookWithAuthorID bookInput)
         {
             bookInput.Book_Name.ToUpper();
 
@@ -49,48 +69,120 @@ namespace apiWeb_MVC.Controllers
                 return BadRequest(ModelState);
             }
 
-            BookOutput bookExist = _bookServices.GetInformationFromBookName(bookInput.Book_Name); 
+            BookOutput bookExist = await _bookServices.GetBookByNameAsync(bookInput.Book_Name);
+
             if (bookExist != null)
             {
-                return BadRequest("the name of the book already exists");
+                return BadRequest("The name of the book already exists");
             }
 
-            BookOutput bookOutput = _bookServices.CreateNewBookWithAuthorName(bookInput);
+            try
+            {
+                BookOutput bookOutput = await _bookServices.CreateNewBookWithAuthorNameAsync(bookInput);
 
-            if (bookOutput != null)
-            {
-                return CreatedAtAction(nameof(GetBook), new { id = bookOutput.Book_ID }, bookOutput);
+                if (bookOutput != null)
+                {
+                    return CreatedAtAction(nameof(GetBook), new { id = bookOutput.Book_ID }, bookOutput);
+                }
+                else
+                {
+                    return BadRequest("There was a problem creating the book.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest("There was a problem creating the book.");
+                return BadRequest($"Error creating book: {ex.Message}");
             }
         }
 
         [HttpPatch("UpdateBook")]
-        public IActionResult UpdateBook([FromQuery] int id, [FromBody] BookInputUpdateAidString bookInput)
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> UpdateBook([FromQuery] int id, [FromBody] BookInputUpdateAidString bookInput)
         {
-            BookOutput book = _bookServices.GetInformationFromBook(id);
-            if (book == null) return NotFound("Book not found.");
-
-            BookOutput bookExist = _bookServices.GetInformationFromBookName(bookInput.Book_Name);
-            if (bookExist != null)
+            try
             {
-                return BadRequest("The name of the book already exists in the database.");
-            }
+                BookOutput book = await _bookServices.GetBookByIdAsync(id);
 
-            if(bookInput.Book_AuthorID != null)
+                if (book == null)
+                {
+                    return NotFound("Book not found.");
+                }
+
+                BookOutput bookExist = await _bookServices.GetBookByNameAsync(bookInput.Book_Name.ToUpper());
+
+                if (bookExist != null)
+                {
+                    return BadRequest("The name of the book already exists in the database.");
+                }
+
+                if (bookInput.Book_AuthorID != null)
+                {
+                    Author authorExis = await _authorServices.GetAuthorByNameAsync(bookInput.Book_AuthorID.ToUpper());
+
+                    if (authorExis == null)
+                    {
+                        return NotFound("The author does not exist in the database, you must create it first to make this request");
+                    }
+                }
+
+                bookInput.Book_AuthorID = bookInput.Book_AuthorID.ToUpper();
+                bookInput.Book_Name = bookInput.Book_Name.ToUpper();
+
+                BookOutput updatedBook = await _bookServices.UpdateBookAsync(id, bookInput);
+
+                if (updatedBook != null)
+                {
+                    return Ok(updatedBook);
+                }
+                else
+                {
+                    return BadRequest("There was a problem updating the book.");
+                }
+            }
+            catch (Exception ex)
             {
-                Author authorExis = _authorServices.GetAuthorByName(bookInput.Book_AuthorID);
-                if (authorExis == null) 
-                    return NotFound("The author does not exist in the database, you must create it first to make this request");
+                return BadRequest($"Error updating book: {ex.Message}");
             }
+        }
 
-            BookOutput updatedBook = _bookServices.UpdateBook(id, bookInput);
+        [HttpPatch("DisableBook")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> DisableBook([FromQuery] int id)
+        {
+            bool result = await _bookServices.DisableBookAsync(id);
 
-            if (updatedBook != null) return Ok(updatedBook);
+            if (result)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound("Book not found or already disabled.");
+            }
+        }
 
-            else return BadRequest("There was a problem updating the user.");
+        [HttpDelete("DeleteBook")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> DeleteBook([FromQuery] int id)
+        {
+            BookOutput book = await _bookServices.GetBookByIdAsync(id);
+
+            if (book == null)
+            {
+                return NotFound("book not found.");
+            }
+            else
+            {
+                await _bookServices.DeletedBookAsync(id);
+                return NoContent();
+            }
+        }
+
+        [HttpGet("print")]
+        public async Task<IActionResult> PrintBooksAndAuthors()
+        {
+            var book = await _bookServices.GetBooksAndAuthorsAsync();
+            return Ok(book);
         }
     }
 }

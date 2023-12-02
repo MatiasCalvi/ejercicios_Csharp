@@ -4,13 +4,13 @@ namespace Datos.Interfaces
 {
     public interface IDaoBD
     {
-        List<UserOutput> GetAllUsers();
-        UserOutput GetUserByID(int pId);
-        UserInputUpdate? GetUserByIDU(int pId);
-        UserInputUpdate GetUserByEmail(string email);
-        UserOutputCreate CreateNewUser(UserInput pUserInput);
-        bool UpdateUser(int pId, UserInputUpdate pCurrentUser);
-        bool DisableUser(int pUserId);
-        void DeletedUser(int pId);
+        Task<List<UserOutput>> GetAllUsersAsync();
+        Task<UserOutput?> GetUserByIDAsync(int pId);
+        Task<UserInputUpdate?> GetUserByIDUAsync(int pId);
+        Task<UserInputUpdate> GetUserByEmailAsync(string pEmail);
+        Task<UserOutputCreate> CreateNewUserAsync(UserInput pUserInput);
+        Task<bool> UpdateUserAsync(int pId, UserInputUpdate pCurrentUser);
+        Task<bool> DisableUserAsync(int pUserId);
+        Task DeletedUserAsync(int pId);
     }
 }

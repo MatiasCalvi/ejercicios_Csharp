@@ -17,7 +17,8 @@ namespace Datos
         private const string getBookByNameQuery = "SELECT * FROM books WHERE book_Name = @book_Name";
         private const string createBookQuery = "INSERT INTO books(Book_Name, Book_Price, Book_CreationYear,Book_AuthorID) VALUES(@Book_Name, @Book_Price, @Book_CreationYear, @Book_AuthorID); SELECT* FROM books WHERE Book_ID = LAST_INSERT_ID()";
         private const string pruebaLibroAutores = "SELECT b.Book_ID, b.Book_Name, b.Book_Price, b.Book_CreationYear, b.Book_AuthorID,a.Author_Id, a.Author_Name FROM books b INNER JOIN authors a ON b.Book_AuthorID = a.Author_Id";
-
+        private const string disableBookQuery = "UPDATE books SET Book_Status = 0 WHERE Book_ID = @Book_ID";
+        private const string deletedBookQuery = "DELETE FROM books WHERE Book_ID = @Book_ID";
         public DaoBDBook(IOptions<BDConfiguration> dbConfig)
         {
             connectionString = dbConfig.Value.ConnectionString;
@@ -68,6 +69,31 @@ namespace Datos
             catch (Exception ex)
             {
                 throw new DatabaseQueryException($"Error getting book with Name {pName}.", ex);
+            }
+        }
+
+        public async Task<List<Book>> GetBooksAndAuthorsAsync()
+        {
+            try
+            {
+                using IDbConnection dbConnection = CreateConnection();
+                dbConnection.Open();
+
+                var result = await dbConnection.QueryAsync<Book, AuthorPrueba, Book>(
+                    pruebaLibroAutores,
+                    (book, author) =>
+                    {
+                        book.Author = author;
+                        return book;
+                    },
+                    splitOn: "Author_Id"
+                );
+
+                return result.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseQueryException("Failed to get books and authors.", ex);
             }
         }
 
@@ -135,29 +161,37 @@ namespace Datos
             }
         }
 
-        public async Task<List<Book>> GetBooksAndAuthorsAsync()
+        public async Task<bool> DisableBookAsync(int pBookId)
+        {
+            try
+            {
+                using IDbConnection dbConnection = CreateConnection();
+                {
+                    dbConnection.Open();
+                    int rowsAffected = await dbConnection.ExecuteAsync(disableBookQuery, new { Book_ID = pBookId });
+
+                    return rowsAffected > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new DatabaseTransactionException($"Error disabling book with ID {pBookId}.", ex);
+            }
+        }
+
+        public async Task DeletedBookAsync(int pId)
         {
             try
             {
                 using IDbConnection dbConnection = CreateConnection();
                 dbConnection.Open();
-
-                var result = await dbConnection.QueryAsync<Book, AuthorPrueba, Book>(
-                    pruebaLibroAutores,
-                    (book, author) =>
-                    {
-                        book.Author = author;
-                        return book;
-                    },
-                    splitOn: "Author_Id"
-                );
-
-                return result.ToList();
+                await dbConnection.ExecuteAsync(deletedBookQuery, new { Book_ID = pId });
             }
             catch (Exception ex)
             {
-                throw new DatabaseQueryException("Failed to get books and authors.", ex);
+                throw new DatabaseTransactionException($"Error deleting book with ID {pId}.", ex);
             }
         }
+
     }
 }

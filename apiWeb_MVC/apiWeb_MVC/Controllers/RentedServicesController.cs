@@ -35,7 +35,6 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpGet("GetRent")]
-        [Authorize(Roles = "admin, user")]
         public async Task<IActionResult> GetRent([FromQuery] int id)
         {
             RentedBookOut rent = await _rentedServices.GetRentByIDAsync(id);

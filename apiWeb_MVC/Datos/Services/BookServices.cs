@@ -59,6 +59,27 @@ namespace Datos.Services
                 throw new DatabaseQueryException($"Error getting book with name {bookName}.", ex);
             }
         }
+        public async Task<List<string>> GetBooksAndAuthorsAsync()
+        {
+            try
+            {
+                var books = await _daoBDBook.GetBooksAndAuthorsAsync();
+
+                var results = new List<string>();
+
+                foreach (var book in books)
+                {
+                    results.Add($"Book: {book.Book_Name}, Author: {book.Author.Author_Name}");
+                }
+
+                return results;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return new List<string>(); 
+            }
+        }
 
         public async Task<BookOutput> CreateNewBookWithAuthorNameAsync(BookWithAuthorID bookInput)
         {
@@ -131,25 +152,27 @@ namespace Datos.Services
             }
         }
 
-        public async Task<List<string>> GetBooksAndAuthorsAsync()
+        public async Task<bool> DisableBookAsync(int pId)
+        {
+            bool result = await _daoBDBook.DisableBookAsync(pId);
+
+            if (!result)
+            {
+                throw new DeletionFailedException($"Failed to disable the book with ID {pId}.");
+            }
+
+            return result;
+        }
+
+        public async Task DeletedBookAsync(int pId)
         {
             try
             {
-                var books = await _daoBDBook.GetBooksAndAuthorsAsync();
-
-                var results = new List<string>();
-
-                foreach (var book in books)
-                {
-                    results.Add($"Book: {book.Book_Name}, Author: {book.Author.Author_Name}");
-                }
-
-                return results;
+                await _daoBDBook.DeletedBookAsync(pId);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
-                return new List<string>(); 
+                throw new DeletionFailedException($"Error occurred while deleting the book with ID {pId}.", ex);
             }
         }
     }

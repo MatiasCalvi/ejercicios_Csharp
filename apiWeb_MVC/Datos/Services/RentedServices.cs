@@ -22,12 +22,7 @@ namespace Datos.Services
         {
             try
             {
-                RentedBookOut rent = await _daoBDRentedBook.GetRentByIDAsync(pId);
-                if (rent == null)
-                {
-                    throw new NotFoundException($"Rent with ID {pId} was not found in the database.");
-                }
-                return rent;
+                return await _daoBDRentedBook.GetRentByIDAsync(pId); ;
             }
             catch (Exception ex)
             {

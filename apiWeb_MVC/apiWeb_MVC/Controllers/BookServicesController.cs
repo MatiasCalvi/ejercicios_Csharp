@@ -8,7 +8,7 @@ namespace apiWeb_MVC.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-
+    [Authorize(Roles = "admin,user")]
     public class BookServicesController : ControllerBase
     {
         private readonly ILogger<BookServicesController> _logger;
@@ -24,6 +24,7 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpGet("GetAll")]
+        [Authorize(Roles = "admin")]
         public async Task<List<BookOutput>> GetAll()
         {
             try
@@ -58,6 +59,7 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpPost("CreateBook")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateBookWithAuthorName([FromBody] BookWithAuthorID bookInput)
         {
             bookInput.Book_Name.ToUpper();
@@ -94,7 +96,7 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpPatch("UpdateBook")]
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateBook([FromQuery] int id, [FromBody] BookInputUpdateAidString bookInput)
         {
             try
@@ -144,7 +146,7 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpPatch("DisableBook")]
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DisableBook([FromQuery] int id)
         {
             bool result = await _bookServices.DisableBookAsync(id);
@@ -160,7 +162,7 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpDelete("DeleteBook")]
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteBook([FromQuery] int id)
         {
             BookOutput book = await _bookServices.GetBookByIdAsync(id);

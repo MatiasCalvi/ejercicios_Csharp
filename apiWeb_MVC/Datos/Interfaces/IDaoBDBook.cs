@@ -10,5 +10,7 @@ namespace Datos.Interfaces
         Task<BookOutput> CreateNewBookAsync(BooWithAuthorIDInt pBookInput);
         Task<bool> UpdateBookAsync(int pId, BookInputUpdate pCurrentBook);
         Task<List<Book>> GetBooksAndAuthorsAsync();
+        Task<bool> DisableBookAsync(int pBookId);
+        Task DeletedBookAsync(int pId);
     }
 }

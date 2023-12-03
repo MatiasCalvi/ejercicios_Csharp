@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Datos.Schemas;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
@@ -14,6 +15,7 @@ namespace Datos.Interfaces
         Task<bool> ValidateRefreshTokenAsync(int userId, string refreshToken);
         Task DeleteRefreshTokenAsync(int userId);
         public void UpdateCookieExpiration(string refreshToken, string cookieValue);
-        public string GenerateAccessToken(SigningCredentials credentials, List<Claim> claims);
+        public string GenerateAccessToken(UserOutput user);
+        public void DeleteCookie(string nameCookie);
     }
 }

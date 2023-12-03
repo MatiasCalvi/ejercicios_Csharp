@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Configuracion;
 using Microsoft.Extensions.Options;
+using Datos.Schemas;
 
 
 namespace Datos.Validate
@@ -67,8 +68,17 @@ namespace Datos.Validate
             }
         }
 
-        public string GenerateAccessToken(SigningCredentials credentials, List<Claim> claims)
+        public string GenerateAccessToken(UserOutput user)
         {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfiguration.Secret));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Sid, user.User_ID.ToString()),
+                    new Claim(ClaimTypes.Role, user.User_Role),
+                    new Claim(ClaimTypes.Name, user.User_Name),
+                    new Claim(ClaimTypes.Email, user.User_Email),
+                };
             var now = DateTime.UtcNow;
             var expiration = now.AddMinutes(1);
 
@@ -151,6 +161,16 @@ namespace Datos.Validate
             cookie.Expires = expiration;
 
             _httpContextAccessor.HttpContext.Response.Cookies.Append("RefreshToken", cookieValue, cookie);
+        }
+        
+        public void DeleteCookie(string nameCookie)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                Expires = DateTime.Now.AddMinutes(-1)
+            };
+
+            _httpContextAccessor.HttpContext.Response.Cookies.Append(nameCookie, "", cookieOptions);
         }
 
         public async Task DeleteRefreshTokenAsync(int userId)

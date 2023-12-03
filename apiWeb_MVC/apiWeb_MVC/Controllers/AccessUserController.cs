@@ -39,17 +39,7 @@ namespace apiWeb_MVC.Controllers
                 return Unauthorized("Invalid email or password.");
             }
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfiguration.Secret));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Sid, userOutput.User_ID.ToString()),
-                new Claim(ClaimTypes.Name, userOutput.User_Name),
-                new Claim(ClaimTypes.Email, userOutput.User_Email),
-                new Claim(ClaimTypes.Role, userOutput.User_Role)
-            };
-
-            var token = _validateMethodes.GenerateAccessToken(credentials, claims);
+            var token = _validateMethodes.GenerateAccessToken(userOutput);
             var refreshToken = await _validateMethodes.GenerateAndStoreRefreshTokenAsync(userOutput.User_ID, userOutput.User_Role);
 
             return Ok(new { Token = token, RefreshToken = refreshToken });
@@ -65,12 +55,7 @@ namespace apiWeb_MVC.Controllers
 
                 await _validateMethodes.DeleteRefreshTokenAsync(userId);
 
-                var cookieOptions = new CookieOptions
-                {
-                    Expires = DateTime.Now.AddMinutes(-1)
-                };
-
-                _httpContextAccessor.HttpContext.Response.Cookies.Append("RefreshToken", "", cookieOptions);
+                _validateMethodes.DeleteCookie("RefreshToken");
 
                 return Ok("Logout successful");
             }
@@ -107,15 +92,9 @@ namespace apiWeb_MVC.Controllers
                     return Unauthorized("Refresh token not found in the database.");
                 }
 
-                var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfiguration.Secret));
-                var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Sid, userId.ToString()),
-                    new Claim(ClaimTypes.Role, userRoleClaim),
-                };
+                UserOutput userOutput = await _userServices.GetInformationFromUserAsync(userId);
 
-                var token = _validateMethodes.GenerateAccessToken(credentials, claims);
+                var token = _validateMethodes.GenerateAccessToken(userOutput);
 
                 var cookie = Request.Cookies["RefreshToken"];
                 if (cookie == null)

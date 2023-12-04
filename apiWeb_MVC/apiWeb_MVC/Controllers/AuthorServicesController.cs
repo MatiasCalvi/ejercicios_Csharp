@@ -37,99 +37,147 @@ namespace apiWeb_MVC.Controllers
         }
 
         [HttpGet("GetAuthor")]
-        public async Task<Author> GetAuthor(string authorName)
+        public async Task<IActionResult> GetAuthor(string authorName)
         {
-            authorName = authorName.ToUpper();
-            Author author = await _authorServices.GetAuthorByNameAsync(authorName);
+            try 
+            {
+                authorName = authorName.ToUpper();
+                Author author = await _authorServices.GetAuthorByNameAsync(authorName);
 
-            return author;
+                return Ok(author);
+            
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "Error during Search", Detail = ex.Message }); 
+            }
         }
 
         [HttpGet("GetAuthorById")]
         public async Task<IActionResult> GetAuthorById([FromQuery] int id)
         {
-            Author author = await _authorServices.GetInformationFromAuthorAsync(id);
-
-            if (author == null)
+            try
             {
-                return NotFound("Author not found");
-            }
+                Author author = await _authorServices.GetInformationFromAuthorAsync(id);
 
-            return Ok(author);
+                if (author == null)
+                {
+                    return NotFound("Author not found");
+                }
+
+                return Ok(author);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "Error during Search", Detail = ex.Message }); 
+            }
         }
 
         [HttpPost("CreateAuthor")]
         public async Task<IActionResult> CreateAuthor(string pAuthor)
         {
-            pAuthor = pAuthor.ToUpper();
-
-            if (!ModelState.IsValid)
+            try 
             {
-                return BadRequest(ModelState);
+                pAuthor = pAuthor.ToUpper();
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                Author authorExist = await _authorServices.GetAuthorByNameAsync(pAuthor);
+
+                if (authorExist != null)
+                {
+                    return BadRequest("The author already exists.");
+                }
+
+                AuthorCreate author = await _authorServices.CreateNewAuthorAsync(pAuthor);
+
+                if (author != null)
+                {
+                    return CreatedAtAction(nameof(CreateAuthor), new { id = author.Author_Id }, author);
+                }
+                else
+                {
+                    return BadRequest("There was a problem creating the author.");
+                }
+             
             }
-
-            Author authorExist = await _authorServices.GetAuthorByNameAsync(pAuthor);
-
-            if (authorExist != null)
+            catch (Exception ex)
             {
-                return BadRequest("The author already exists.");
-            }
-
-            AuthorCreate author = await _authorServices.CreateNewAuthorAsync(pAuthor);
-
-            if (author != null)
-            {
-                return CreatedAtAction(nameof(CreateAuthor), new { id = author.Author_Id }, author);
-            }
-            else
-            {
-                return BadRequest("There was a problem creating the author.");
+                return BadRequest(new { Message = "Error during author creation", Detail = ex.Message });
             }
         }
 
         [HttpPatch("UpdateAuthor")]
         public async Task<IActionResult> UpdateAuthor([FromQuery] int id, [FromBody] AutorInputUP authorInput)
-        {   
-            authorInput.Author_Name = authorInput.Author_Name.ToUpper();
+        {
+            try
+            {
+                authorInput.Author_Name = authorInput.Author_Name.ToUpper();
 
-            Author user = await _authorServices.GetInformationFromAuthorAsync(id);
-            if (user == null) return NotFound("Author not found.");
+                Author user = await _authorServices.GetInformationFromAuthorAsync(id);
+                if (user == null) return NotFound("Author not found.");
 
-            AuthorUpdateOut updatedauthor = await _authorServices.UpdateAuthorAsync(id, authorInput);
+                AuthorUpdateOut updatedauthor = await _authorServices.UpdateAuthorAsync(id, authorInput);
 
-            if (updatedauthor != null) return Ok(updatedauthor);
+                if (updatedauthor != null) return Ok(updatedauthor);
 
-            else return BadRequest("There was a problem updating the author.");
+                else return BadRequest("There was a problem updating the author.");
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "Error during author update", Detail = ex.Message });
+            }
         }
 
         [HttpPatch("DisableAuthor")]
         public async Task<IActionResult> DisableAuthor([FromQuery] int id)
         {
-            bool result = await _authorServices.DisableAuthorAsync(id);
+            try
+            {
+                bool result = await _authorServices.DisableAuthorAsync(id);
+                
+                if (result)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return NotFound("Author not found or already disabled.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "Error during author disable", Detail = ex.Message });
+            }
 
-            if (result)
-            {
-                return NoContent();
-            }
-            else
-            {
-                return NotFound("Author not found or already disabled.");
-            }
         }
 
         [HttpDelete("DeleteAuthor")]
         public async Task<IActionResult> DeleteAuthor([FromQuery] int id)
         {
-            Author author = await _authorServices.GetInformationFromAuthorAsync(id);
+            try
+            {
+                Author author = await _authorServices.GetInformationFromAuthorAsync(id);
 
-            if (author == null)
-            {
-                return NotFound("Author not found.");
+                if (author == null)
+                {
+                    return NotFound("Author not found.");
+                }
+                else
+                {
+                    await _authorServices.DeletedAuthorAsync(id);
+                    return NoContent();
+                }
+
             }
-            else
+            catch (Exception ex)
             {
-                await _authorServices.DeletedAuthorAsync(id);
-                return NoContent();
+                return BadRequest(new { Message = "Error during author deletion", Detail = ex.Message });
             }
         }
     }

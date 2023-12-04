@@ -25,11 +25,18 @@ namespace apiWeb_MVC.Controllers
         [HttpGet("GetAll")]
         [Authorize(Roles = "admin")]
 
-        public async Task<List<UserOutput>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            List<UserOutput> user = await _userServices.GetAllUsersAsync();
+            try
+            {   
+                List<UserOutput> user = await _userServices.GetAllUsersAsync();
 
-            return user;
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode( 500, new { Message = "Error during search", Detail = ex.Message });
+            }
         }
 
         [HttpGet("GetUser")]
@@ -37,53 +44,76 @@ namespace apiWeb_MVC.Controllers
 
         public async Task <IActionResult> GetUser([FromQuery] int id)
         {
-            UserOutput user = await _userServices.GetInformationFromUserAsync(id);
-            if (user == null)
+            try
             {
-                return NotFound("User not found");
+                UserOutput user = await _userServices.GetInformationFromUserAsync(id);
+                if (user == null)
+                {
+                    return NotFound("User not found");
+                }
+                
+                return Ok(user);
             }
-            return Ok(user);
+            catch (Exception ex)
+            {
+                return StatusCode( 500, new { Message = "Error during search", Detail = ex.Message });
+            }
         }
 
         [HttpGet("GetUsers")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetUsers([FromQuery] string ids)
         {
-            List<int> userIds = ids.Split(',').Select(int.Parse).ToList();
-            List<UserOutput> users = await _userServices.GetUsersByIdsAsync(userIds);
-
-            if (users.Count == 0)
+            try
             {
-                return NotFound("No users found for the IDs provided.");
-            }
+                List<int> userIds = ids.Split(',').Select(int.Parse).ToList();
+                List<UserOutput> users = await _userServices.GetUsersByIdsAsync(userIds);
 
-            return Ok(users);
+                if (users.Count == 0)
+                {
+                    return NotFound("No users found for the IDs provided.");
+                }
+
+                return Ok(users);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "Error during search", Detail = ex.Message });
+            }
         }
 
         [HttpPost("CreateUser")]
         [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> CreateUser([FromBody] UserInput userInput)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
-            }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-            UserInputUpdate user = await _userServices.GetUserByEmailAsync(userInput.User_Email);
-            if (user != null)
-            {
-                return BadRequest("Email already in use.");
-            }
+                UserInputUpdate user = await _userServices.GetUserByEmailAsync(userInput.User_Email);
+                if (user != null)
+                {
+                    return BadRequest("Email already in use.");
+                }
 
-            UserOutputCreate userOutput = await _userServices.CreateNewUserAsync(userInput);
+                UserOutputCreate userOutput = await _userServices.CreateNewUserAsync(userInput);
 
-            if (userOutput != null)
-            {
-                return CreatedAtAction(nameof(GetUser), new { id = userOutput.User_ID }, userOutput);
+                if (userOutput != null)
+                {
+                    return CreatedAtAction(nameof(GetUser), new { id = userOutput.User_ID }, userOutput);
+                }
+                else
+                {
+                    return BadRequest("There was a problem creating the user.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest("There was a problem creating the user.");
+                return StatusCode( 500, new { Message = "Error during user creation", Detail = ex.Message });
             }
         }
 
@@ -91,15 +121,22 @@ namespace apiWeb_MVC.Controllers
         [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> DisableUser([FromQuery] int id)
         {
-            bool result = await _userServices.DisableUserAsync(id);
+            try
+            {
+                bool result = await _userServices.DisableUserAsync(id);
 
-            if (result)
-            {
-                return NoContent();
+                if (result)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return NotFound("User not found or already disabled.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return NotFound("User not found or already disabled.");
+                return StatusCode( 500, new { Message = "Error during user disable", Detail = ex.Message });
             }
         }
 
@@ -107,30 +144,71 @@ namespace apiWeb_MVC.Controllers
         [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> UpdateUser([FromQuery] int id, [FromBody] UserInputUpdate userInput)
         {
-            UserOutput user = await _userServices.GetInformationFromUserAsync(id);
-            if (user == null) return NotFound("User not found.");
+            try
+            {
+                UserOutput user = await _userServices.GetInformationFromUserAsync(id);
+                if (user == null) return NotFound("User not found.");
 
-            UserOutput updatedUser = await _userServices.UpdateUserAsync(id, userInput);
+                UserOutput updatedUser = await _userServices.UpdateUserAsync(id, userInput);
 
-            if (updatedUser != null) return Ok(updatedUser);
+                if (updatedUser != null) return Ok(updatedUser);
 
-            else return BadRequest("There was a problem updating the user.");
+                else return BadRequest("There was a problem updating the user.");
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500 , new { Message = "Error during user update", Detail = ex.Message });
+            }
+        }
+
+        [HttpPatch("ForgottenPassword")]
+        [Authorize(Roles = "admin,user")]
+
+        public async Task<IActionResult> ForgottenPassword([FromQuery] int id, [FromBody] UserPasswordUpdate newPassword) 
+        {
+            try
+            {   
+                UserOutput user = await _userServices.GetInformationFromUserAsync(id);
+                
+                if (user == null) return NotFound("User not found.");
+                
+                string updatePassword = await _userServices.UserForgottenPasswordAsync(id, newPassword);
+
+                if (updatePassword != null) return Ok(updatePassword);
+                
+                else return BadRequest("Error during password update");
+
+            }
+            catch(Exception ex) 
+            {
+                return StatusCode(500, new { Message = "Error during user update", Detail = ex.Message });
+            }
+
         }
 
         [HttpDelete("DeleteUser")]
         [Authorize(Roles = "admin,user")]
         public async Task<IActionResult> DeleteUser([FromQuery] int id)
         {
-            UserOutput user = await _userServices.GetInformationFromUserAsync(id);
+            try
+            {
+                UserOutput user = await _userServices.GetInformationFromUserAsync(id);
 
-            if (user == null)
-            {
-                return NotFound("User not found.");
+                if (user == null)
+                {
+                    return NotFound("User not found.");
+                }
+                else
+                {
+                    await _userServices.DeletedUserAsync(id);
+                    return NoContent();
+                }
+
             }
-            else
+            catch (Exception ex)
             {
-                await _userServices.DeletedUserAsync(id);
-                return NoContent();
+                return BadRequest(new { Message = "Error during user deletion", Detail = ex.Message });
             }
         }
     }

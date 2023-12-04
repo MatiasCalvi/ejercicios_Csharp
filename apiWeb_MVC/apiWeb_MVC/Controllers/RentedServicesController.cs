@@ -37,12 +37,20 @@ namespace apiWeb_MVC.Controllers
         [HttpGet("GetRent")]
         public async Task<IActionResult> GetRent([FromQuery] int id)
         {
-            RentedBookOut rent = await _rentedServices.GetRentByIDAsync(id);
-            if (rent == null)
+            try
             {
-                return NotFound("Rent not found");
+                RentedBookOut rent = await _rentedServices.GetRentByIDAsync(id);
+                if (rent == null)
+                {
+                    return NotFound("Rent not found");
+                }
+                return Ok(rent);
+
             }
-            return Ok(rent);
+            catch (Exception ex)
+            {
+                return BadRequest(new { Msg = "Error during search", ex.Message});
+            }
         }
 
         [HttpPost("CreateRent")]

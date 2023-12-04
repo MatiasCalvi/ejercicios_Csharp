@@ -79,7 +79,7 @@ namespace Datos.Validate
                     new Claim(ClaimTypes.Name, user.User_Name),
                     new Claim(ClaimTypes.Email, user.User_Email),
                 };
-            var now = DateTime.UtcNow;
+            var now = DateTime.Now;
             var expiration = now.AddMinutes(1);
 
             var sectoken = new JwtSecurityTokenHandler().CreateToken(new SecurityTokenDescriptor
@@ -108,7 +108,7 @@ namespace Datos.Validate
                 new Claim(ClaimTypes.Role, userRole),
             };
 
-            var now = DateTime.UtcNow;
+            var now = DateTime.Now;
             var expiration = now.AddHours(10);
 
             var refreshToken = new JwtSecurityToken(
@@ -132,7 +132,7 @@ namespace Datos.Validate
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Expires = DateTime.UtcNow.AddHours(10)
+                Expires = DateTime.Now.AddHours(10)
             };
 
             _httpContextAccessor.HttpContext.Response.Cookies.Append("RefreshToken", refreshToken, cookieOptions);

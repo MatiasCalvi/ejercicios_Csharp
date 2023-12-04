@@ -1,6 +1,7 @@
 ﻿using Datos.Exceptions;
 using Datos.Interfaces;
 using Datos.Schemas;
+using Microsoft.AspNetCore.Http;
 using MySql.Data.MySqlClient;
 
 
@@ -114,18 +115,21 @@ namespace apiWeb_MVC.Services
                     throw new NotFoundException($"The user with ID {pId} was not found in the database.");
                 }
 
-                bool passwordChanged = !_validateMethodes.VerifyPassword(pUserUpdate.User_Password, currentUser.User_Password);
+                if (pUserUpdate.User_Password != null)
+                {
+                    bool passwordChanged = !_validateMethodes.VerifyPassword(pUserUpdate.User_Password, currentUser.User_Password);
+                    
+                    if (passwordChanged)
+                    {
+                        string hashedPassword = _validateMethodes.HashPassword(pUserUpdate.User_Password);
+                        currentUser.User_Password = hashedPassword;
+                    }
+                }
 
                 currentUser.User_Name = pUserUpdate.User_Name ?? currentUser.User_Name;
                 currentUser.User_LastName = pUserUpdate.User_LastName ?? currentUser.User_LastName;
                 currentUser.User_Email = pUserUpdate.User_Email ?? currentUser.User_Email;
                 currentUser.User_UpdateDate = UpdateDate;
-
-                if (passwordChanged)
-                {
-                    string hashedPassword = _validateMethodes.HashPassword(pUserUpdate.User_Password);
-                    currentUser.User_Password = hashedPassword;
-                }
 
                 bool updated = await _daoBD.UpdateUserAsync(pId, currentUser);
 
@@ -154,43 +158,91 @@ namespace apiWeb_MVC.Services
             }
         }
 
+        public async Task<String> UserForgottenPasswordAsync (int pId,UserPasswordUpdate pPassword)
+        {
+            try 
+            {
+                UserInputUpdate currentUser = await GetInformationFromUserUAsync(pId);
+                DateTime UpdateDate = DateTime.Now;
+
+                if(pPassword.User_NewPassword != pPassword.User_RepeatNewPassword) 
+                {
+                    throw new Exception("Passwords do not match");
+                }
+
+                string hashedPassword = _validateMethodes.HashPassword(pPassword.User_NewPassword);
+                currentUser.User_Password = hashedPassword;
+                currentUser.User_UpdateDate = UpdateDate;
+
+                bool updated = await _daoBD.UpdateUserAsync(pId, currentUser);
+            
+                if (updated)
+                {
+                    return "The password was changed successfully";
+                }
+                else
+                {
+                    throw new UpdateFailedException($"Failed to update the Password");
+                }
+            
+            }
+            catch (Exception ex)
+            {
+                throw new UpdateFailedException("Error occurred while updating the Password", ex);
+            }
+        } 
+
         public async Task<UserOutput> VerifyUserAsync(string pEmail, string pPassword)
         {
-            UserInputUpdate user = await _daoBD.GetUserByEmailAsync(pEmail);
-            if (user == null)
+            try
             {
-                return null;
-            }
-
-            bool passwordMatch = _validateMethodes.VerifyPassword(pPassword, user.User_Password);
-            if (passwordMatch)
-            {
-                UserOutput userOutput = new UserOutput
+                UserInputUpdate user = await _daoBD.GetUserByEmailAsync(pEmail);
+                if (user == null)
                 {
-                    User_ID = user.User_ID,
-                    User_Name = user.User_Name,
-                    User_LastName = user.User_LastName,
-                    User_Email = user.User_Email,
-                    User_Role = user.User_Role
-                };
-                return userOutput;
+                    return null;
+                }
+
+                bool passwordMatch = _validateMethodes.VerifyPassword(pPassword, user.User_Password);
+                if (passwordMatch)
+                {
+                    UserOutput userOutput = new UserOutput
+                    {
+                        User_ID = user.User_ID,
+                        User_Name = user.User_Name,
+                        User_LastName = user.User_LastName,
+                        User_Email = user.User_Email,
+                        User_Role = user.User_Role
+                    };
+                    return userOutput;
+                }
+                else
+                {
+                    return null;
+                }
             }
-            else
+            catch(Exception ex)
             {
-                return null;
+                throw new BadHttpRequestException("Error occurred while verification the Password", ex);
             }
         }
 
         public async Task<bool> DisableUserAsync(int pId)
-        {
-            bool result = await _daoBD.DisableUserAsync(pId);
-
-            if (!result)
+        {   
+            try
             {
-                throw new DeletionFailedException($"Failed to disable the user with ID {pId}.");
-            }
+                bool result = await _daoBD.DisableUserAsync(pId);
 
-            return result;
+                if (!result)
+                {
+                    throw new DeletionFailedException($"Failed to disable the user with ID {pId}.");
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new BadHttpRequestException("Error during user disablement", ex);
+            }
         }
 
         public async Task DeletedUserAsync(int pId)

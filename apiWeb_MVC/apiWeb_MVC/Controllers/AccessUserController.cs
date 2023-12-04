@@ -33,16 +33,24 @@ namespace apiWeb_MVC.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] UserLogin user)
         {
-            UserOutput userOutput = await _userServices.VerifyUserAsync(user.User_Email, user.User_Password);
-            if (userOutput == null)
-            {
-                return Unauthorized("Invalid email or password.");
+            try
+            { 
+                UserOutput userOutput = await _userServices.VerifyUserAsync(user.User_Email, user.User_Password);
+                if (userOutput == null)
+                {
+                    return Unauthorized("Invalid email or password.");
+                }
+
+                var token = _validateMethodes.GenerateAccessToken(userOutput);
+                var refreshToken = await _validateMethodes.GenerateAndStoreRefreshTokenAsync(userOutput.User_ID, userOutput.User_Role);
+
+                return Ok(new { Token = token, RefreshToken = refreshToken });
+            
             }
-
-            var token = _validateMethodes.GenerateAccessToken(userOutput);
-            var refreshToken = await _validateMethodes.GenerateAndStoreRefreshTokenAsync(userOutput.User_ID, userOutput.User_Role);
-
-            return Ok(new { Token = token, RefreshToken = refreshToken });
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "Error during login", Detail = ex.Message });
+            }
         }
 
         [HttpPost("Logout")]

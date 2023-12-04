@@ -165,16 +165,23 @@ namespace apiWeb_MVC.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteBook([FromQuery] int id)
         {
-            BookOutput book = await _bookServices.GetBookByIdAsync(id);
+            try
+            {
+                BookOutput book = await _bookServices.GetBookByIdAsync(id);
 
-            if (book == null)
-            {
-                return NotFound("book not found.");
+                if (book == null)
+                {
+                    return NotFound("book not found.");
+                }
+                else
+                {
+                    await _bookServices.DeletedBookAsync(id);
+                    return NoContent();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await _bookServices.DeletedBookAsync(id);
-                return NoContent();
+                return BadRequest($"Error during book deletion: {ex.Message}");
             }
         }
 

@@ -117,6 +117,15 @@ namespace Datos.Schemas
         public string User_Password { get; set; } 
     }
 
+    public class UserPasswordUpdate
+    {
+        [Required]
+        public string User_NewPassword { get; set; }
+        
+        [Required]
+        public string User_RepeatNewPassword {  get; set; }
+    }
+
     public class UserLogin
     {
         public string User_Email { get; set; }

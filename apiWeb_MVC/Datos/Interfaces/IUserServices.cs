@@ -11,6 +11,7 @@ namespace Datos.Interfaces
         Task<UserInputUpdate> GetUserByEmailAsync(string pEmail);
         Task<UserOutputCreate> CreateNewUserAsync(UserInput pUserInput);
         Task<UserOutput> UpdateUserAsync(int pId, UserInputUpdate pUserUpdate);
+        Task<String> UserForgottenPasswordAsync(int pId, UserPasswordUpdate pPassword);
         Task<UserOutput> VerifyUserAsync(string pEmail, string pPassword);
         Task<bool> DisableUserAsync(int pId);
         Task DeletedUserAsync(int pId);

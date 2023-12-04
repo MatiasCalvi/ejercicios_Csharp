@@ -1,6 +1,7 @@
 ﻿using Datos.Interfaces;
 using Datos.Schemas;
 using Datos.Exceptions;
+using Microsoft.AspNetCore.Http;
 
 namespace Datos.Services
 {
@@ -154,14 +155,22 @@ namespace Datos.Services
 
         public async Task<bool> DisableBookAsync(int pId)
         {
-            bool result = await _daoBDBook.DisableBookAsync(pId);
-
-            if (!result)
+            try
             {
-                throw new DeletionFailedException($"Failed to disable the book with ID {pId}.");
-            }
+                bool result = await _daoBDBook.DisableBookAsync(pId);
 
-            return result;
+                if (!result)
+                {
+                    throw new DeletionFailedException($"Failed to disable the book with ID {pId}.");
+                }
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                throw new BadHttpRequestException($"Error during book disablement {pId}.", ex);
+            }
         }
 
         public async Task DeletedBookAsync(int pId)
